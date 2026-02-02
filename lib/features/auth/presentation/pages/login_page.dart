@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_router.dart';
 import '../widgets/login_footer.dart';
 import '../widgets/login_left_panel.dart';
 import '../widgets/login_right_panel.dart';
@@ -29,7 +31,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onLogin() {
     if (_formKey.currentState?.validate() ?? false) {
-      // TODO: integrar con AuthProvider
+      // TODO: integrar con AuthProvider y validar credenciales
+      context.go(AppRoutes.home);
     }
   }
 

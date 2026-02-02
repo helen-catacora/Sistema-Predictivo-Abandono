@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/auth/presentation/pages/login_page.dart';
+import 'core/router/app_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Sistema Predictivo de Abandono Estudiantil',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      routerConfig: appRouter,
     );
   }
 }
