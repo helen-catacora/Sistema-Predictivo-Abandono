@@ -37,18 +37,18 @@ final GoRouter appRouter = GoRouter(
             FadeTransition(opacity: animation, child: child),
       ),
     ),
-    GoRoute(
-      path: AppRoutes.home,
-      redirect: (context, state) {
-        final location = state.matchedLocation;
-        if (location == AppRoutes.home || location == '${AppRoutes.home}/') {
-          return AppRoutes.homePanel;
-        }
-        return null;
-      },
+    ShellRoute(
+      builder: (context, state, child) => DashboardLayout(child: child),
       routes: [
-        ShellRoute(
-          builder: (context, state, child) => DashboardLayout(child: child),
+        GoRoute(
+          path: AppRoutes.home,
+          redirect: (context, state) {
+            final loc = state.uri.path;
+            if (loc == AppRoutes.home || loc == '${AppRoutes.home}/') {
+              return AppRoutes.homePanel;
+            }
+            return null;
+          },
           routes: [
             GoRoute(
               path: 'panel',
