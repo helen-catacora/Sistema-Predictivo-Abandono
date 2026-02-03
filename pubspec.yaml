@@ -41,6 +41,9 @@ dependencies:
   # Gráficos
   fl_chart: ^0.69.0
 
+  # Selector de archivos (web, desktop, móvil)
+  file_picker: ^8.0.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -18,7 +18,7 @@ class DashboardFooter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '© 2024 ESCUELA MILITAR DE INGENIERÍA - CIENCIAS BÁSICAS',
+            '© ${DateTime.now().year} ESCUELA MILITAR DE INGENIERÍA - CIENCIAS BÁSICAS',
             style: TextStyle(
               color: AppColors.grayDark,
               fontSize: 12,
@@ -26,14 +26,6 @@ class DashboardFooter extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                'PRIVACIDAD',
-                style: TextStyle(
-                  color: AppColors.grayDark,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
               const SizedBox(width: 16),
               Text(
                 'REGLAMENTOS',
@@ -45,7 +37,7 @@ class DashboardFooter extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Text(
-                'SOPORTE',
+                'MANUAL DE USUARIO',
                 style: TextStyle(
                   color: AppColors.grayDark,
                   fontSize: 11,
