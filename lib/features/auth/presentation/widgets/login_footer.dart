@@ -13,7 +13,7 @@ class LoginFooter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       color: AppColors.navyDark,
       child: Text(
-        '© 2024 Escuela Militar de Ingeniería - Todos los derechos reservados',
+        '© ${DateTime.now().year} Escuela Militar de Ingeniería - Todos los derechos reservados',
         textAlign: TextAlign.center,
         style: TextStyle(
           color: AppColors.grayMedium,

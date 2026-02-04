@@ -37,10 +37,17 @@ class LoginLeftPanel extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(
+                        /*child: Icon(
                           FontAwesomeIcons.shieldHalved,
                           size: 30,
                           color: AppColors.navyDark,
+                        ),*/
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network('https://tse1.mm.bing.net/th/id/OIP.rWIa57aBTxT20Yxk3PFouAHaHa?cb=defcache2defcache=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+                          width: 30,
+                          height: 30,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
