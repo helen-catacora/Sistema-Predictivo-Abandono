@@ -13,6 +13,7 @@ class LoginRightPanel extends StatelessWidget {
     required this.passwordController,
     required this.obscurePassword,
     required this.rememberSession,
+    this.isLoading = false,
     required this.onTogglePassword,
     required this.onToggleRemember,
     required this.onLogin,
@@ -23,6 +24,7 @@ class LoginRightPanel extends StatelessWidget {
   final TextEditingController passwordController;
   final bool obscurePassword;
   final bool rememberSession;
+  final bool isLoading;
   final VoidCallback onTogglePassword;
   final ValueChanged<bool?> onToggleRemember;
   final VoidCallback onLogin;
@@ -216,7 +218,7 @@ class LoginRightPanel extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   FilledButton(
-                    onPressed: onLogin,
+                    onPressed: isLoading ? null : onLogin,
                     style: FilledButton.styleFrom(
                       backgroundColor: Color(0xff001233),
                       foregroundColor: AppColors.white,
@@ -229,8 +231,18 @@ class LoginRightPanel extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'INICIAR SESIÓN',
+                          if (isLoading)
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          else
+                            Text(
+                              'INICIAR SESIÓN',
                             style: GoogleFonts.inter(
                               color: Colors.white,
                               fontSize: 16,
@@ -239,12 +251,14 @@ class LoginRightPanel extends StatelessWidget {
                               letterSpacing: 0,
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward_outlined,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                          if (!isLoading) ...[
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.arrow_forward_outlined,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ],
                         ],
                       ),
                     ),

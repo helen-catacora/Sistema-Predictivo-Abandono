@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/asistencia/presentation/pages/asistencia_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/layout/dashboard_layout.dart';
 import '../../features/estudiantes/presentation/pages/estudiantes_page.dart';
 import '../../features/gestion_usuarios/presentation/pages/gestion_usuarios_page.dart';
@@ -22,11 +23,24 @@ abstract class AppRoutes {
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
 }
 
-/// Configuración de go_router para navegación.
-final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.login,
-  debugLogDiagnostics: true,
-  routes: [
+/// Crea el router con lógica de redirección según autenticación.
+GoRouter createAppRouter(AuthProvider authProvider) {
+  return GoRouter(
+    refreshListenable: authProvider,
+    initialLocation: AppRoutes.login,
+    debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final isLoggedIn = authProvider.isAuthenticated;
+      final isLoginRoute = state.uri.path == AppRoutes.login;
+      if (!isLoggedIn && !isLoginRoute) return AppRoutes.login;
+      if (isLoggedIn && isLoginRoute) return AppRoutes.homePanel;
+      return null;
+    },
+    routes: _routes,
+  );
+}
+
+final List<RouteBase> _routes = [
     GoRoute(
       path: AppRoutes.login,
       name: 'login',
@@ -96,5 +110,4 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
-  ],
-);
+  ];

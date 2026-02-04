@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_router.dart';
+import '../providers/auth_provider.dart';
 import '../widgets/login_footer.dart';
 import '../widgets/login_left_panel.dart';
 import '../widgets/login_right_panel.dart';
@@ -29,10 +31,24 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _onLogin() {
+  Future<void> _onLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // TODO: integrar con AuthProvider y validar credenciales
-      context.go(AppRoutes.home);
+      final auth = context.read<AuthProvider>();
+      final ok = await auth.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (!mounted) return;
+      if (ok) {
+        context.go(AppRoutes.home);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(auth.errorMessage ?? 'Error al iniciar sesión'),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
     }
   }
 
@@ -53,17 +69,20 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: LoginRightPanel(
-                          formKey: _formKey,
-                          emailController: _emailController,
-                          passwordController: _passwordController,
-                          obscurePassword: _obscurePassword,
-                          rememberSession: _rememberSession,
-                          onTogglePassword: () =>
-                              setState(() => _obscurePassword = !_obscurePassword),
-                          onToggleRemember: (v) =>
-                              setState(() => _rememberSession = v ?? false),
-                          onLogin: _onLogin,
+                        child:                         Consumer<AuthProvider>(
+                          builder: (_, auth, __) => LoginRightPanel(
+                            formKey: _formKey,
+                            emailController: _emailController,
+                            passwordController: _passwordController,
+                            obscurePassword: _obscurePassword,
+                            rememberSession: _rememberSession,
+                            isLoading: auth.isLoading,
+                            onTogglePassword: () =>
+                                setState(() => _obscurePassword = !_obscurePassword),
+                            onToggleRemember: (v) =>
+                                setState(() => _rememberSession = v ?? false),
+                            onLogin: _onLogin,
+                          ),
                         ),
                       ),
                     ],
@@ -72,17 +91,20 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         LoginLeftPanel(compact: true),
-                        LoginRightPanel(
-                          formKey: _formKey,
-                          emailController: _emailController,
-                          passwordController: _passwordController,
-                          obscurePassword: _obscurePassword,
-                          rememberSession: _rememberSession,
-                          onTogglePassword: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
-                          onToggleRemember: (v) =>
-                              setState(() => _rememberSession = v ?? false),
-                          onLogin: _onLogin,
+                        Consumer<AuthProvider>(
+                          builder: (_, auth, __) => LoginRightPanel(
+                            formKey: _formKey,
+                            emailController: _emailController,
+                            passwordController: _passwordController,
+                            obscurePassword: _obscurePassword,
+                            rememberSession: _rememberSession,
+                            isLoading: auth.isLoading,
+                            onTogglePassword: () => setState(
+                                () => _obscurePassword = !_obscurePassword),
+                            onToggleRemember: (v) =>
+                                setState(() => _rememberSession = v ?? false),
+                            onLogin: _onLogin,
+                          ),
                         ),
                       ],
                     ),

@@ -44,6 +44,11 @@ dependencies:
   # Selector de archivos (web, desktop, móvil)
   file_picker: ^8.0.0+1
 
+  # HTTP y estado
+  dio: ^5.4.0
+  shared_preferences: ^2.2.2
+  provider: ^6.1.2
+
   google_fonts: ^8.0.0
 
   font_awesome_flutter: ^10.12.0
@@ -71,8 +76,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/
+#  assets:
+  #  - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

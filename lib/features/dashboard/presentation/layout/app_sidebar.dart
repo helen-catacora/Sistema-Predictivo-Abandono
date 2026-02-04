@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/menu_item.dart';
 import '../widgets/sidebar_brand.dart';
 import '../widgets/menu_section.dart';
@@ -88,7 +90,11 @@ class AppSidebar extends StatelessWidget {
             ),
           ),
           UserProfile(
-            onLogout: () => context.go(AppRoutes.login),
+            onLogout: () {
+              context.read<AuthProvider>().logout().then((_) {
+                if (context.mounted) context.go(AppRoutes.login);
+              });
+            },
           ),
           const SizedBox(height: 16),
         ],
