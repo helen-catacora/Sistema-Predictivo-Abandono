@@ -6,11 +6,7 @@ import 'sidebar_tile.dart';
 
 /// Sección del menú lateral con título e ítems.
 class MenuSection extends StatelessWidget {
-  const MenuSection({
-    super.key,
-    required this.title,
-    required this.items,
-  });
+  const MenuSection({super.key, required this.title, required this.items});
 
   final String title;
   final List<MenuItem> items;
@@ -27,7 +23,7 @@ class MenuSection extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: AppColors.white.withOpacity(0.6),
+                color: AppColors.white.withValues(alpha: 0.6),
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.2,

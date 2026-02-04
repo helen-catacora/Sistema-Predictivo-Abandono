@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../auth/presentation/widgets/image_placeholder.dart';
+import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
 
 /// Perfil de usuario en el menú lateral.
 class UserProfile extends StatelessWidget {
@@ -15,12 +13,12 @@ class UserProfile extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: AppColors.navyMedium.withOpacity(0.5),
+        color: AppColors.navyMedium.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          const ImagePlaceholder(size: 44, borderRadius: 22),
+          CircleAvatar(child: Text('CR')),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -37,7 +35,7 @@ class UserProfile extends StatelessWidget {
                 Text(
                   'Sesión Activa',
                   style: TextStyle(
-                    color: AppColors.white.withOpacity(0.7),
+                    color: AppColors.white.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),

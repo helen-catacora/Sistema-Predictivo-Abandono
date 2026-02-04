@@ -67,8 +67,10 @@ class ReportsFilterSection extends StatelessWidget {
                   label: const Text('APLICAR FILTROS'),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.navyMedium,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
                   ),
                 ),
               ],
@@ -106,20 +108,16 @@ class _FilterField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 12,
             ),
             isDense: true,
           ),
-          items: [
-            DropdownMenuItem(value: value, child: Text(displayText)),
-          ],
+          items: [DropdownMenuItem(value: value, child: Text(displayText))],
           onChanged: (_) {},
         ),
       ],

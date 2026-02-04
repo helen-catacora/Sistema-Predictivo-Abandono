@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import 'image_placeholder.dart';
 
 /// Panel derecho del login con el formulario de inicio de sesión.
 class LoginRightPanel extends StatelessWidget {
@@ -43,44 +44,55 @@ class LoginRightPanel extends StatelessWidget {
                 children: [
                   Center(
                     child: Container(
-                      padding: const EdgeInsets.all(16),
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
-                        color: AppColors.grayLight,
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.gray002855.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const ImagePlaceholder(size: 48, borderRadius: 8),
+                      child: Icon(
+                        FontAwesomeIcons.lock,
+                        size: 30,
+                        color: AppColors.gray002855,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Bienvenido',
+                  Text(
+                    'Bienvenido de Vuelta',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.navyMedium,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.inter(
+                      color: AppColors.darkBlue1E293B,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      height: 36 / 30,
+                      letterSpacing: 0,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Ingrese sus credenciales para acceder al sistema',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.grayMedium,
-                      fontSize: 14,
+                    style: GoogleFonts.inter(
+                      color: Color(0xff64748B),
+                      fontSize: 16,
+                      height: 24 / 16,
+                      letterSpacing: 0,
                     ),
                   ),
                   const SizedBox(height: 32),
                   Row(
                     children: [
-                      const ImagePlaceholder(size: 20, borderRadius: 4),
+                      Icon(Icons.email, size: 16, color: AppColors.gray002855),
                       const SizedBox(width: 8),
                       Text(
                         'CORREO ELECTRÓNICO',
-                        style: TextStyle(
-                          color: AppColors.grayDark,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                        style: GoogleFonts.inter(
+                          color: Color(0xff334155),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          height: 20 / 14,
+                          letterSpacing: 0.35,
                         ),
                       ),
                     ],
@@ -109,14 +121,20 @@ class LoginRightPanel extends StatelessWidget {
                   const SizedBox(height: 24),
                   Row(
                     children: [
-                      const ImagePlaceholder(size: 20, borderRadius: 4),
+                      Icon(
+                        FontAwesomeIcons.key,
+                        size: 16,
+                        color: AppColors.gray002855,
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         'CONTRASEÑA',
-                        style: TextStyle(
-                          color: AppColors.grayDark,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                        style: GoogleFonts.inter(
+                          color: Color(0xff334155),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          height: 20 / 14,
+                          letterSpacing: 0.35,
                         ),
                       ),
                     ],
@@ -136,14 +154,17 @@ class LoginRightPanel extends StatelessWidget {
                       ),
                       suffixIcon: IconButton(
                         onPressed: onTogglePassword,
-                        icon: const ImagePlaceholder(
-                          size: 24,
-                          borderRadius: 4,
+                        icon: Icon(
+                          FontAwesomeIcons.solidEye,
+                          color: Color(0xff94A3B8),
+                          size: 18,
                         ),
                       ),
                     ),
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Ingrese su contraseña';
+                      if (v == null || v.isEmpty) {
+                        return 'Ingrese su contraseña';
+                      }
                       return null;
                     },
                   ),
@@ -167,9 +188,12 @@ class LoginRightPanel extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         'Recordar sesión',
-                        style: TextStyle(
-                          color: AppColors.grayDark,
+                        style: GoogleFonts.inter(
+                          color: Color(0xff475569),
                           fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          height: 20 / 14,
+                          letterSpacing: 0,
                         ),
                       ),
                       const Spacer(),
@@ -177,12 +201,14 @@ class LoginRightPanel extends StatelessWidget {
                         onTap: () {
                           // TODO: ¿Olvidó su contraseña?
                         },
-                        child: const Text(
+                        child: Text(
                           '¿Olvidó su contraseña?',
-                          style: TextStyle(
-                            color: AppColors.navyMedium,
+                          style: GoogleFonts.inter(
+                            color: AppColors.gray002855,
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w700,
+                            height: 20 / 14,
+                            letterSpacing: 0,
                           ),
                         ),
                       ),
@@ -192,20 +218,35 @@ class LoginRightPanel extends StatelessWidget {
                   FilledButton(
                     onPressed: onLogin,
                     style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.navyMedium,
+                      backgroundColor: Color(0xff001233),
                       foregroundColor: AppColors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('INICIAR SESIÓN'),
-                        const SizedBox(width: 8),
-                        const ImagePlaceholder(size: 20, borderRadius: 4),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'INICIAR SESIÓN',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              height: 24 / 16,
+                              letterSpacing: 0,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.arrow_forward_outlined,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 28),
@@ -218,7 +259,7 @@ class LoginRightPanel extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const ImagePlaceholder(size: 24, borderRadius: 12),
+                        Icon(Icons.info, color: Color(0xff001233)),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -252,10 +293,7 @@ class LoginRightPanel extends StatelessWidget {
                   Text.rich(
                     TextSpan(
                       text: '¿Necesita ayuda? ',
-                      style: TextStyle(
-                        color: AppColors.grayDark,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: AppColors.grayDark, fontSize: 14),
                       children: [
                         TextSpan(
                           text: 'Contacte a Soporte Técnico',

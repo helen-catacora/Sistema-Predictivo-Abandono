@@ -40,7 +40,9 @@ class _LastImportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = success ? const Color(0xFF22C55E) : const Color(0xFFEAB308);
+    final statusColor = success
+        ? const Color(0xFF22C55E)
+        : const Color(0xFFEAB308);
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -51,11 +53,7 @@ class _LastImportCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            Icon(
-              Icons.check_circle,
-              color: statusColor,
-              size: 40,
-            ),
+            Icon(Icons.check_circle, color: statusColor, size: 40),
             const SizedBox(width: 16),
             Text(
               success ? 'Exitosa' : 'Con errores',
@@ -105,11 +103,7 @@ class _StatisticsCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.show_chart,
-                  color: AppColors.accentYellow,
-                  size: 24,
-                ),
+                Icon(Icons.show_chart, color: AppColors.accentYellow, size: 24),
                 const SizedBox(width: 8),
                 const Text(
                   'Estadísticas',
@@ -124,10 +118,7 @@ class _StatisticsCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Total de Importaciones',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
             const SizedBox(height: 12),
             Row(
@@ -145,10 +136,7 @@ class _StatisticsCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'CARGAS REALIZADAS',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                 ),
               ],
             ),
@@ -192,11 +180,7 @@ class _RequiredFieldsCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.list_alt,
-                  color: AppColors.navyMedium,
-                  size: 24,
-                ),
+                Icon(Icons.list_alt, color: AppColors.navyMedium, size: 24),
                 const SizedBox(width: 8),
                 const Text(
                   'Campos Requeridos',
@@ -243,11 +227,7 @@ class _RequiredFieldsCard extends StatelessWidget {
                     SizedBox(
                       width: 20,
                       height: 20,
-                      child: Radio<String>(
-                        value: f,
-                        groupValue: null,
-                        onChanged: (_) {},
-                      ),
+                      child: Radio<String>(value: f),
                     ),
                     const SizedBox(width: 8),
                     Text(f, style: const TextStyle(fontSize: 13)),

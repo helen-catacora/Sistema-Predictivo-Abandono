@@ -83,14 +83,16 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
   void _markAllPresent() {
     setState(() {
       _students = _students
-          .map((s) => StudentAttendanceRowData(
-                nro: s.nro,
-                grade: s.grade,
-                name: s.name,
-                code: s.code,
-                status: AttendanceStatus.presente,
-                observation: s.observation,
-              ))
+          .map(
+            (s) => StudentAttendanceRowData(
+              nro: s.nro,
+              grade: s.grade,
+              name: s.name,
+              code: s.code,
+              status: AttendanceStatus.presente,
+              observation: s.observation,
+            ),
+          )
           .toList();
     });
   }
@@ -98,14 +100,16 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
   void _clearAll() {
     setState(() {
       _students = _students
-          .map((s) => StudentAttendanceRowData(
-                nro: s.nro,
-                grade: s.grade,
-                name: s.name,
-                code: s.code,
-                status: null,
-                observation: null,
-              ))
+          .map(
+            (s) => StudentAttendanceRowData(
+              nro: s.nro,
+              grade: s.grade,
+              name: s.name,
+              code: s.code,
+              status: null,
+              observation: null,
+            ),
+          )
           .toList();
     });
   }
@@ -167,7 +171,9 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                headingRowColor: WidgetStateProperty.all(const Color(0xFF2C3E50)),
+                headingRowColor: WidgetStateProperty.all(
+                  const Color(0xFF2C3E50),
+                ),
                 columns: const [
                   DataColumn(
                     label: Text(
@@ -225,7 +231,7 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                   final s = entry.value;
                   return DataRow(
                     cells: [
-                      DataCell(Text('${s.nro.toString().padLeft(2, '0')}')),
+                      DataCell(Text(s.nro.toString().padLeft(2, '0'))),
                       DataCell(
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -286,8 +292,9 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.accentYellow
-                                      .withValues(alpha: 0.3),
+                                  color: AppColors.accentYellow.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(

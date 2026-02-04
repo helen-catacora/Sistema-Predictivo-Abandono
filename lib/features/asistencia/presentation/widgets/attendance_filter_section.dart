@@ -33,7 +33,7 @@ class AttendanceFilterSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: 'algebra',
+                    initialValue: 'algebra',
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -82,10 +82,7 @@ class AttendanceFilterSection extends StatelessWidget {
                       isDense: true,
                     ),
                     items: const [
-                      DropdownMenuItem(
-                        value: 'a',
-                        child: Text('Paralelo A'),
-                      ),
+                      DropdownMenuItem(value: 'a', child: Text('Paralelo A')),
                     ],
                     onChanged: (_) {},
                   ),
@@ -130,7 +127,10 @@ class AttendanceFilterSection extends StatelessWidget {
               label: const Text('Aplicar Filtros'),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.navyMedium,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
               ),
             ),
           ],

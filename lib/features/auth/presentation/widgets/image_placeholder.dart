@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Contenedor rojo como placeholder para imágenes en desarrollo.
 class ImagePlaceholder extends StatelessWidget {
-  const ImagePlaceholder({
-    super.key,
-    this.size = 48,
-    this.borderRadius = 8,
-  });
+  const ImagePlaceholder({super.key, this.size = 48, this.borderRadius = 8});
 
   final double size;
   final double borderRadius;
