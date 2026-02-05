@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../providers/asistencias_provider.dart';
 
 /// Tarjetas de resumen de asistencia.
 class AttendanceSummaryCards extends StatelessWidget {
@@ -8,40 +10,49 @@ class AttendanceSummaryCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _SummaryCard(
-            title: 'TOTAL ESTUDIANTES',
-            value: '42',
-            valueColor: AppColors.navyMedium,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _SummaryCard(
-            title: 'PRESENTES',
-            value: '35',
-            valueColor: const Color(0xFF22C55E),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _SummaryCard(
-            title: 'AUSENTES',
-            value: '4',
-            valueColor: const Color(0xFFEF4444),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _SummaryCard(
-            title: 'TASA DE ASISTENCIA',
-            value: '83.3%',
-            valueColor: AppColors.navyMedium,
-          ),
-        ),
-      ],
+    return Consumer<AsistenciasProvider>(
+      builder: (context, provider, _) {
+        final hasData = provider.hasData;
+        return Row(
+          children: [
+            Expanded(
+              child: _SummaryCard(
+                title: 'TOTAL ESTUDIANTES',
+                value: hasData
+                    ? provider.totalEstudiantes.toString()
+                    : '-',
+                valueColor: AppColors.navyMedium,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _SummaryCard(
+                title: 'PRESENTES',
+                value: hasData ? provider.totalPresentes.toString() : '-',
+                valueColor: const Color(0xFF22C55E),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _SummaryCard(
+                title: 'AUSENTES',
+                value: hasData ? provider.totalAusentes.toString() : '-',
+                valueColor: const Color(0xFFEF4444),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _SummaryCard(
+                title: 'TASA DE ASISTENCIA',
+                value: hasData
+                    ? '${provider.porcentajeAsistenciaDia.toStringAsFixed(1)}%'
+                    : '-',
+                valueColor: AppColors.navyMedium,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

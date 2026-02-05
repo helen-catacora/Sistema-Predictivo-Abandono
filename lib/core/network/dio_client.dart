@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../constants/api_endpoints.dart';
+import '../storage/token_storage.dart';
 
 /// Cliente HTTP configurado con Dio.
 class DioClient {
@@ -22,6 +23,18 @@ class DioClient {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+        },
+      ),
+    );
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final token = TokenStorage.getAccessToken();
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
         },
       ),
     );

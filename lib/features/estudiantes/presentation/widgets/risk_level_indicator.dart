@@ -4,7 +4,20 @@ import 'package:flutter/material.dart';
 enum RiskLevel {
   alto,
   medio,
-  bajo,
+  bajo;
+
+  static RiskLevel fromString(String value) {
+    switch (value.toUpperCase()) {
+      case 'ALTO':
+        return RiskLevel.alto;
+      case 'MEDIO':
+        return RiskLevel.medio;
+      case 'BAJO':
+        return RiskLevel.bajo;
+      default:
+        return RiskLevel.medio;
+    }
+  }
 }
 
 /// Widget que muestra un punto de color y el nivel de riesgo.

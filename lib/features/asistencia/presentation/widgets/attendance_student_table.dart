@@ -1,135 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../providers/asistencias_provider.dart';
 import 'attendance_status_selector.dart';
 
-/// Fila de estudiante para la tabla de asistencia.
-class StudentAttendanceRowData {
-  const StudentAttendanceRowData({
-    required this.nro,
-    required this.grade,
-    required this.name,
-    required this.code,
-    required this.status,
-    this.observation,
-  });
-
-  final int nro;
-  final String grade; // Est., Alfz., etc.
-  final String name;
-  final String code;
-  final AttendanceStatus? status;
-  final String? observation;
+/// Convierte string de API a AttendanceStatus.
+AttendanceStatus? _estadoFromString(String s) {
+  final t = s.toLowerCase();
+  if (t.contains('presente')) return AttendanceStatus.presente;
+  if (t.contains('ausente')) return AttendanceStatus.ausente;
+  if (t.contains('justificado')) return AttendanceStatus.justificado;
+  return null;
 }
 
 /// Tabla de estudiantes para registro de asistencia.
-class AttendanceStudentTable extends StatefulWidget {
+class AttendanceStudentTable extends StatelessWidget {
   const AttendanceStudentTable({super.key});
 
   @override
-  State<AttendanceStudentTable> createState() => _AttendanceStudentTableState();
-}
-
-class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
-  late List<StudentAttendanceRowData> _students;
-
-  @override
-  void initState() {
-    super.initState();
-    _students = [
-      StudentAttendanceRowData(
-        nro: 1,
-        grade: 'Est.',
-        name: 'Alex Johnson',
-        code: '2023-04921',
-        status: AttendanceStatus.presente,
-        observation: null,
-      ),
-      StudentAttendanceRowData(
-        nro: 2,
-        grade: 'Alfz.',
-        name: 'Sarah Williams',
-        code: '2023-04875',
-        status: AttendanceStatus.ausente,
-        observation: null,
-      ),
-      StudentAttendanceRowData(
-        nro: 3,
-        grade: 'Est.',
-        name: 'Marcus Chen',
-        code: '2023-04112',
-        status: AttendanceStatus.justificado,
-        observation: 'Baja Médica',
-      ),
-      StudentAttendanceRowData(
-        nro: 4,
-        grade: 'Est.',
-        name: 'María García',
-        code: '2023-05234',
-        status: AttendanceStatus.presente,
-        observation: null,
-      ),
-      StudentAttendanceRowData(
-        nro: 5,
-        grade: 'Est.',
-        name: 'Carlos López',
-        code: '2023-05189',
-        status: AttendanceStatus.presente,
-        observation: null,
-      ),
-    ];
-  }
-
-  void _markAllPresent() {
-    setState(() {
-      _students = _students
-          .map(
-            (s) => StudentAttendanceRowData(
-              nro: s.nro,
-              grade: s.grade,
-              name: s.name,
-              code: s.code,
-              status: AttendanceStatus.presente,
-              observation: s.observation,
-            ),
-          )
-          .toList();
-    });
-  }
-
-  void _clearAll() {
-    setState(() {
-      _students = _students
-          .map(
-            (s) => StudentAttendanceRowData(
-              nro: s.nro,
-              grade: s.grade,
-              name: s.name,
-              code: s.code,
-              status: null,
-              observation: null,
-            ),
-          )
-          .toList();
-    });
-  }
-
-  void _updateStatus(int index, AttendanceStatus? status) {
-    setState(() {
-      final s = _students[index];
-      _students[index] = StudentAttendanceRowData(
-        nro: s.nro,
-        grade: s.grade,
-        name: s.name,
-        code: s.code,
-        status: status,
-        observation: s.observation,
-      );
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    return Consumer<AsistenciasProvider>(
+      builder: (context, provider, _) {
+        if (!provider.hasData && !provider.isLoading) {
+          return _buildEmptyState();
+        }
+
+        if (provider.hasError) {
+          return _buildErrorState(provider.errorMessage ?? 'Error');
+        }
+
+        return _buildTable(context, provider);
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(48),
+        child: Center(
+          child: Text(
+            'Seleccione paralelo y materia, luego pulse "Aplicar Filtros"',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.grayMedium, fontSize: 14),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String message) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(48),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: Colors.red.shade700),
+              const SizedBox(height: 16),
+              Text(message, textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTable(BuildContext context, AsistenciasProvider provider) {
+    final items = provider.editableAsistencias;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -147,11 +100,11 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
             Row(
               children: [
                 TextButton(
-                  onPressed: _markAllPresent,
+                  onPressed: items.isNotEmpty ? provider.markAllPresent : null,
                   child: const Text('MARCAR TODOS PRESENTES'),
                 ),
                 TextButton(
-                  onPressed: _clearAll,
+                  onPressed: items.isNotEmpty ? provider.clearAll : null,
                   child: const Text('LIMPIAR TODO'),
                 ),
               ],
@@ -226,12 +179,13 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                     ),
                   ),
                 ],
-                rows: _students.asMap().entries.map((entry) {
+                rows: items.asMap().entries.map((entry) {
                   final i = entry.key;
-                  final s = entry.value;
+                  final e = entry.value;
+                  final status = _estadoFromString(e.estado);
                   return DataRow(
                     cells: [
-                      DataCell(Text(s.nro.toString().padLeft(2, '0'))),
+                      DataCell(Text((i + 1).toString().padLeft(2, '0'))),
                       DataCell(
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -239,19 +193,15 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: s.grade == 'Alfz.'
-                                ? AppColors.blueLight
-                                : AppColors.grayLight,
+                            color: AppColors.grayLight,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            s.grade,
+                            'Est.',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
-                              color: s.grade == 'Alfz.'
-                                  ? AppColors.navyMedium
-                                  : AppColors.grayDark,
+                              color: AppColors.grayDark,
                             ),
                           ),
                         ),
@@ -262,14 +212,14 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              s.name,
+                              e.nombreEstudiante,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
                             ),
                             Text(
-                              s.code,
+                              e.codigoEstudiante,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.shade600,
@@ -280,12 +230,12 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                       ),
                       DataCell(
                         AttendanceStatusSelector(
-                          selectedStatus: s.status,
-                          onChanged: (v) => _updateStatus(i, v),
+                          selectedStatus: status,
+                          onChanged: (v) => provider.updateEstatus(i, v),
                         ),
                       ),
                       DataCell(
-                        s.observation != null
+                        e.observacion.isNotEmpty
                             ? Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -307,7 +257,7 @@ class _AttendanceStudentTableState extends State<AttendanceStudentTable> {
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      s.observation!,
+                                      e.observacion,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade800,

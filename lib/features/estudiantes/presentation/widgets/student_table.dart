@@ -1,84 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../data/models/estudiante_item.dart';
+import '../providers/estudiantes_provider.dart';
 import 'attendance_bar.dart';
 import 'risk_level_indicator.dart';
-
-/// Modelo de estudiante para la tabla.
-class StudentRowData {
-  const StudentRowData({
-    required this.name,
-    required this.career,
-    required this.id,
-    required this.attendance,
-    required this.promedio,
-    required this.promedioMax,
-    required this.riskLevel,
-  });
-
-  final String name;
-  final String career;
-  final String id;
-  final int attendance;
-  final double promedio;
-  final double promedioMax;
-  final RiskLevel riskLevel;
-}
 
 /// Tabla de estudiantes en riesgo académico.
 class StudentTable extends StatelessWidget {
   const StudentTable({super.key});
 
-  static final _sampleData = [
-    StudentRowData(
-      name: 'Alejandro Morales',
-      career: 'Ing. de Sistemas',
-      id: 'EMI-2024-0012',
-      attendance: 62,
-      promedio: 3.2,
-      promedioMax: 5.0,
-      riskLevel: RiskLevel.alto,
-    ),
-    StudentRowData(
-      name: 'Luciana Beltrán',
-      career: 'Ing. Civil',
-      id: 'EMI-2024-0085',
-      attendance: 81,
-      promedio: 3.8,
-      promedioMax: 5.0,
-      riskLevel: RiskLevel.medio,
-    ),
-    StudentRowData(
-      name: 'Sofía Gutiérrez',
-      career: 'Ing. de Sistemas',
-      id: 'EMI-2024-0044',
-      attendance: 45,
-      promedio: 2.1,
-      promedioMax: 5.0,
-      riskLevel: RiskLevel.alto,
-    ),
-    StudentRowData(
-      name: 'Carlos Rodríguez',
-      career: 'Ing. Industrial',
-      id: 'EMI-2024-0104',
-      attendance: 95,
-      promedio: 4.5,
-      promedioMax: 5.0,
-      riskLevel: RiskLevel.bajo,
-    ),
-    StudentRowData(
-      name: 'Valentina Ruiz',
-      career: 'Ing. Mecatrónica',
-      id: 'EMI-2024-0099',
-      attendance: 75,
-      promedio: 3.5,
-      promedioMax: 5.0,
-      riskLevel: RiskLevel.medio,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    return Consumer<EstudiantesProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoading) {
+          return _buildLoading(context);
+        }
+        if (provider.hasError) {
+          return _buildError(context, provider.errorMessage ?? 'Error desconocido',
+              provider.loadEstudiantes);
+        }
+        return _buildTable(context, provider.filteredEstudiantes);
+      },
+    );
+  }
+
+  Widget _buildLoading(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(48),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Cargando estudiantes...'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(
+      BuildContext context, String message, VoidCallback onRetry) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(48),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: Colors.red.shade700),
+              const SizedBox(height: 16),
+              Text(message, textAlign: TextAlign.center),
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTable(BuildContext context, List<EstudianteItem> estudiantes) {
     return Card(
       elevation: 0,
       color: AppColors.white,
@@ -154,7 +158,7 @@ class StudentTable extends StatelessWidget {
                 ),
               ),
             ],
-            rows: _sampleData
+            rows: estudiantes
                 .map((s) => DataRow(
                       cells: [
                         DataCell(
@@ -163,14 +167,14 @@ class StudentTable extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                s.name,
+                                s.nombreCompleto,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
                               ),
                               Text(
-                                s.career,
+                                s.carrera,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey.shade600,
@@ -179,15 +183,17 @@ class StudentTable extends StatelessWidget {
                             ],
                           ),
                         ),
-                        DataCell(Text(s.id)),
+                        DataCell(Text(s.codigoEstudiante)),
                         DataCell(
                           SizedBox(
                             width: 100,
-                            child: AttendanceBar(percentage: s.attendance),
+                            child: AttendanceBar(percentage: s.porcentajeAsistencia),
                           ),
                         ),
-                        DataCell(Text('${s.promedio} / ${s.promedioMax}')),
-                        DataCell(RiskLevelIndicator(level: s.riskLevel)),
+                        DataCell(Text(
+                            s.promedio != null ? '${s.promedio} / 5.0' : '-')),
+                        DataCell(RiskLevelIndicator(
+                            level: RiskLevel.fromString(s.nivelRiesgo))),
                         DataCell(
                           FilledButton(
                             onPressed: () {},

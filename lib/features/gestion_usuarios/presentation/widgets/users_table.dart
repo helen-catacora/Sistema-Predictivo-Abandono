@@ -1,82 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../data/models/usuario_item.dart';
+import '../providers/usuarios_provider.dart';
 
-/// Fila de usuario para la tabla.
-class UserRowData {
-  const UserRowData({
-    required this.initials,
-    required this.name,
-    required this.position,
-    required this.email,
-    required this.role,
-    required this.isAdmin,
-    required this.isActive,
-  });
-
-  final String initials;
-  final String name;
-  final String position;
-  final String email;
-  final String role;
-  final bool isAdmin;
-  final bool isActive;
+/// Genera iniciales a partir del nombre (ej: "Juan Pérez" -> "JP").
+String _iniciales(String nombre) {
+  final partes = nombre.trim().split(RegExp(r'\s+'));
+  if (partes.isEmpty) return '';
+  if (partes.length == 1) {
+    final s = partes.first;
+    return s.length >= 2 ? s.substring(0, 2).toUpperCase() : s.toUpperCase();
+  }
+  return (partes.first[0] + partes.last[0]).toUpperCase();
 }
 
 /// Tabla de usuarios registrados.
 class UsersTable extends StatelessWidget {
   const UsersTable({super.key});
 
-  static final _sampleData = [
-    UserRowData(
-      initials: 'JP',
-      name: 'Juan Pérez',
-      position: 'Administrador del Sistema',
-      email: 'juan.perez@emi.edu.bo',
-      role: 'ADMINISTRADOR',
-      isAdmin: true,
-      isActive: true,
-    ),
-    UserRowData(
-      initials: 'AM',
-      name: 'Ana Morales',
-      position: 'Coordinadora Académica',
-      email: 'ana.morales@emi.edu.bo',
-      role: 'ADMINISTRADOR',
-      isAdmin: true,
-      isActive: true,
-    ),
-    UserRowData(
-      initials: 'MG',
-      name: 'Maria García',
-      position: 'Encargada de Asistencia',
-      email: 'maria.garcia@emi.edu.bo',
-      role: 'ENCARGADO',
-      isAdmin: false,
-      isActive: true,
-    ),
-    UserRowData(
-      initials: 'CR',
-      name: 'Carlos Rojas',
-      position: 'Docente Dedicación Exclusiva',
-      email: 'carlos.rojas@emi.edu.bo',
-      role: 'ENCARGADO',
-      isAdmin: false,
-      isActive: false,
-    ),
-    UserRowData(
-      initials: 'LP',
-      name: 'Luis Paredes',
-      position: 'Encargado de Registro',
-      email: 'luis.paredes@emi.edu.bo',
-      role: 'ENCARGADO',
-      isAdmin: false,
-      isActive: true,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    return Consumer<UsuariosProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoading) {
+          return _buildLoading(context);
+        }
+        if (provider.hasError) {
+          return _buildError(
+            context,
+            provider.errorMessage ?? 'Error desconocido',
+            provider.loadUsuarios,
+          );
+        }
+        return _buildTable(context, provider.usuarios);
+      },
+    );
+  }
+
+  Widget _buildLoading(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(48),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(
+    BuildContext context,
+    String message,
+    VoidCallback onRetry,
+  ) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(48),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: Colors.red.shade700),
+              const SizedBox(height: 16),
+              Text(message, textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTable(BuildContext context, List<UsuarioItem> usuarios) {
     return Card(
       elevation: 0,
       color: AppColors.white,
@@ -142,7 +156,7 @@ class UsersTable extends StatelessWidget {
                 ),
               ),
             ],
-            rows: _sampleData
+            rows: usuarios
                 .map(
                   (u) => DataRow(
                     cells: [
@@ -152,13 +166,13 @@ class UsersTable extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 24,
-                              backgroundColor: u.isAdmin
+                              backgroundColor: _isAdmin(u.rol)
                                   ? AppColors.navyMedium
                                   : AppColors.grayLight,
                               child: Text(
-                                u.initials,
+                                _iniciales(u.nombre),
                                 style: TextStyle(
-                                  color: u.isAdmin
+                                  color: _isAdmin(u.rol)
                                       ? AppColors.white
                                       : AppColors.grayDark,
                                   fontSize: 14,
@@ -172,14 +186,14 @@ class UsersTable extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  u.name,
+                                  u.nombre,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
                                 ),
                                 Text(
-                                  u.position,
+                                  u.rol,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey.shade600,
@@ -190,7 +204,7 @@ class UsersTable extends StatelessWidget {
                           ],
                         ),
                       ),
-                      DataCell(Text(u.email)),
+                      DataCell(Text(u.correo)),
                       DataCell(
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -198,18 +212,18 @@ class UsersTable extends StatelessWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: u.isAdmin
+                            color: _isAdmin(u.rol)
                                 ? AppColors.navyMedium
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
-                            border: u.isAdmin
+                            border: _isAdmin(u.rol)
                                 ? null
                                 : Border.all(color: Colors.grey.shade400),
                           ),
                           child: Text(
-                            u.role,
+                            u.rol,
                             style: TextStyle(
-                              color: u.isAdmin
+                              color: _isAdmin(u.rol)
                                   ? AppColors.white
                                   : AppColors.grayDark,
                               fontSize: 12,
@@ -226,7 +240,7 @@ class UsersTable extends StatelessWidget {
                               width: 8,
                               height: 8,
                               decoration: BoxDecoration(
-                                color: u.isActive
+                                color: _isActivo(u.estado)
                                     ? const Color(0xFF22C55E)
                                     : Colors.grey.shade400,
                                 shape: BoxShape.circle,
@@ -234,9 +248,9 @@ class UsersTable extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              u.isActive ? 'Activo' : 'Inactivo',
+                              _isActivo(u.estado) ? 'Activo' : 'Inactivo',
                               style: TextStyle(
-                                color: u.isActive
+                                color: _isActivo(u.estado)
                                     ? const Color(0xFF22C55E)
                                     : Colors.grey.shade600,
                                 fontSize: 13,
@@ -271,5 +285,14 @@ class UsersTable extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isAdmin(String rol) {
+    final r = rol.toUpperCase();
+    return r.contains('ADMIN') || r.contains('ADMINISTRADOR');
+  }
+
+  bool _isActivo(String estado) {
+    return estado.toLowerCase().trim() == 'activo';
   }
 }

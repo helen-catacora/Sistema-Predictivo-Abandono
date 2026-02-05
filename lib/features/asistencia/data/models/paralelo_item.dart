@@ -1,0 +1,26 @@
+/// Modelo de paralelo del endpoint /paralelos.
+class ParaleloItem {
+  ParaleloItem({
+    required this.id,
+    required this.nombre,
+    required this.areaId,
+    required this.semestreId,
+    required this.nombreEncargado,
+  });
+
+  factory ParaleloItem.fromJson(Map<String, dynamic> json) {
+    return ParaleloItem(
+      id: json['id'] as int,
+      nombre: json['nombre'] as String,
+      areaId: json['area_id'] as int,
+      semestreId: json['semestre_id'] as int,
+      nombreEncargado: json['nombre_encargado'] as String,
+    );
+  }
+
+  final int id;
+  final String nombre;
+  final int areaId;
+  final int semestreId;
+  final String nombreEncargado;
+}

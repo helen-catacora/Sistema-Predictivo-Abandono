@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 
 import 'core/router/app_router.dart';
 import 'core/storage/token_storage.dart';
-import 'features/auth/presentation/pages/login_page.dart';
+import 'features/asistencia/presentation/providers/asistencias_provider.dart';
+import 'features/asistencia/presentation/providers/materias_provider.dart';
+import 'features/asistencia/presentation/providers/paralelos_provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/estudiantes/presentation/providers/estudiantes_provider.dart';
+import 'features/gestion_usuarios/presentation/providers/usuarios_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,8 +38,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthProvider>.value(
-      value: authProvider,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ChangeNotifierProvider(create: (_) => EstudiantesProvider()),
+        ChangeNotifierProvider(create: (_) => ParalelosProvider()),
+        ChangeNotifierProvider(create: (_) => MateriasProvider()),
+        ChangeNotifierProvider(create: (_) => AsistenciasProvider()),
+        ChangeNotifierProvider(create: (_) => UsuariosProvider()),
+      ],
       child: MaterialApp.router(
         title: 'Sistema Predictivo de Abandono Estudiantil',
         debugShowCheckedModeBanner: false,

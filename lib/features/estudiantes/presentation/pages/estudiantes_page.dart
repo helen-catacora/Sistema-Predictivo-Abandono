@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/estudiantes_provider.dart';
 import '../widgets/academic_risk_header.dart';
 import '../widgets/student_filter_section.dart';
 import '../widgets/student_table.dart';
 
 /// Pantalla Estudiantes en Riesgo Académico.
-class EstudiantesPage extends StatelessWidget {
+class EstudiantesPage extends StatefulWidget {
   const EstudiantesPage({super.key});
+
+  @override
+  State<EstudiantesPage> createState() => _EstudiantesPageState();
+}
+
+class _EstudiantesPageState extends State<EstudiantesPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EstudiantesProvider>().loadEstudiantes();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
