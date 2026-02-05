@@ -6,7 +6,9 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/layout/dashboard_layout.dart';
 import '../../features/estudiantes/presentation/pages/estudiantes_page.dart';
+import '../../features/gestion_usuarios/data/models/usuario_item.dart';
 import '../../features/gestion_usuarios/presentation/pages/gestion_usuarios_page.dart';
+import '../../features/gestion_usuarios/presentation/pages/user_form_page.dart';
 import '../../features/importar_datos/presentation/pages/importar_datos_page.dart';
 import '../../features/panel_principal/presentation/pages/panel_principal_page.dart';
 import '../../features/reportes/presentation/pages/reportes_page.dart';
@@ -21,6 +23,8 @@ abstract class AppRoutes {
   static const String homeReportes = '/home/reportes';
   static const String homeImportarDatos = '/home/importar-datos';
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
+  static const String userFormNuevo = '/home/gestion-usuarios/nuevo';
+  static const String userFormEditar = '/home/gestion-usuarios/editar';
 }
 
 /// Crea el router con lógica de redirección según autenticación.
@@ -105,6 +109,25 @@ final List<RouteBase> _routes = [
                 key: state.pageKey,
                 child: const GestionUsuariosPage(),
               ),
+              routes: [
+                GoRoute(
+                  path: 'nuevo',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    key: state.pageKey,
+                    child: const UserFormPage(),
+                  ),
+                ),
+                GoRoute(
+                  path: 'editar',
+                  pageBuilder: (context, state) {
+                    final usuario = state.extra as UsuarioItem?;
+                    return NoTransitionPage(
+                      key: state.pageKey,
+                      child: UserFormPage(usuario: usuario),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

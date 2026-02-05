@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
 import '../../data/models/usuario_item.dart';
 import '../providers/usuarios_provider.dart';
 
@@ -261,7 +263,10 @@ class UsersTable extends StatelessWidget {
                       ),
                       DataCell(
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () => context.push(
+                            AppRoutes.userFormEditar,
+                            extra: u,
+                          ),
                           icon: Icon(
                             Icons.edit,
                             size: 18,

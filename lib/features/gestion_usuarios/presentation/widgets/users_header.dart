@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
 
 /// Encabezado de la página Gestión de Usuarios.
 class UsersHeader extends StatelessWidget {
@@ -33,7 +35,7 @@ class UsersHeader extends StatelessWidget {
           ],
         ),
         FilledButton.icon(
-          onPressed: () {},
+          onPressed: () => context.push(AppRoutes.userFormNuevo),
           icon: const Icon(Icons.person_add, size: 20),
           label: const Text('AGREGAR USUARIO'),
           style: FilledButton.styleFrom(
