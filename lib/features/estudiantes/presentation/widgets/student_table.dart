@@ -149,6 +149,16 @@ class StudentTable extends StatelessWidget {
               ),
               DataColumn(
                 label: Text(
+                  'CLASIFICACIÓN',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
                   'ACCIONES',
                   style: TextStyle(
                     color: Colors.white,
@@ -194,6 +204,7 @@ class StudentTable extends StatelessWidget {
                             s.promedio != null ? '${s.promedio} / 5.0' : '-')),
                         DataCell(RiskLevelIndicator(
                             level: RiskLevel.fromString(s.nivelRiesgo))),
+                        DataCell(Text(s.clasificacion ?? '-')),
                         DataCell(
                           FilledButton(
                             onPressed: () {},

@@ -8,6 +8,8 @@ class EstudianteItem {
     required this.porcentajeAsistencia,
     required this.nivelRiesgo,
     this.promedio,
+    this.probabilidadAbandono,
+    this.clasificacion,
   });
 
   factory EstudianteItem.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,8 @@ class EstudianteItem {
       porcentajeAsistencia: (json['porcentaje_asistencia'] as num?)?.toInt() ?? 0,
       nivelRiesgo: json['nivel_riesgo'] as String? ?? '',
       promedio: (json['promedio'] as num?)?.toDouble(),
+      probabilidadAbandono: (json['probabilidad_abandono'] as num?)?.toDouble(),
+      clasificacion: json['clasificacion_abandono'] as String?,
     );
   }
 
@@ -29,4 +33,8 @@ class EstudianteItem {
   final int porcentajeAsistencia;
   final String nivelRiesgo;
   final double? promedio;
+  /// Probabilidad de abandono (0–1) del modelo predictivo.
+  final double? probabilidadAbandono;
+  /// Clasificación de abandono del endpoint (ej. "Abandona", "No Abandona").
+  final String? clasificacion;
 }

@@ -10,6 +10,9 @@ abstract class ApiEndpoints {
   /// Estudiantes
   static const String estudiantesTabla = '/estudiantes/tabla';
 
+  /// Estudiantes - importar desde Excel (POST multipart/form-data con archivo .xlsx)
+  static const String estudiantesImportar = '/estudiantes/importar';
+
   /// Paralelos (para asistencia)
   static const String paralelos = '/paralelos';
 
