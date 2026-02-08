@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../widgets/alertas_criticas_section.dart';
 import '../widgets/estado_academico_section.dart';
+import '../widgets/resumen_paralelo_section.dart';
 import '../widgets/seguimiento_alumnos_section.dart';
 import '../widgets/tendencia_historica_section.dart';
 
 /// Pantalla Panel Principal del Sistema Predictivo de Abandono.
+/// Diseño: Estado Académico, Distribución de Riesgo + Alertas Críticas,
+/// Resumen por Paralelo, Seguimiento de Alumnos.
 class PanelPrincipalPage extends StatelessWidget {
   const PanelPrincipalPage({super.key});
 
@@ -44,6 +47,8 @@ class PanelPrincipalPage extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: 24),
+          const ResumenParaleloSection(),
           const SizedBox(height: 24),
           const SeguimientoAlumnosSection(),
         ],

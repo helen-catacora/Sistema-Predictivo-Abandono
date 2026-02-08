@@ -71,13 +71,38 @@ class SeguimientoAlumnosSection extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                headingRowColor: WidgetStateProperty.all(AppColors.grayLight),
+                headingRowColor: WidgetStateProperty.all(AppColors.navyDark),
                 columns: const [
-                  DataColumn(label: Text('ESTUDIANTE')),
-                  DataColumn(label: Text('NIVEL / SEMESTRE')),
-                  DataColumn(label: Text('ASISTENCIA')),
-                  DataColumn(label: Text('NIVEL DE RIESGO')),
-                  DataColumn(label: Text('ACCIONES')),
+                  DataColumn(
+                      label: Text('ESTUDIANTE',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12))),
+                  DataColumn(
+                      label: Text('NIVEL / SEMESTRE',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12))),
+                  DataColumn(
+                      label: Text('ASISTENCIA',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12))),
+                  DataColumn(
+                      label: Text('NIVEL DE RIESGO',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12))),
+                  DataColumn(
+                      label: Text('ACCIONES',
+                          style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12))),
                 ],
                 rows: [
                   _buildRow(
@@ -143,23 +168,42 @@ class SeguimientoAlumnosSection extends StatelessWidget {
     int riesgo,
     bool riesgoAlto,
   ) {
+    final initial = name.isNotEmpty ? name[0] : '?';
     return DataRow(
       cells: [
         DataCell(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                id,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
+              CircleAvatar(
+                radius: 18,
+                backgroundColor: AppColors.navyMedium,
+                child: Text(
+                  initial.toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+              ),
+              const SizedBox(width: 12),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    id,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

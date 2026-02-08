@@ -41,8 +41,9 @@ class AlertasCriticasSection extends StatelessWidget {
             detail: 'Inasistencia: 28%',
             detailColor: AppColors.grayMedium,
             badge: 'ALTO',
-            badgeColor: AppColors.accentYellow,
-            badgeTextColor: AppColors.grayDark,
+            badgeColor: Colors.orange,
+            badgeTextColor: AppColors.white,
+            initial: 'J',
           ),
           const SizedBox(height: 12),
           _AlertItem(
@@ -52,6 +53,7 @@ class AlertasCriticasSection extends StatelessWidget {
             badge: 'CRÍTICO',
             badgeColor: Colors.red,
             badgeTextColor: AppColors.white,
+            initial: 'M',
           ),
           const SizedBox(height: 12),
           _AlertItem(
@@ -59,8 +61,9 @@ class AlertasCriticasSection extends StatelessWidget {
             detail: 'Materias Reprobadas: 3',
             detailColor: AppColors.accentYellow,
             badge: 'ALTO',
-            badgeColor: AppColors.accentYellow,
-            badgeTextColor: AppColors.grayDark,
+            badgeColor: Colors.orange,
+            badgeTextColor: AppColors.white,
+            initial: 'C',
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -99,6 +102,7 @@ class _AlertItem extends StatelessWidget {
     required this.badge,
     required this.badgeColor,
     required this.badgeTextColor,
+    this.initial,
   });
 
   final String name;
@@ -107,9 +111,11 @@ class _AlertItem extends StatelessWidget {
   final String badge;
   final Color badgeColor;
   final Color badgeTextColor;
+  final String? initial;
 
   @override
   Widget build(BuildContext context) {
+    final letter = initial ?? (name.isNotEmpty ? name[0] : '?');
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -118,6 +124,19 @@ class _AlertItem extends StatelessWidget {
       ),
       child: Row(
         children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: AppColors.navyDark,
+            child: Text(
+              letter.toUpperCase(),
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

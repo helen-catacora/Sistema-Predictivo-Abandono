@@ -13,7 +13,7 @@ class EstadoAcademicoSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Estado Académico',
+          'Estado Académico - Gestión 2024',
           style: TextStyle(
             color: AppColors.navyMedium,
             fontSize: 22,
@@ -45,7 +45,8 @@ class EstadoAcademicoSection extends StatelessWidget {
                     subtitle: '3.4% del total de inscritos',
                     trend: '+5.2%',
                     trendIsPositive: true,
-                    icon: Icons.people_outline,
+                    topBorderColor: Colors.red,
+                    icon: Icons.warning_amber_rounded,
                   ),
                 ),
                 SizedBox(
@@ -64,7 +65,25 @@ class EstadoAcademicoSection extends StatelessWidget {
                 ),
                 SizedBox(
                   width: _cardWidth(constraints.maxWidth),
-                  child: _PlaceholderMetricCard(),
+                  child: MetricCard(
+                    title: 'ALERTAS ACTIVAS',
+                    value: '67',
+                    trend: '+8',
+                    trendIsPositive: true,
+                    trendColor: AppColors.accentYellow,
+                    topBorderColor: AppColors.accentYellow,
+                    details: [
+                      'Críticas: 15',
+                      'Altas: 42',
+                      'Medias: 10',
+                    ],
+                    detailColors: [
+                      Colors.red,
+                      Colors.orange,
+                      AppColors.accentYellow,
+                    ],
+                    icon: Icons.notifications_active_outlined,
+                  ),
                 ),
               ],
             );
@@ -78,29 +97,5 @@ class EstadoAcademicoSection extends StatelessWidget {
     if (maxWidth > 1200) return 280;
     if (maxWidth > 900) return 240;
     return double.infinity;
-  }
-}
-
-class _PlaceholderMetricCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: SizedBox(
-        height: 140,
-        child: Center(
-          child: Icon(
-            Icons.school_outlined,
-            size: 48,
-            color: AppColors.grayLight,
-          ),
-        ),
-      ),
-    );
   }
 }

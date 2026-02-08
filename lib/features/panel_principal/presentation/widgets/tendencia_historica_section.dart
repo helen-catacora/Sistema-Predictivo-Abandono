@@ -3,7 +3,15 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
-/// Sección Tendencia Histórica de Deserción con gráfico.
+/// Datos para una barra del gráfico de distribución de riesgo.
+class _BarItem {
+  const _BarItem(this.label, this.value, this.color);
+  final String label;
+  final double value;
+  final Color color;
+}
+
+/// Sección Distribución de Riesgo por Nivel con gráfico de barras.
 class TendenciaHistoricaSection extends StatefulWidget {
   const TendenciaHistoricaSection({super.key});
 
@@ -13,20 +21,16 @@ class TendenciaHistoricaSection extends StatefulWidget {
 }
 
 class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
-  bool _semanal = true;
+  bool _porNivel = true;
 
-  static const _sampleData = [
-    FlSpot(0, 3),
-    FlSpot(1, 4),
-    FlSpot(2, 3.5),
-    FlSpot(3, 5),
-    FlSpot(4, 4),
-    FlSpot(5, 6),
-    FlSpot(6, 5),
-    FlSpot(7, 7),
-    FlSpot(8, 5.5),
-    FlSpot(9, 6),
+  static const _barData = [
+    _BarItem('Bajo', 320, Colors.green),
+    _BarItem('Medio', 185, Colors.blue),
+    _BarItem('Alto', 95, Colors.orange),
+    _BarItem('Crítico', 42, Colors.red),
   ];
+
+  static const _maxY = 350.0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,7 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Tendencia Histórica de Deserción',
+                      'Distribución de Riesgo por Nivel',
                       style: TextStyle(
                         color: AppColors.navyMedium,
                         fontSize: 16,
@@ -68,16 +72,16 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                 ),
                 Row(
                   children: [
-                    _PeriodButton(
-                      label: 'SEMANAL',
-                      isSelected: _semanal,
-                      onTap: () => setState(() => _semanal = true),
+                    _TabButton(
+                      label: 'POR NIVEL',
+                      isSelected: _porNivel,
+                      onTap: () => setState(() => _porNivel = true),
                     ),
                     const SizedBox(width: 8),
-                    _PeriodButton(
-                      label: 'MENSUAL',
-                      isSelected: !_semanal,
-                      onTap: () => setState(() => _semanal = false),
+                    _TabButton(
+                      label: 'POR CARRERA',
+                      isSelected: !_porNivel,
+                      onTap: () => setState(() => _porNivel = false),
                     ),
                   ],
                 ),
@@ -85,46 +89,101 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
             ),
             const SizedBox(height: 24),
             SizedBox(
-              height: 220,
-              child: LineChart(
-                LineChartData(
+              height: 260,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: _maxY,
+                  barTouchData: BarTouchData(enabled: false),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          final i = value.toInt();
+                          if (i >= 0 && i < _barData.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                _barData[i].label,
+                                style: TextStyle(
+                                  color: AppColors.grayDark,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                        reservedSize: 28,
+                        interval: 1,
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            value.toInt().toString(),
+                            style: TextStyle(
+                              color: AppColors.grayMedium,
+                              fontSize: 11,
+                            ),
+                          );
+                        },
+                        reservedSize: 32,
+                        interval: 100,
+                      ),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                  ),
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    horizontalInterval: 1,
+                    horizontalInterval: 100,
                     getDrawingHorizontalLine: (value) => FlLine(
                       color: Colors.grey.shade200,
                       strokeWidth: 1,
                     ),
                   ),
-                  titlesData: FlTitlesData(show: false),
                   borderData: FlBorderData(show: false),
-                  minX: 0,
-                  maxX: 9,
-                  minY: 0,
-                  maxY: 8,
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: _sampleData,
-                      isCurved: true,
-                      color: AppColors.navyMedium,
-                      barWidth: 2.5,
-                      isStrokeCapRound: true,
-                      dotData: FlDotData(
-                        show: true,
-                        getDotPainter: (spot, percent, data, index) =>
-                            FlDotCirclePainter(
-                          radius: 4,
-                          color: AppColors.accentYellow,
-                          strokeWidth: 2,
-                          strokeColor: AppColors.navyMedium,
+                  barGroups: _barData.asMap().entries.map((e) {
+                    final i = e.key;
+                    final item = e.value;
+                    return BarChartGroupData(
+                      x: i,
+                      barRods: [
+                        BarChartRodData(
+                          toY: item.value,
+                          color: item.color,
+                          width: 36,
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(6),
+                          ),
                         ),
-                      ),
-                      belowBarData: BarAreaData(show: false),
-                    ),
-                  ],
+                      ],
+                      showingTooltipIndicators: [],
+                    );
+                  }).toList(),
                 ),
                 duration: const Duration(milliseconds: 250),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: Text(
+                'Número de Estudiantes',
+                style: TextStyle(
+                  color: AppColors.grayMedium,
+                  fontSize: 11,
+                ),
               ),
             ),
           ],
@@ -134,8 +193,8 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
   }
 }
 
-class _PeriodButton extends StatelessWidget {
-  const _PeriodButton({
+class _TabButton extends StatelessWidget {
+  const _TabButton({
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -152,7 +211,7 @@ class _PeriodButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.grayDark : Colors.transparent,
+          color: isSelected ? AppColors.navyDark : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: AppColors.grayMedium,

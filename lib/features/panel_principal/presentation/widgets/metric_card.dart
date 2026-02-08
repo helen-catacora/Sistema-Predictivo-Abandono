@@ -11,9 +11,12 @@ class MetricCard extends StatelessWidget {
     this.subtitle,
     this.trend,
     this.trendIsPositive = false,
+    this.trendColor,
     this.badge,
     this.details,
+    this.detailColors,
     this.icon,
+    this.topBorderColor,
   });
 
   final String title;
@@ -21,25 +24,50 @@ class MetricCard extends StatelessWidget {
   final String? subtitle;
   final String? trend;
   final bool trendIsPositive;
+  /// Si se define, usa este color para el trend en lugar de rojo/verde por defecto.
+  final Color? trendColor;
   final String? badge;
   final List<String>? details;
+  /// Mismo orden que [details]; si se define, cada línea usa su color.
+  final List<Color>? detailColors;
   final IconData? icon;
+  /// Borde superior de la tarjeta (ej. rojo para riesgo, amarillo para alertas).
+  final Color? topBorderColor;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.white,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: topBorderColor != null
+            ? [
+                BoxShadow(
+                  color: topBorderColor!.withValues(alpha: 0.3),
+                  offset: const Offset(0, -1),
+                  blurRadius: 0,
+                  spreadRadius: 0,
+                ),
+              ]
+            : null,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (topBorderColor != null)
+              Container(
+                height: 4,
+                color: topBorderColor,
+              ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
             Text(
               title,
               style: TextStyle(
@@ -100,16 +128,18 @@ class MetricCard extends StatelessWidget {
                                       ? Icons.arrow_upward
                                       : Icons.arrow_downward,
                                   size: 14,
-                                  color: trendIsPositive
-                                      ? Colors.red
-                                      : Colors.green,
+                                  color: trendColor ??
+                                      (trendIsPositive
+                                          ? Colors.red
+                                          : Colors.green),
                                 ),
                                 Text(
                                   trend!,
                                   style: TextStyle(
-                                    color: trendIsPositive
-                                        ? Colors.red
-                                        : Colors.green,
+                                    color: trendColor ??
+                                        (trendIsPositive
+                                            ? Colors.red
+                                            : Colors.green),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -131,18 +161,22 @@ class MetricCard extends StatelessWidget {
                       ],
                       if (details != null) ...[
                         const SizedBox(height: 8),
-                        ...details!.map(
-                          (d) => Padding(
+                        ...List.generate(details!.length, (i) {
+                          final color = detailColors != null &&
+                                  i < detailColors!.length
+                              ? detailColors![i]
+                              : AppColors.grayMedium;
+                          return Padding(
                             padding: const EdgeInsets.only(bottom: 2),
                             child: Text(
-                              d,
+                              details![i],
                               style: TextStyle(
-                                color: AppColors.grayMedium,
+                                color: color,
                                 fontSize: 11,
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                       ],
                     ],
                   ),
@@ -151,13 +185,18 @@ class MetricCard extends StatelessWidget {
                   Icon(
                     icon,
                     size: 48,
-                    color: AppColors.grayLight,
+                    color: (topBorderColor != null
+                            ? topBorderColor!.withValues(alpha: 0.5)
+                            : AppColors.grayLight),
                   ),
               ],
             ),
           ],
         ),
       ),
-    );
+    ],
+  ),
+  ),
+  );
   }
 }
