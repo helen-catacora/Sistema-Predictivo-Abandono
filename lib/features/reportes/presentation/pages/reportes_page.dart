@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/reportes_historial_provider.dart';
+import '../providers/reportes_tipos_provider.dart';
 import '../widgets/reports_available_section.dart';
 import '../widgets/reports_charts_section.dart';
 import '../widgets/reports_filter_section.dart';
@@ -8,8 +11,22 @@ import '../widgets/reports_metrics_cards.dart';
 import '../widgets/reports_recent_table.dart';
 
 /// Pantalla Centro de Reportes.
-class ReportesPage extends StatelessWidget {
+class ReportesPage extends StatefulWidget {
   const ReportesPage({super.key});
+
+  @override
+  State<ReportesPage> createState() => _ReportesPageState();
+}
+
+class _ReportesPageState extends State<ReportesPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReportesTiposProvider>().loadTipos();
+      context.read<ReportesHistorialProvider>().loadHistorial(page: 1, pageSize: 20);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +36,12 @@ class ReportesPage extends StatelessWidget {
         children: [
           const ReportsHeader(),
           const SizedBox(height: 24),
-          const ReportsFilterSection(),
-          const SizedBox(height: 24),
-          const ReportsMetricsCards(),
-          const SizedBox(height: 24),
-          const ReportsChartsSection(),
-          const SizedBox(height: 24),
+        //  const ReportsFilterSection(),
+        //  const SizedBox(height: 24),
+        //  const ReportsMetricsCards(),
+        //  const SizedBox(height: 24),
+        //  const ReportsChartsSection(),
+        //  const SizedBox(height: 24),
           const ReportsAvailableSection(),
           const SizedBox(height: 24),
           const ReportsRecentTable(),
@@ -33,3 +50,4 @@ class ReportesPage extends StatelessWidget {
     );
   }
 }
+

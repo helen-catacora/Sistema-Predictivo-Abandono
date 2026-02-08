@@ -21,4 +21,22 @@ abstract class ApiEndpoints {
 
   /// Usuarios (gestión)
   static const String usuarios = '/usuarios';
+
+  /// Predicciones - dashboard (resumen, distribución riesgo, por paralelo)
+  static const String prediccionesDashboard = '/predicciones/dashboard';
+
+  /// Predicciones - carga masiva (POST multipart/form-data con archivo xlsx)
+  static const String prediccionesMasiva = '/predicciones/masiva';
+
+  /// Alertas (listado con total, activas, críticas)
+  static const String alertas = '/alertas';
+
+  /// Reportes - tipos disponibles (GET /reportes/tipos)
+  static const String reportesTipos = '/reportes/tipos';
+
+  /// Reportes - generar PDF (POST /reportes/generar)
+  static const String reportesGenerar = '/reportes/generar';
+
+  /// Reportes - historial paginado (GET /reportes/historial?page=1&page_size=20)
+  static const String reportesHistorial = '/reportes/historial';
 }

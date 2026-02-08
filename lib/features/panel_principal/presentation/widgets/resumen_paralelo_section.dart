@@ -1,86 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../data/models/dashboard_response.dart';
+import '../providers/dashboard_provider.dart';
 
-/// Datos de ejemplo por paralelo.
-class _ParaleloCardData {
-  const _ParaleloCardData(
-    this.nombre,
-    this.semestre,
-    this.totalEstudiantes,
-    this.riesgoAlto,
-    this.critico,
-  );
-  final String nombre;
-  final String semestre;
-  final int totalEstudiantes;
-  final int riesgoAlto;
-  final int critico;
-}
-
-/// Sección Resumen por Paralelo con 4 tarjetas.
+/// Sección Resumen por Paralelo (datos de distribucion_por_paralelo).
 class ResumenParaleloSection extends StatelessWidget {
   const ResumenParaleloSection({super.key});
 
-  static const _paralelos = [
-    _ParaleloCardData('Paralelo A', '1ER SEMESTRE', 42, 8, 3),
-    _ParaleloCardData('Paralelo B', '1ER SEMESTRE', 38, 12, 5),
-    _ParaleloCardData('Paralelo C', '2DO SEMESTRE', 45, 6, 2),
-    _ParaleloCardData('Paralelo D', '2DO SEMESTRE', 40, 10, 4),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboard, _) {
+        final paralelos = dashboard.distribucionPorParalelo;
+        final isLoading = dashboard.isLoading;
+        final hasError = dashboard.hasError;
+
+        if (hasError && paralelos.isEmpty) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle(context),
+              const SizedBox(height: 16),
+              Text(
+                dashboard.errorMessage ?? 'Error al cargar',
+                style: TextStyle(color: Colors.red.shade700, fontSize: 13),
+              ),
+            ],
+          );
+        }
+
+        if (isLoading && paralelos.isEmpty) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle(context),
+              const SizedBox(height: 24),
+              const Center(
+                  child: Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              )),
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: AppColors.navyMedium,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Resumen por Paralelo',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            _buildTitle(context),
+            const SizedBox(height: 16),
+            paralelos.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      'No hay datos de distribución por paralelo.',
+                      style: TextStyle(
+                        color: AppColors.grayMedium,
+                        fontSize: 13,
+                      ),
+                    ),
+                  )
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isWide = constraints.maxWidth > 700;
+                      if (isWide) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: paralelos
+                              .map((p) => Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 12),
+                                      child: _ParaleloCard(item: p),
+                                    ),
+                                  ))
+                              .toList(),
+                        );
+                      }
+                      return Column(
+                        children: paralelos
+                            .map((p) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: _ParaleloCard(item: p),
+                                ))
+                            .toList(),
+                      );
+                    },
+                  ),
           ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTitle(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: AppColors.navyMedium,
+            borderRadius: BorderRadius.circular(4),
+          ),
         ),
-        const SizedBox(height: 16),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final isWide = constraints.maxWidth > 700;
-            if (isWide) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: _paralelos
-                    .map((p) => Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: _ParaleloCard(data: p),
-                          ),
-                        ))
-                    .toList(),
-              );
-            }
-            return Column(
-              children: _paralelos
-                  .map((p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _ParaleloCard(data: p),
-                      ))
-                  .toList(),
-            );
-          },
+        const SizedBox(width: 8),
+        Text(
+          'Resumen por Paralelo',
+          style: TextStyle(
+            color: AppColors.navyMedium,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -88,9 +120,9 @@ class ResumenParaleloSection extends StatelessWidget {
 }
 
 class _ParaleloCard extends StatelessWidget {
-  const _ParaleloCard({required this.data});
+  const _ParaleloCard({required this.item});
 
-  final _ParaleloCardData data;
+  final DistribucionPorParaleloItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +142,7 @@ class _ParaleloCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  data.nombre,
+                  item.paralelo,
                   style: const TextStyle(
                     color: AppColors.navyMedium,
                     fontSize: 15,
@@ -126,7 +158,7 @@ class _ParaleloCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              data.semestre,
+              item.area,
               style: TextStyle(
                 color: AppColors.grayMedium,
                 fontSize: 12,
@@ -134,7 +166,7 @@ class _ParaleloCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Total Estudiantes: ${data.totalEstudiantes}',
+              'Total Estudiantes: ${item.total}',
               style: TextStyle(
                 color: AppColors.grayDark,
                 fontSize: 13,
@@ -151,7 +183,7 @@ class _ParaleloCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data.riesgoAlto}',
+                  '${item.altoRiesgo}',
                   style: const TextStyle(
                     color: Colors.orange,
                     fontSize: 13,
@@ -167,7 +199,7 @@ class _ParaleloCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data.critico}',
+                  '${item.critico}',
                   style: const TextStyle(
                     color: Colors.red,
                     fontSize: 13,
