@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
 
 /// Estado de asistencia del estudiante.
-enum AttendanceStatus {
-  presente,
-  ausente,
-  justificado,
-}
+enum AttendanceStatus { presente, ausente, justificado }
 
 /// Selector de estado de asistencia (Presente, Ausente, Justificado).
 class AttendanceStatusSelector extends StatelessWidget {
@@ -69,7 +66,7 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isSelected ? color.withValues(alpha: 0.2) : Colors.grey.shade100,
+      color: isSelected ? color.withValues(alpha: 0.2) : AppColors.greyF1F5F9,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         onTap: onTap,
@@ -92,9 +89,11 @@ class _StatusChip extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected ? color : Colors.grey.shade700,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? color : AppColors.darkBlue1E293B,
+                  height: 20 / 14,
+                  letterSpacing: 0,
                 ),
               ),
             ],

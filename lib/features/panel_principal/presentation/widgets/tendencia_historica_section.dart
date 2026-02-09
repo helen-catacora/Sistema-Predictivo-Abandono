@@ -9,10 +9,10 @@ import '../providers/dashboard_provider.dart';
 /// Orden y color por nivel de riesgo (igual que el backend).
 const _ordenNiveles = ['Bajo', 'Medio', 'Alto', 'Critico'];
 const _coloresNivel = [
-  Colors.green,
-  Colors.blue,
-  Colors.orange,
-  Colors.red,
+  Color(0xff44AD74),
+  Color(0xff4674F5),
+  Color(0xffE79914),
+  Color(0xffC63627),
 ];
 
 /// Label para mostrar (Critico → Crítico).
@@ -31,8 +31,6 @@ class TendenciaHistoricaSection extends StatefulWidget {
 }
 
 class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
-  bool _porNivel = true;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(
@@ -52,11 +50,13 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
             } catch (_) {
               item = null;
             }
-            barItems.add(_BarItem(
-              _labelNivel(nivel),
-              item != null ? item.cantidad.toDouble() : 0.0,
-              _coloresNivel[i],
-            ));
+            barItems.add(
+              _BarItem(
+                _labelNivel(nivel),
+                item != null ? item.cantidad.toDouble() : 0.0,
+                _coloresNivel[i],
+              ),
+            );
           }
         } else if (!isLoading && !hasError) {
           barItems.addAll([
@@ -116,21 +116,6 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        _TabButton(
-                          label: 'POR NIVEL',
-                          isSelected: _porNivel,
-                          onTap: () => setState(() => _porNivel = true),
-                        ),
-                        const SizedBox(width: 8),
-                        _TabButton(
-                          label: 'POR CARRERA',
-                          isSelected: !_porNivel,
-                          onTap: () => setState(() => _porNivel = false),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
                 if (isLoading && barItems.every((e) => e.value == 0))
@@ -138,108 +123,135 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                     padding: EdgeInsets.symmetric(vertical: 40),
                     child: Center(child: CircularProgressIndicator()),
                   )
-                else
-                  ...[
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      height: 260,
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          maxY: maxY,
-                          barTouchData: BarTouchData(enabled: false),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  final i = value.toInt();
-                                  if (i >= 0 && i < barItems.length) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 8),
-                                      child: Text(
-                                        barItems[i].label,
-                                        style: TextStyle(
-                                          color: AppColors.grayDark,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                else ...[
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    height: 260,
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: maxY,
+                        barTouchData: BarTouchData(
+                          enabled: false,
+                          touchTooltipData: BarTouchTooltipData(
+                            getTooltipColor: (_) =>
+                                Colors.transparent, // Fondo transparente
+                            tooltipPadding: EdgeInsets.zero,
+                            tooltipMargin: 3,
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              return BarTooltipItem(
+                                rod.toY.toInt().toString(),
+                                TextStyle(
+                                  color: AppColors
+                                      .darkBlue1E293B, // Color del texto
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                final i = value.toInt();
+                                if (i >= 0 && i < barItems.length) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Text(
+                                      barItems[i].label,
+                                      style: TextStyle(
+                                        color: AppColors.grayDark,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    );
-                                  }
-                                  return const SizedBox.shrink();
-                                },
-                                reservedSize: 28,
-                                interval: 1,
-                              ),
-                            ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  return Text(
-                                    value.toInt().toString(),
-                                    style: TextStyle(
-                                      color: AppColors.grayMedium,
-                                      fontSize: 11,
                                     ),
                                   );
-                                },
-                                reservedSize: 32,
-                                interval: interval,
+                                }
+                                return const SizedBox.shrink();
+                              },
+                              reservedSize: 28,
+                              interval: 1,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            axisNameWidget: Text(
+                              'Número de Estudiantes',
+                              style: TextStyle(
+                                color: AppColors.grayMedium,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                          ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawVerticalLine: false,
-                            horizontalInterval: interval,
-                            getDrawingHorizontalLine: (value) => FlLine(
-                              color: Colors.grey.shade200,
-                              strokeWidth: 1,
-                            ),
-                          ),
-                          borderData: FlBorderData(show: false),
-                          barGroups: barItems.asMap().entries.map((e) {
-                            final i = e.key;
-                            final item = e.value;
-                            return BarChartGroupData(
-                              x: i,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: item.value,
-                                  color: item.color,
-                                  width: 36,
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(6),
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                return Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    color: AppColors.grayMedium,
+                                    fontSize: 11,
                                   ),
+                                );
+                              },
+                              reservedSize: 32,
+                              interval: interval,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          horizontalInterval: interval,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Colors.grey.shade200,
+                            strokeWidth: 1,
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        barGroups: barItems.asMap().entries.map((e) {
+                          final i = e.key;
+                          final item = e.value;
+                          return BarChartGroupData(
+                            x: i,
+                            barRods: [
+                              BarChartRodData(
+                                toY: item.value,
+                                color: item.color,
+                                width: 150,
+                                borderSide: BorderSide(color: Colors.black),
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(0),
                                 ),
-                              ],
-                              showingTooltipIndicators: [],
-                            );
-                          }).toList(),
-                        ),
-                        duration: const Duration(milliseconds: 250),
+                              ),
+                            ],
+                            showingTooltipIndicators: [0],
+                          );
+                        }).toList(),
+                      ),
+                      duration: const Duration(milliseconds: 250),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Text(
+                      'Nivel de Riesgo',
+                      style: TextStyle(
+                        color: AppColors.grayMedium,
+                        fontSize: 11,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Center(
-                      child: Text(
-                        'Número de Estudiantes',
-                        style: TextStyle(
-                          color: AppColors.grayMedium,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -254,42 +266,4 @@ class _BarItem {
   final String label;
   final double value;
   final Color color;
-}
-
-class _TabButton extends StatelessWidget {
-  const _TabButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.navyDark : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppColors.grayMedium,
-            width: isSelected ? 0 : 1,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? AppColors.white : AppColors.grayDark,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
 }

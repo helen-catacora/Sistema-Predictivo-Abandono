@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -35,20 +36,23 @@ class EstadoAcademicoSection extends StatelessWidget {
           children: [
             Text(
               'Estado Académico - Gestión 2024',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                color: AppColors.gray002855,
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                height: 36 / 30,
+                letterSpacing: 0,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              'SISTEMA DE ALERTA TEMPRANA DE DESERCIÓN ESCOLAR (SAT-DE)',
-              style: TextStyle(
-                color: AppColors.grayMedium,
-                fontSize: 11,
+              'SISTEMA DE ALERTA TEMPRANA DE ABANDONO ESTUDIANTIL (EMI)',
+              style: GoogleFonts.inter(
+                color: AppColors.grey64748B,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
-                letterSpacing: 0.5,
+                height: 20 / 14,
+                letterSpacing: 0.7,
               ),
             ),
             if (hasError) ...[
@@ -61,12 +65,10 @@ class EstadoAcademicoSection extends StatelessWidget {
             const SizedBox(height: 20),
             LayoutBuilder(
               builder: (context, constraints) {
-                return Wrap(
+                return Row(
                   spacing: 20,
-                  runSpacing: 20,
                   children: [
-                    SizedBox(
-                      width: _cardWidth(constraints.maxWidth),
+                    Expanded(
                       child: MetricCard(
                         title: 'ESTUDIANTES EN RIESGO ALTO',
                         value: valueOrPlaceholder(totalAlto),
@@ -76,27 +78,33 @@ class EstadoAcademicoSection extends StatelessWidget {
                         trend: totalAlto > 0 ? null : null,
                         trendIsPositive: true,
                         topBorderColor: Colors.red,
-                        icon: Icons.warning_amber_rounded,
+                        iconPath: 'assets/riesgo.png',
                       ),
                     ),
-                    SizedBox(
-                      width: _cardWidth(constraints.maxWidth),
+                    Expanded(
                       child: MetricCard(
                         title: 'POBLACIÓN TOTAL',
                         value: valueOrPlaceholderFormatted(totalEst),
                         badge: 'ACTIVOS',
-                        details: r != null && totalEst > 0
+                        detailsTitles: r != null && totalEst > 0
                             ? [
-                                'Predicciones activas: ${r.totalPrediccionesActivas}',
-                                'Bajo riesgo: ${r.totalBajoRiesgo}',
-                                'Medio riesgo: ${r.totalMedioRiesgo}',
+                                'Predicciones activas',
+                                'Bajo riesgo',
+                                'Medio riesgo',
                               ]
                             : null,
-                        icon: Icons.school_outlined,
+                        detailsContent: r != null && totalEst > 0
+                            ? [
+                                '${r.totalPrediccionesActivas}',
+                                '${r.totalBajoRiesgo}',
+                                '${r.totalMedioRiesgo}',
+                              ]
+                            : null,
+                        topBorderColor: Colors.black,
+                        iconPath: 'assets/poblacion.png',
                       ),
                     ),
-                    SizedBox(
-                      width: _cardWidth(constraints.maxWidth),
+                    Expanded(
                       child: MetricCard(
                         title: 'ALERTAS ACTIVAS',
                         value: valueOrPlaceholder(alertasActivas),
@@ -104,21 +112,25 @@ class EstadoAcademicoSection extends StatelessWidget {
                         trendIsPositive: true,
                         trendColor: AppColors.accentYellow,
                         topBorderColor: AppColors.accentYellow,
-                        details: alertasActivas > 0
+                        showAsColumn: false,
+                        detailsContent: alertasActivas > 0
                             ? [
-                                'Críticas: $alertasCriticas',
-                                'Altas: $altoRiesgo',
-                                'Medias: $medioRiesgo',
+                                '$alertasCriticas',
+                                '$altoRiesgo',
+                                '$medioRiesgo',
                               ]
+                            : null,
+                        detailsTitles: alertasActivas > 0
+                            ? ['Críticas:', 'Altas:', 'Medias:']
                             : null,
                         detailColors: alertasActivas > 0
                             ? [
-                                Colors.red,
-                                Colors.orange,
-                                AppColors.accentYellow,
+                                Color(0xffDC2626),
+                                Color(0xffCA8A04),
+                                Color(0xff2563EB),
                               ]
                             : null,
-                        icon: Icons.notifications_active_outlined,
+                        iconPath: 'assets/alertas.png',
                       ),
                     ),
                   ],
@@ -134,11 +146,5 @@ class EstadoAcademicoSection extends StatelessWidget {
   static String _formatNumber(int n) {
     if (n >= 1000) return '${(n / 1000).toStringAsFixed(1)}k';
     return n.toString();
-  }
-
-  static double _cardWidth(double maxWidth) {
-    if (maxWidth > 1200) return 280;
-    if (maxWidth > 900) return 240;
-    return double.infinity;
   }
 }

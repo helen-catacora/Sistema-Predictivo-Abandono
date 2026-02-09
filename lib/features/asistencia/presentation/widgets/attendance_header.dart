@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -11,38 +12,28 @@ class AttendanceHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Icon(Icons.school_outlined, color: AppColors.navyMedium, size: 24),
-            const SizedBox(width: 8),
-            Text(
-              'Registro Diario de Asistencia',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
         Text(
           'EMI Ciencias Básicas > Control de Asistencia',
-          style: TextStyle(
-            color: AppColors.grayMedium,
+          style: GoogleFonts.inter(
+            color: AppColors.grey64748B,
             fontSize: 12,
+            fontWeight: FontWeight.w500,
+            height: 16 / 12,
+            letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'REGISTRO DE ASISTENCIA',
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: AppColors.navyMedium,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                height: 36 / 30,
+                letterSpacing: 0,
               ),
             ),
             Row(

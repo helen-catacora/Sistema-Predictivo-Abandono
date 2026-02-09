@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
-/// Tarjeta de métrica para el panel principal.
 class MetricCard extends StatelessWidget {
   const MetricCard({
     super.key,
@@ -13,10 +13,12 @@ class MetricCard extends StatelessWidget {
     this.trendIsPositive = false,
     this.trendColor,
     this.badge,
-    this.details,
+    this.detailsTitles,
+    this.detailsContent,
     this.detailColors,
-    this.icon,
     this.topBorderColor,
+    this.showAsColumn = true,
+    required this.iconPath,
   });
 
   final String title;
@@ -24,15 +26,14 @@ class MetricCard extends StatelessWidget {
   final String? subtitle;
   final String? trend;
   final bool trendIsPositive;
-  /// Si se define, usa este color para el trend en lugar de rojo/verde por defecto.
   final Color? trendColor;
   final String? badge;
-  final List<String>? details;
-  /// Mismo orden que [details]; si se define, cada línea usa su color.
+  final List<String>? detailsTitles;
+  final List<String>? detailsContent;
   final List<Color>? detailColors;
-  final IconData? icon;
-  /// Borde superior de la tarjeta (ej. rojo para riesgo, amarillo para alertas).
   final Color? topBorderColor;
+  final bool showAsColumn;
+  final String iconPath;
 
   @override
   Widget build(BuildContext context) {
@@ -40,163 +41,192 @@ class MetricCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: topBorderColor != null
-            ? [
-                BoxShadow(
-                  color: topBorderColor!.withValues(alpha: 0.3),
-                  offset: const Offset(0, -1),
-                  blurRadius: 0,
-                  spreadRadius: 0,
-                ),
-              ]
-            : null,
+        border: Border(
+          left: BorderSide(
+            color: topBorderColor ?? Colors.transparent,
+            width: 4,
+          ),
+        ),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (topBorderColor != null)
-              Container(
-                height: 4,
-                color: topBorderColor,
-              ),
-            Padding(
-              padding: const EdgeInsets.all(20),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 16,
+            top: 16,
+            child: Opacity(
+              opacity: 0.2,
+              child: Image.asset(iconPath, width: 96, height: 96),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: AppColors.grayDark,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    title,
+                    style: GoogleFonts.inter(
+                      color: AppColors.grey64748B,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      height: 16 / 12,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  Row(
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            value,
-                            style: const TextStyle(
-                              color: AppColors.navyMedium,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if (badge != null) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.navyMedium,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                badge!,
-                                style: const TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                          if (trend != null) ...[
-                            const SizedBox(width: 8),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  trendIsPositive
-                                      ? Icons.arrow_upward
-                                      : Icons.arrow_downward,
-                                  size: 14,
-                                  color: trendColor ??
-                                      (trendIsPositive
-                                          ? Colors.red
-                                          : Colors.green),
-                                ),
-                                Text(
-                                  trend!,
-                                  style: TextStyle(
-                                    color: trendColor ??
-                                        (trendIsPositive
-                                            ? Colors.red
-                                            : Colors.green),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
+                      Text(
+                        value,
+                        style: GoogleFonts.inter(
+                          color: AppColors.darkBlue1E293B,
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          height: 48 / 48,
+                          letterSpacing: 0,
+                        ),
                       ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          subtitle!,
-                          style: TextStyle(
-                            color: AppColors.grayMedium,
-                            fontSize: 12,
+                      if (badge != null) ...[
+                        SizedBox(width: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.blueDBEAFE,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            badge!,
+                            style: GoogleFonts.inter(
+                              color: AppColors.blue1D4ED8,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0,
+                            ),
                           ),
                         ),
                       ],
-                      if (details != null) ...[
-                        const SizedBox(height: 8),
-                        ...List.generate(details!.length, (i) {
-                          final color = detailColors != null &&
-                                  i < detailColors!.length
-                              ? detailColors![i]
-                              : AppColors.grayMedium;
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 2),
-                            child: Text(
-                              details![i],
-                              style: TextStyle(
-                                color: color,
-                                fontSize: 11,
-                              ),
-                            ),
-                          );
-                        }),
-                      ],
                     ],
                   ),
-                ),
-                if (icon != null)
-                  Icon(
-                    icon,
-                    size: 48,
-                    color: (topBorderColor != null
-                            ? topBorderColor!.withValues(alpha: 0.5)
-                            : AppColors.grayLight),
+                  const SizedBox(height: 4),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (subtitle != null) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                subtitle!,
+                                style: GoogleFonts.inter(
+                                  color: AppColors.grey94A3B8,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  height: 16 / 12,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                            ],
+                            if (detailsTitles != null &&
+                                detailsTitles!.isNotEmpty &&
+                                detailsContent!.isNotEmpty) ...[
+                              if (showAsColumn) ...[
+                                Row(
+                                  spacing: 12,
+                                  children: List.generate(
+                                    detailsTitles!.length,
+                                    (index) {
+                                      final title = detailsTitles![index];
+                                      final content = detailsContent![index];
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            title,
+                                            style: GoogleFonts.inter(
+                                              color: AppColors.grey94A3B8,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              height: 16 / 12,
+                                              letterSpacing: 0,
+                                            ),
+                                          ),
+                                          Text(
+                                            content,
+                                            style: GoogleFonts.inter(
+                                              color: AppColors.black334155,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              height: 20 / 14,
+                                              letterSpacing: 0,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ] else
+                                Row(
+                                  spacing: 20,
+                                  children: List.generate(
+                                    detailsTitles!.length,
+                                    (index) {
+                                      final color =
+                                          detailColors != null &&
+                                              index < detailColors!.length
+                                          ? detailColors![index]
+                                          : AppColors.grayMedium;
+                                      final title = detailsTitles![index];
+                                      final content = detailsContent![index];
+                                      return Row(
+                                        spacing: 2,
+                                        children: [
+                                          Text(
+                                            title,
+                                            style: GoogleFonts.inter(
+                                              color: AppColors.grey94A3B8,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              height: 16 / 12,
+                                              letterSpacing: 0,
+                                            ),
+                                          ),
+                                          Text(
+                                            content,
+                                            style: GoogleFonts.inter(
+                                              color: color,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1,
+                                              letterSpacing: 0,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    ],
-  ),
-  ),
-  );
+    );
   }
 }

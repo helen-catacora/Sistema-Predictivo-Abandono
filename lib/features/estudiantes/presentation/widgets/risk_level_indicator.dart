@@ -29,11 +29,44 @@ class RiskLevelIndicator extends StatelessWidget {
   static Color _colorFor(RiskLevel level) {
     switch (level) {
       case RiskLevel.alto:
-        return const Color(0xFFEF4444);
+        return const Color(0xffB91C1C);
       case RiskLevel.medio:
-        return const Color(0xFFFACC15);
+        return const Color(0xffA16207);
       case RiskLevel.bajo:
-        return const Color(0xFF22C55E);
+        return const Color(0xff15803D);
+    }
+  }
+
+  static Color _dotColor(RiskLevel level) {
+    switch (level) {
+      case RiskLevel.alto:
+        return const Color(0xffDC2626);
+      case RiskLevel.medio:
+        return const Color(0xffEAB308);
+      case RiskLevel.bajo:
+        return const Color(0xff22C55E);
+    }
+  }
+
+  static Color _backGroundColor(RiskLevel level) {
+    switch (level) {
+      case RiskLevel.alto:
+        return const Color(0xffFEF2F2);
+      case RiskLevel.medio:
+        return const Color(0xffFEFCE8);
+      case RiskLevel.bajo:
+        return const Color(0xffF0FDF4);
+    }
+  }
+
+  static Color _borderColor(RiskLevel level) {
+    switch (level) {
+      case RiskLevel.alto:
+        return const Color(0xffFECACA);
+      case RiskLevel.medio:
+        return const Color(0xffFEF08A);
+      case RiskLevel.bajo:
+        return const Color(0xffBBF7D0);
     }
   }
 
@@ -52,28 +85,41 @@ class RiskLevelIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _colorFor(level);
     final label = _labelFor(level);
+    final backGroundColor = _backGroundColor(level);
+    final borderColor = _borderColor(level);
+    final dotColor = _dotColor(level);
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: backGroundColor,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: borderColor, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: dotColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: color,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

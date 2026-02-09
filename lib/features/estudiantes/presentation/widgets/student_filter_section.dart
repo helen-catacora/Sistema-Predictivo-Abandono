@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -49,11 +50,12 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                     children: [
                       Text(
                         'BUSCAR ESTUDIANTE',
-                        style: TextStyle(
-                          color: AppColors.grayDark,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
+                        style: GoogleFonts.inter(
+                          color: AppColors.grey64748B,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -61,18 +63,44 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                         controller: _searchController,
                         decoration: InputDecoration(
                           hintText: 'Nombre, ID o correo electrónico...',
+                          hintStyle: GoogleFonts.inter(
+                            color: AppColors.gray9CA3AF,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1,
+                            letterSpacing: 0,
+                          ),
                           prefixIcon: const Icon(Icons.search, size: 20),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
                           ),
+                          fillColor: Color(0xffF8FAFC),
+                          filled: true,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
                           ),
                           isDense: true,
                         ),
-                        onChanged: (value) =>
-                            provider.setSearchQuery(value),
+                        onChanged: (value) => provider.setSearchQuery(value),
                       ),
                     ],
                   ),
@@ -84,20 +112,41 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                     children: [
                       Text(
                         'FACULTAD / CARRERA',
-                        style: TextStyle(
-                          color: AppColors.grayDark,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
+                        style: GoogleFonts.inter(
+                          color: AppColors.grey64748B,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: provider.carreraFilter ?? 'todas',
                         decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
                           ),
+                          fillColor: Color(0xffF8FAFC),
+                          filled: true,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,
@@ -105,19 +154,36 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                           isDense: true,
                         ),
                         items: [
-                          const DropdownMenuItem(
+                          DropdownMenuItem(
                             value: 'todas',
-                            child: Text('Todas las Carreras'),
+                            child: Text(
+                              'Todas las Carreras',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.darkBlue1E293B,
+                                height: 20 / 14,
+                                letterSpacing: 0,
+                              ),
+                            ),
                           ),
                           ...provider.carreras.map(
                             (c) => DropdownMenuItem(
                               value: c,
-                              child: Text(c),
+                              child: Text(
+                                c,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.darkBlue1E293B,
+                                  height: 20 / 14,
+                                  letterSpacing: 0,
+                                ),
+                              ),
                             ),
                           ),
                         ],
-                        onChanged: (value) =>
-                            provider.setCarreraFilter(value),
+                        onChanged: (value) => provider.setCarreraFilter(value),
                       ),
                     ],
                   ),
@@ -134,7 +200,10 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.blueLight,
                     foregroundColor: AppColors.navyMedium,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 14,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

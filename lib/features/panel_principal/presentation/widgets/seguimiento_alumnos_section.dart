@@ -8,153 +8,204 @@ class SeguimientoAlumnosSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Color(0xff002855), width: 4)),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            offset: Offset(0, 1),
+            blurRadius: 2,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: AppColors.navyMedium,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: AppColors.navyMedium,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Seguimiento de Alumnos',
+                      style: TextStyle(
+                        color: AppColors.navyMedium,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Seguimiento de Alumnos',
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.filter_list, size: 18),
+                      label: const Text('Filtrar'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.grayDark,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    FilledButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.download, size: 18),
+                      label: const Text('Exportar'),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.navyMedium,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Row(
-              children: [
-                OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.filter_list, size: 18),
-                  label: const Text('Filtrar'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.grayDark,
+            const SizedBox(height: 16),
+            Card(
+              elevation: 0,
+              color: AppColors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.grey.shade200),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: constraints
+                              .maxWidth, // Hace que ocupe al menos todo el ancho del Card
+                        ),
+                        child: DataTable(
+                          headingRowColor: WidgetStateProperty.all(
+                            AppColors.navyDark,
+                          ),
+                          columns: const [
+                            DataColumn(
+                              label: Text(
+                                'ESTUDIANTE',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'NIVEL / SEMESTRE',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'ASISTENCIA',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'NIVEL DE RIESGO',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'ACCIONES',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: [
+                            _buildRow(
+                              'ALVAREZ, CARLOS',
+                              'ID: 2024-0015',
+                              '2DO SEMESTRE',
+                              'CIENCIAS EXACTAS',
+                              85,
+                              true,
+                              65,
+                              false,
+                            ),
+                            _buildRow(
+                              'ROJAS, ANA LUCÍA',
+                              'ID: 2024-0128',
+                              '1ER SEMESTRE',
+                              'TECNOLOGÍA',
+                              62,
+                              false,
+                              82,
+                              true,
+                            ),
+                            _buildRow(
+                              'TORRES, MARCOS',
+                              'ID: 2024-0542',
+                              '3ER SEMESTRE',
+                              'INGENIERÍA',
+                              91,
+                              true,
+                              45,
+                              false,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: GestureDetector(
+                onTap: () {},
+                child: const Text(
+                  'Ver todos los estudiantes',
+                  style: TextStyle(
+                    color: AppColors.navyMedium,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 12),
-                FilledButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.download, size: 18),
-                  label: const Text('Exportar'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.navyMedium,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Card(
-          elevation: 0,
-          color: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade200),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                headingRowColor: WidgetStateProperty.all(AppColors.navyDark),
-                columns: const [
-                  DataColumn(
-                      label: Text('ESTUDIANTE',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12))),
-                  DataColumn(
-                      label: Text('NIVEL / SEMESTRE',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12))),
-                  DataColumn(
-                      label: Text('ASISTENCIA',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12))),
-                  DataColumn(
-                      label: Text('NIVEL DE RIESGO',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12))),
-                  DataColumn(
-                      label: Text('ACCIONES',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12))),
-                ],
-                rows: [
-                  _buildRow(
-                    'ALVAREZ, CARLOS',
-                    'ID: 2024-0015',
-                    '2DO SEMESTRE',
-                    'CIENCIAS EXACTAS',
-                    85,
-                    true,
-                    65,
-                    false,
-                  ),
-                  _buildRow(
-                    'ROJAS, ANA LUCÍA',
-                    'ID: 2024-0128',
-                    '1ER SEMESTRE',
-                    'TECNOLOGÍA',
-                    62,
-                    false,
-                    82,
-                    true,
-                  ),
-                  _buildRow(
-                    'TORRES, MARCOS',
-                    'ID: 2024-0542',
-                    '3ER SEMESTRE',
-                    'INGENIERÍA',
-                    91,
-                    true,
-                    45,
-                    false,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Center(
-          child: GestureDetector(
-            onTap: () {},
-            child: const Text(
-              'Ver todos los estudiantes',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -198,10 +249,7 @@ class SeguimientoAlumnosSection extends StatelessWidget {
                   ),
                   Text(
                     id,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -216,10 +264,7 @@ class SeguimientoAlumnosSection extends StatelessWidget {
               Text(nivel),
               Text(
                 carrera,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ),
@@ -239,10 +284,7 @@ class SeguimientoAlumnosSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                _ProgressBar(
-                  value: asistencia / 100,
-                  isHigh: asistenciaOk,
-                ),
+                _ProgressBar(value: asistencia / 100, isHigh: asistenciaOk),
               ],
             ),
           ),
@@ -262,10 +304,7 @@ class SeguimientoAlumnosSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                _ProgressBar(
-                  value: riesgo / 100,
-                  isHigh: riesgoAlto,
-                ),
+                _ProgressBar(value: riesgo / 100, isHigh: riesgoAlto),
               ],
             ),
           ),

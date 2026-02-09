@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -13,18 +14,23 @@ class AcademicRiskHeader extends StatelessWidget {
       children: [
         Text(
           'Estudiantes en Riesgo Académico',
-          style: TextStyle(
-            color: AppColors.navyMedium,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.inter(
+            color: AppColors.gray002855,
+            fontSize: 30,
+            fontWeight: FontWeight.w800,
+            height: 36 / 30,
+            letterSpacing: 0,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           'Monitoreo de indicadores críticos y probabilidad de deserción en Ciencias Básicas.',
-          style: TextStyle(
-            color: AppColors.grayMedium,
-            fontSize: 14,
+          style: GoogleFonts.inter(
+            color: AppColors.grey64748B,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            height: 24 / 16,
+            letterSpacing: 0.7,
           ),
         ),
       ],

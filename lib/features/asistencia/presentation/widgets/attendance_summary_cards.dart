@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -18,10 +19,9 @@ class AttendanceSummaryCards extends StatelessWidget {
             Expanded(
               child: _SummaryCard(
                 title: 'TOTAL ESTUDIANTES',
-                value: hasData
-                    ? provider.totalEstudiantes.toString()
-                    : '-',
-                valueColor: AppColors.navyMedium,
+                value: hasData ? provider.totalEstudiantes.toString() : '-',
+                valueColor: AppColors.darkBlue1E293B,
+                borderColor: Color(0xff002855),
               ),
             ),
             const SizedBox(width: 16),
@@ -30,6 +30,7 @@ class AttendanceSummaryCards extends StatelessWidget {
                 title: 'PRESENTES',
                 value: hasData ? provider.totalPresentes.toString() : '-',
                 valueColor: const Color(0xFF22C55E),
+                borderColor: AppColors.green16A34A,
               ),
             ),
             const SizedBox(width: 16),
@@ -38,6 +39,7 @@ class AttendanceSummaryCards extends StatelessWidget {
                 title: 'AUSENTES',
                 value: hasData ? provider.totalAusentes.toString() : '-',
                 valueColor: const Color(0xFFEF4444),
+                borderColor: AppColors.redDC2626,
               ),
             ),
             const SizedBox(width: 16),
@@ -48,6 +50,8 @@ class AttendanceSummaryCards extends StatelessWidget {
                     ? '${provider.porcentajeAsistenciaDia.toStringAsFixed(1)}%'
                     : '-',
                 valueColor: AppColors.navyMedium,
+                borderColor: AppColors.gray002855,
+                backGroundColor: Color(0xffFEFCE8).withValues(alpha: 0.5),
               ),
             ),
           ],
@@ -62,20 +66,31 @@ class _SummaryCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.valueColor,
+    required this.borderColor,
+    this.backGroundColor = Colors.white,
   });
 
   final String title;
   final String value;
   final Color valueColor;
+  final Color borderColor;
+  final Color backGroundColor;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppColors.white,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: backGroundColor,
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade200),
+        border: Border(left: BorderSide(color: borderColor, width: 1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            offset: Offset(0, 1),
+            blurRadius: 2,
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -84,19 +99,23 @@ class _SummaryCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: AppColors.grayDark,
+              style: GoogleFonts.inter(
+                color: AppColors.grey94A3B8,
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
+                height: 16 / 12,
+                letterSpacing: 0.6,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
+              style: GoogleFonts.inter(
                 color: valueColor,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                height: 36 / 30,
+                letterSpacing: 0,
               ),
             ),
           ],

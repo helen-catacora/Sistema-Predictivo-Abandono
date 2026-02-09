@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -91,10 +92,12 @@ class AttendanceStudentTable extends StatelessWidget {
           children: [
             Text(
               'Lista de Estudiantes Detallada',
-              style: TextStyle(
-                color: AppColors.navyMedium,
+              style: GoogleFonts.inter(
+                color: AppColors.black334155,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                letterSpacing: 0,
               ),
             ),
             Row(
@@ -121,164 +124,199 @@ class AttendanceStudentTable extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                headingRowColor: WidgetStateProperty.all(
-                  const Color(0xFF2C3E50),
-                ),
-                columns: const [
-                  DataColumn(
-                    label: Text(
-                      'NRO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: DataTable(
+                      headingRowColor: WidgetStateProperty.all(
+                        AppColors.gray002855,
                       ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'GRADO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'ESTUDIANTE / CÓDIGO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'CONTROL DE ASISTENCIA',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'OBSERVACIÓN',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: items.asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final e = entry.value;
-                  final status = _estadoFromString(e.estado);
-                  return DataRow(
-                    cells: [
-                      DataCell(Text((i + 1).toString().padLeft(2, '0'))),
-                      DataCell(
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.grayLight,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            'Est.',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.grayDark,
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            'NRO',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0.6,
                             ),
                           ),
                         ),
-                      ),
-                      DataCell(
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              e.nombreEstudiante,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                        DataColumn(
+                          label: Text(
+                            'GRADO',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'ESTUDIANTE / CÓDIGO',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'CONTROL DE ASISTENCIA',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'OBSERVACIÓN',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              height: 16 / 12,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                      ],
+                      rows: items.asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final e = entry.value;
+                        final status = _estadoFromString(e.estado);
+                        return DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                (i + 1).toString().padLeft(2, '0'),
+                                style: GoogleFonts.inter(
+                                  color: AppColors.grey94A3B8,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  height: 20 / 14,
+                                  letterSpacing: 0,
+                                ),
                               ),
                             ),
-                            Text(
-                              e.codigoEstudiante,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      DataCell(
-                        AttendanceStatusSelector(
-                          selectedStatus: status,
-                          onChanged: (v) => provider.updateEstatus(i, v),
-                        ),
-                      ),
-                      DataCell(
-                        e.observacion.isNotEmpty
-                            ? Container(
+                            DataCell(
+                              Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.accentYellow.withValues(
-                                    alpha: 0.3,
+                                  color: AppColors.grayLight,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'Estudiante',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.darkBlue1E293B,
+                                    height: 16 / 12,
+                                    letterSpacing: 0,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.chat_bubble_outline,
-                                      size: 16,
-                                      color: Colors.grey.shade700,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      e.observacion,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade800,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.chat_bubble_outline,
-                                  size: 20,
-                                  color: Colors.grey.shade400,
                                 ),
                               ),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
+                            ),
+                            DataCell(
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    e.nombreEstudiante,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.black0F172A,
+                                      fontSize: 16,
+                                      height: 24 / 16,
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                  Text(
+                                    e.codigoEstudiante,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: AppColors.grey64748B,
+                                      fontWeight: FontWeight.w400,
+                                      height: 16 / 12,
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              AttendanceStatusSelector(
+                                selectedStatus: status,
+                                onChanged: (v) => provider.updateEstatus(i, v),
+                              ),
+                            ),
+                            DataCell(
+                              e.observacion.isNotEmpty
+                                  ? Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.accentYellow
+                                            .withValues(alpha: 0.3),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.chat_bubble_outline,
+                                            size: 16,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            e.observacion,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade800,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.chat_bubble_outline,
+                                        size: 20,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
