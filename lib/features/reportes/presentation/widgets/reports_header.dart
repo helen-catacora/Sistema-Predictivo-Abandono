@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -11,42 +12,25 @@ class ReportsHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              width: 4,
-              height: 28,
-              decoration: BoxDecoration(
-                color: AppColors.accentYellow,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'REPORTES Y ANÁLISIS',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
         Text(
           'Centro de Reportes',
-          style: TextStyle(
-            color: AppColors.navyMedium,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.inter(
+            color: AppColors.gray002855,
+            fontSize: 30,
+            fontWeight: FontWeight.w700,
+            height: 36 / 30,
+            letterSpacing: 0,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           'ANÁLISIS INTEGRAL DE DESERCIÓN ESTUDIANTIL - GESTIÓN 2024',
-          style: TextStyle(
-            color: AppColors.grayMedium,
-            fontSize: 13,
+          style: GoogleFonts.inter(
+            color: AppColors.grey64748B,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 20 / 14,
+            letterSpacing: 0.7,
           ),
         ),
       ],

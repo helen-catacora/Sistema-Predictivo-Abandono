@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -7,7 +8,9 @@ import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import '../../../estudiantes/data/models/estudiante_item.dart';
 import '../../../estudiantes/presentation/providers/estudiantes_provider.dart';
 import '../../data/models/reporte_tipo_item.dart';
-import '../../utils/pdf_download_stub.dart' if (dart.library.html) '../../utils/pdf_download_web.dart' as pdf_util;
+import '../../utils/pdf_download_stub.dart'
+    if (dart.library.html) '../../utils/pdf_download_web.dart'
+    as pdf_util;
 import '../providers/reportes_tipos_provider.dart';
 
 /// Ícono por tipo de reporte.
@@ -28,111 +31,146 @@ IconData _iconForTipo(String tipo) {
   }
 }
 
+Color _backGroundColorForTipo(String tipo) {
+  switch (tipo) {
+    case 'predictivo_general':
+      return Color(0xffDBEAFE);
+    case 'estudiantes_riesgo':
+      return Color(0xffFEF3C7);
+    case 'por_paralelo':
+      return Color(0xffF3E8FF);
+    case 'asistencia':
+      return Color(0xffFEE2E2);
+    case 'individual':
+      return Color(0xffCFFAFE);
+    default:
+      return Color(0xffCFFAFE);
+  }
+}
+
+Color _iconColorForTipo(String tipo) {
+  switch (tipo) {
+    case 'predictivo_general':
+      return Color(0xff002855);
+    case 'estudiantes_riesgo':
+      return Color(0xffD97706);
+    case 'por_paralelo':
+      return Color(0xff9333EA);
+    case 'asistencia':
+      return Color(0xffDC2626);
+    case 'individual':
+      return Color(0xff0891B2);
+    default:
+      return Color(0xff0891B2);
+  }
+}
+
 /// Sección de reportes disponibles (datos de GET /reportes/tipos).
 class ReportsAvailableSection extends StatelessWidget {
   const ReportsAvailableSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ReportesTiposProvider>(
-      builder: (context, provider, _) {
-        final isLoading = provider.isLoading;
-        final hasError = provider.hasError;
-        final tipos = provider.tipos;
+    return Container(
+      padding: EdgeInsets.all(24),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border(top: BorderSide(color: AppColors.gray002855, width: 4)),
+      ),
+      child: Consumer<ReportesTiposProvider>(
+        builder: (context, provider, _) {
+          final isLoading = provider.isLoading;
+          final hasError = provider.hasError;
+          final tipos = provider.tipos;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 4,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: AppColors.accentYellow,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      'Reportes Disponibles',
-                      style: TextStyle(
-                        color: AppColors.navyMedium,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                FilledButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('NUEVO REPORTE'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.navyMedium,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            if (isLoading && tipos.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 48),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Cargando reportes disponibles...'),
+                      Container(
+                        width: 6,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: AppColors.gray002855,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Reportes Disponibles',
+                        style: GoogleFonts.inter(
+                          color: AppColors.darkBlue1E293B,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          height: 28 / 18,
+                          letterSpacing: 0,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              )
-            else if (hasError && tipos.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Text(
-                  provider.errorMessage ?? 'Error al cargar tipos de reportes',
-                  style: TextStyle(color: Colors.red.shade700, fontSize: 13),
-                ),
-              )
-            else if (tipos.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Text(
-                  'No hay tipos de reportes disponibles.',
-                  style: TextStyle(
-                    color: AppColors.grayMedium,
-                    fontSize: 13,
-                  ),
-                ),
-              )
-            else
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 2.2,
-                children: tipos
-                    .map((item) => _ReportTemplateCard(
-                          item: item,
-                          onGenerar: () => _onGenerarReporte(context, item),
-                        ))
-                    .toList(),
+                ],
               ),
-          ],
-        );
-      },
+              const SizedBox(height: 20),
+              if (isLoading && tipos.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 48),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('Cargando reportes disponibles...'),
+                      ],
+                    ),
+                  ),
+                )
+              else if (hasError && tipos.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Text(
+                    provider.errorMessage ??
+                        'Error al cargar tipos de reportes',
+                    style: TextStyle(color: Colors.red.shade700, fontSize: 13),
+                  ),
+                )
+              else if (tipos.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Text(
+                    'No hay tipos de reportes disponibles.',
+                    style: TextStyle(color: AppColors.grayMedium, fontSize: 13),
+                  ),
+                )
+              else
+                Wrap(
+                  runSpacing: 20,
+                  spacing: 50,
+                  children: List.generate(tipos.length, (index) {
+                    final reportType = tipos[index];
+                    return _ReportTemplateCard(
+                      item: reportType,
+                      onGenerar: () => _onGenerarReporte(context, reportType),
+                    );
+                  }),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 
-  Future<void> _onGenerarReporte(BuildContext context, ReporteTipoItem item) async {
+  Future<void> _onGenerarReporte(
+    BuildContext context,
+    ReporteTipoItem item,
+  ) async {
     final reportesProvider = context.read<ReportesTiposProvider>();
     if (reportesProvider.isGenerating) return;
 
@@ -145,7 +183,10 @@ class ReportsAvailableSection extends StatelessWidget {
         await paralelosProvider.loadParalelos();
       }
       if (!context.mounted) return;
-      final selected = await _showParaleloPicker(context, paralelosProvider.paralelos);
+      final selected = await _showParaleloPicker(
+        context,
+        paralelosProvider.paralelos,
+      );
       if (selected == null) return;
       paraleloId = selected.id;
     }
@@ -156,15 +197,18 @@ class ReportsAvailableSection extends StatelessWidget {
         await estudiantesProvider.loadEstudiantes();
       }
       if (!context.mounted) return;
-      final selected = await _showEstudiantePicker(context, estudiantesProvider.estudiantes);
+      final selected = await _showEstudiantePicker(
+        context,
+        estudiantesProvider.estudiantes,
+      );
       if (selected == null) return;
       estudianteId = selected.id;
     }
 
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Generando reporte...')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Generando reporte...')));
 
     try {
       final bytes = await reportesProvider.generarReporte(
@@ -183,13 +227,13 @@ class ReportsAvailableSection extends StatelessWidget {
       final path = pdf_util.savePdf(bytes, filename);
       if (!context.mounted) return;
       if (path != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('PDF guardado en: $path')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('PDF guardado en: $path')));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Descarga iniciada')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Descarga iniciada')));
       }
     } catch (e) {
       if (!context.mounted) return;
@@ -202,7 +246,10 @@ class ReportsAvailableSection extends StatelessWidget {
     }
   }
 
-  Future<ParaleloItem?> _showParaleloPicker(BuildContext context, List<ParaleloItem> paralelos) async {
+  Future<ParaleloItem?> _showParaleloPicker(
+    BuildContext context,
+    List<ParaleloItem> paralelos,
+  ) async {
     if (paralelos.isEmpty) return null;
     ParaleloItem? selected = paralelos.first;
     return showDialog<ParaleloItem>(
@@ -214,7 +261,12 @@ class ReportsAvailableSection extends StatelessWidget {
             value: selected,
             isExpanded: true,
             items: paralelos
-                .map((p) => DropdownMenuItem(value: p, child: Text('${p.nombre} (ID: ${p.id})')))
+                .map(
+                  (p) => DropdownMenuItem(
+                    value: p,
+                    child: Text('${p.nombre} (ID: ${p.id})'),
+                  ),
+                )
                 .toList(),
             onChanged: (p) => setState(() => selected = p),
           ),
@@ -233,7 +285,10 @@ class ReportsAvailableSection extends StatelessWidget {
     );
   }
 
-  Future<EstudianteItem?> _showEstudiantePicker(BuildContext context, List<EstudianteItem> estudiantes) async {
+  Future<EstudianteItem?> _showEstudiantePicker(
+    BuildContext context,
+    List<EstudianteItem> estudiantes,
+  ) async {
     if (estudiantes.isEmpty) return null;
     EstudianteItem? selected = estudiantes.first;
     return showDialog<EstudianteItem>(
@@ -245,10 +300,12 @@ class ReportsAvailableSection extends StatelessWidget {
             value: selected,
             isExpanded: true,
             items: estudiantes
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text('${e.nombreCompleto} (${e.codigoEstudiante})'),
-                    ))
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text('${e.nombreCompleto} (${e.codigoEstudiante})'),
+                  ),
+                )
                 .toList(),
             onChanged: (e) => setState(() => selected = e),
           ),
@@ -277,6 +334,8 @@ class _ReportTemplateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icon = _iconForTipo(item.tipo);
+    final iconBackGroundColor = _backGroundColorForTipo(item.tipo);
+    final iconColor = _iconColorForTipo(item.tipo);
     final badges = <String>[];
     if (item.requiereParalelo) badges.add('Requiere paralelo');
     if (item.requiereEstudiante) badges.add('Requiere estudiante');
@@ -285,12 +344,13 @@ class _ReportTemplateCard extends StatelessWidget {
       builder: (context, provider, _) {
         final isGenerating = provider.isGenerating;
 
-        return Card(
-          elevation: 0,
-          color: AppColors.white,
-          shape: RoundedRectangleBorder(
+        return Container(
+          height: 250,
+          width: 330,
+          decoration: BoxDecoration(
+            color: AppColors.greyF8FAFC,
+            border: Border.all(color: AppColors.greyE2E8F0, width: 1),
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade200),
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -298,77 +358,98 @@ class _ReportTemplateCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(icon, color: AppColors.navyMedium, size: 28),
-                    const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      height: 56,
+                      width: 56,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF22C55E).withValues(alpha: 0.2),
+                        color: iconBackGroundColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
+                      child: Center(
+                        child: Icon(icon, color: iconColor, size: 24),
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xffDCFCE7),
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Text(
                         'ACTIVO',
-                        style: TextStyle(
-                          color: Color(0xFF22C55E),
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                        style: GoogleFonts.inter(
+                          color: AppColors.green15803D,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 Text(
                   item.nombre,
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.inter(
+                    color: AppColors.darkBlue1E293B,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    height: 24 / 16,
+                    letterSpacing: 0,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
                   item.descripcion,
-                  style: TextStyle(
-                    color: AppColors.grayMedium,
-                    fontSize: 12,
+                  style: GoogleFonts.inter(
+                    color: AppColors.grey64748B,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 20 / 14,
+                    letterSpacing: 0,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                if (badges.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    children: badges
-                        .map((b) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.blueLight,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                b,
-                                style: const TextStyle(
-                                  color: AppColors.navyMedium,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                ],
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    if (badges.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: badges
+                            .map(
+                              (b) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.blueLight,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  b,
+                                  style: const TextStyle(
+                                    color: AppColors.navyMedium,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                    Spacer(),
                     FilledButton(
                       onPressed: isGenerating ? null : onGenerar,
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.navyMedium,
+                        backgroundColor: Colors.transparent,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
                       child: isGenerating
@@ -377,7 +458,16 @@ class _ReportTemplateCard extends StatelessWidget {
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('GENERAR'),
+                          : Text(
+                              'GENERAR',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppColors.gray002855,
+                                fontWeight: FontWeight.w700,
+                                height: 16 / 12,
+                                letterSpacing: 0,
+                              ),
+                            ),
                     ),
                   ],
                 ),
