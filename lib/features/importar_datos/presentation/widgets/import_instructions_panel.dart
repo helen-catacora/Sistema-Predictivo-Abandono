@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -9,60 +10,107 @@ class ImportInstructionsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppColors.navyMedium,
         borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF002855), Color(0xFF023E8A)],
+          stops: [0.0, 1.0],
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: AppColors.accentYellow,
-                size: 28,
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Instrucciones de Importación',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: Color(0xffFFD60A),
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                child: Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.navyDark,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Instrucciones de Importación',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      height: 28 / 20,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Siga estos pasos para asegurar una correcta importación de datos',
+                    style: GoogleFonts.inter(
+                      color: Color(0xffDBEAFE),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 20 / 14,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Siga estos pasos para asegurar una correcta importación de datos',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.85),
-              fontSize: 14,
-            ),
-          ),
           const SizedBox(height: 24),
-          _buildStep('1.', 'Formato de Archivo:',
-              'Use archivos CSV, Excel (.xlsx) o JSON. Máximo 10MB por archivo.'),
+          _buildStep(
+            '1',
+            'Formato de Archivo:',
+            'Use archivos CSV, Excel (.xlsx) o JSON. Máximo 10MB por archivo.',
+          ),
           const SizedBox(height: 16),
-          _buildStep('2.', 'Campos Requeridos:',
-              'ID Estudiante, Nombres, Apellidos, Semestre, Promedio, Asistencia (%).'),
+          _buildStep(
+            '2',
+            'Campos Requeridos:',
+            'ID Estudiante, Nombres, Apellidos, Semestre, Promedio, Asistencia (%).',
+          ),
           const SizedBox(height: 16),
-          _buildStep('3.', 'Validación Automática:',
-              'El sistema validará los datos y mostrará errores antes de procesarlos.'),
-          const Spacer(),
+          _buildStep(
+            '3',
+            'Validación Automática:',
+            'El sistema validará los datos y mostrará errores antes de procesarlos.',
+          ),
+          SizedBox(height: 50),
           SizedBox(
-            width: double.infinity,
             child: FilledButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.download, size: 20),
-              label: const Text('DESCARGAR PLANTILLA'),
+              icon: const Icon(
+                Icons.download,
+                size: 20,
+                color: Color(0xff002855),
+              ),
+              label: Text(
+                'DESCARGAR PLANTILLA',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  color: Color(0xff002855),
+                  fontWeight: FontWeight.w700,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.navyDark,
+                backgroundColor: Colors.white,
                 foregroundColor: AppColors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -78,32 +126,51 @@ class ImportInstructionsPanel extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          number,
-          style: const TextStyle(
-            color: AppColors.accentYellow,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.2),
+            shape: BoxShape.circle,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                height: 1.5,
+          child: Center(
+            child: Text(
+              number,
+              style: GoogleFonts.inter(
+                color: Color(0xffFFD60A),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                letterSpacing: 0,
               ),
-              children: [
-                TextSpan(
-                  text: '$title ',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                TextSpan(text: text),
-              ],
             ),
           ),
+        ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                letterSpacing: 0,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              text,
+              style: GoogleFonts.inter(
+                color: Color(0xffDBEAFE),
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                height: 20 / 14,
+                letterSpacing: 0,
+              ),
+            ),
+          ],
         ),
       ],
     );

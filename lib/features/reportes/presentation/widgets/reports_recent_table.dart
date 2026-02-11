@@ -201,18 +201,18 @@ class ReportsRecentTable extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'ACCIONES',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'ACCIONES',
+                              //     style: GoogleFonts.inter(
+                              //       color: Color(0xff475569),
+                              //       fontSize: 12,
+                              //       fontWeight: FontWeight.w600,
+                              //       height: 16 / 12,
+                              //       letterSpacing: 0.6,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                             rows: reportes.isEmpty
                                 ? [
@@ -374,25 +374,25 @@ class ReportsRecentTable extends StatelessWidget {
             ),
           ),
         ),
-        DataCell(
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.download, size: 20),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.visibility_outlined, size: 20),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.delete_outline, size: 20),
-              ),
-            ],
-          ),
-        ),
+        // DataCell(
+        //   Row(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(Icons.download, size: 20),
+        //       ),
+        //       IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(Icons.visibility_outlined, size: 20),
+        //       ),
+        //       IconButton(
+        //         onPressed: () {},
+        //         icon: const Icon(Icons.delete_outline, size: 20),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

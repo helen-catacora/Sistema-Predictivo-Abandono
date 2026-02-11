@@ -6,13 +6,9 @@ import '../widgets/import_file_selector.dart';
 import '../widgets/import_history_table.dart';
 import '../widgets/import_main_section.dart';
 import '../widgets/import_page_header.dart';
-import '../widgets/import_section_header.dart';
 
 /// Tipo de vista en la página Importar Datos.
-enum ImportarDatosVista {
-  prediccionMasiva,
-  creacionEstudiantes,
-}
+enum ImportarDatosVista { prediccionMasiva, creacionEstudiantes }
 
 /// Pantalla Importar Datos con menú flotante para alternar entre Predicción masiva y Creación de estudiantes.
 class ImportarDatosPage extends StatefulWidget {
@@ -62,8 +58,9 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
               label: 'Predicción masiva',
               icon: Icons.analytics_outlined,
               selected: _vistaActual == ImportarDatosVista.prediccionMasiva,
-              onTap: () =>
-                  setState(() => _vistaActual = ImportarDatosVista.prediccionMasiva),
+              onTap: () => setState(
+                () => _vistaActual = ImportarDatosVista.prediccionMasiva,
+              ),
             ),
             const SizedBox(width: 8),
             _menuItem(
@@ -71,7 +68,8 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
               icon: Icons.person_add_outlined,
               selected: _vistaActual == ImportarDatosVista.creacionEstudiantes,
               onTap: () => setState(
-                  () => _vistaActual = ImportarDatosVista.creacionEstudiantes),
+                () => _vistaActual = ImportarDatosVista.creacionEstudiantes,
+              ),
             ),
           ],
         ),
@@ -125,14 +123,12 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
         const SizedBox(height: 32),
         const ImportMainSection(),
         const SizedBox(height: 32),
-        const ImportSectionHeader(title: 'Seleccionar Archivo'),
         const SizedBox(height: 16),
         const ImportFileSelector(),
         const SizedBox(height: 32),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const ImportSectionHeader(title: 'Historial de Importaciones'),
             OutlinedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.filter_list, size: 18),

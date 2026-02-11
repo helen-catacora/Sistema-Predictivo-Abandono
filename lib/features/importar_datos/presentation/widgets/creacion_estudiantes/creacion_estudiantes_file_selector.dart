@@ -1,6 +1,9 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sistemapredictivoabandono/features/importar_datos/presentation/widgets/creacion_estudiantes/creacion_estudiantes_sidebar.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../providers/importar_estudiantes_provider.dart';
@@ -19,13 +22,28 @@ class CreacionEstudiantesFileSelector extends StatefulWidget {
 
 class _CreacionEstudiantesFileSelectorState
     extends State<CreacionEstudiantesFileSelector> {
+  static const _requiredFields = [
+    'ID Estudiante',
+    'Nombres Completos',
+    'Apellidos',
+    'Email Institucional',
+    'Teléfono',
+    'Dirección',
+    'Semestre / Nivel',
+  ];
+
+  static const _optionalFields = [
+    'Fecha de Nacimiento',
+    'Carrera',
+    'Contacto de Emergencia',
+  ];
+
   bool _isDragging = false;
   PlatformFile? _selectedFile;
 
   bool _canImport(PlatformFile? file) =>
       file != null &&
-      _extensionesXlsx.any(
-          (e) => file.name.toLowerCase().endsWith('.$e'));
+      _extensionesXlsx.any((e) => file.name.toLowerCase().endsWith('.$e'));
 
   @override
   Widget build(BuildContext context) {
@@ -68,108 +86,209 @@ class _CreacionEstudiantesFileSelectorState
                 ),
               ),
             ],
-            MouseRegion(
-              onEnter: (_) => setState(() => _isDragging = true),
-              onExit: (_) => setState(() => _isDragging = false),
-              child: GestureDetector(
-                onTap: _selectFile,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 48, horizontal: 24),
-                  decoration: BoxDecoration(
-                    color: _isDragging
-                        ? AppColors.blueLight
-                        : Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: _isDragging
-                          ? AppColors.navyMedium
-                          : Colors.grey.shade400,
-                      width: 2,
-                      strokeAlign: BorderSide.strokeAlignInside,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border(
+                        top: BorderSide(color: Color(0xff002855), width: 4),
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Color(0xff002855),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Seleccionar Archivo',
+                              style: TextStyle(
+                                color: Color(0xff1E293B),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                height: 28 / 10,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+                        MouseRegion(
+                          onEnter: (_) => setState(() => _isDragging = true),
+                          onExit: (_) => setState(() => _isDragging = false),
+                          child: GestureDetector(
+                            onTap: _selectFile,
+                            child: DottedBorder(
+                              options: RoundedRectDottedBorderOptions(
+                                radius: Radius.circular(12),
+                                dashPattern: [10, 5],
+                                strokeWidth: 2,
+                                color: _isDragging
+                                    ? AppColors.navyMedium
+                                    : Colors.grey,
+                              ),
+                              child: AnimatedContainer(
+                                width: double.infinity,
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 48,
+                                  horizontal: 24,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.cloud_upload_outlined,
+                                      size: 64,
+                                      color: _isDragging
+                                          ? AppColors.navyMedium
+                                          : Colors.grey.shade600,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      _selectedFile?.name ??
+                                          'Arrastre su archivo aquí o haga clic para seleccionar desde su computadora',
+                                      style: TextStyle(
+                                        color: AppColors.navyMedium,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 24),
+                                    OutlinedButton.icon(
+                                      onPressed: _selectFile,
+                                      icon: const Icon(
+                                        Icons.folder_open,
+                                        size: 20,
+                                      ),
+                                      label: const Text('EXPLORAR ARCHIVOS'),
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor: AppColors.navyMedium,
+                                        side: const BorderSide(
+                                          color: AppColors.navyMedium,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 24,
+                                          vertical: 14,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      'Formatos aceptados: XLSX | Tamaño máximo: 10MB',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: isImporting
+                                  ? null
+                                  : () => setState(() => _selectedFile = null),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Color(0xffCBD5E1),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.refresh, size: 18),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'CANCELAR',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        color: Color(0xff334155),
+                                        fontWeight: FontWeight.w700,
+                                        height: 20 / 14,
+                                        letterSpacing: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            GestureDetector(
+                              onTap: (canImport && !isImporting)
+                                  ? () => _iniciarImportacion(context)
+                                  : null,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0xff002855),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.upload,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      isImporting
+                                          ? 'IMPORTANDO...'
+                                          : 'INICIAR IMPORTACIÓN',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        height: 20 / 14,
+                                        letterSpacing: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.cloud_upload_outlined,
-                        size: 64,
-                        color: _isDragging
-                            ? AppColors.navyMedium
-                            : Colors.grey.shade600,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _selectedFile?.name ??
-                            'Arrastre su archivo aquí o haga clic para seleccionar desde su computadora',
-                        style: TextStyle(
-                          color: AppColors.navyMedium,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      OutlinedButton.icon(
-                        onPressed: _selectFile,
-                        icon: const Icon(Icons.folder_open, size: 20),
-                        label: const Text('EXPLORAR ARCHIVOS'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.navyMedium,
-                          side: const BorderSide(color: AppColors.navyMedium),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 14),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Formatos aceptados: XLSX | Tamaño máximo: 10MB',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                OutlinedButton.icon(
-                  onPressed: isImporting
-                      ? null
-                      : () => setState(() => _selectedFile = null),
-                  icon: const Icon(Icons.refresh, size: 18),
-                  label: const Text('CANCELAR'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.grayDark,
-                    side: BorderSide(color: Colors.grey.shade300),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                FilledButton.icon(
-                  onPressed: (canImport && !isImporting)
-                      ? () => _iniciarImportacion(context)
-                      : null,
-                  icon: isImporting
-                      ? SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.white,
-                          ),
-                        )
-                      : const Icon(Icons.upload, size: 18),
-                  label: Text(
-                      isImporting ? 'IMPORTANDO...' : 'INICIAR IMPORTACIÓN'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.navyMedium,
-                    foregroundColor: AppColors.white,
+                SizedBox(width: 24),
+                Expanded(
+                  flex: 1,
+                  child: RequiredOptionalFieldsCard(
+                    requiredFields: _requiredFields,
+                    optionalFields: _optionalFields,
                   ),
                 ),
               ],
@@ -207,9 +326,9 @@ class _CreacionEstudiantesFileSelectorState
         msg.write(', Errores: ${response.totalErrores}');
       }
       msg.write('.');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(msg.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(msg.toString())));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

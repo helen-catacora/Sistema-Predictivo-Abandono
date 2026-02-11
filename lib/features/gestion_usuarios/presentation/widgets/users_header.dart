@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_router.dart';
@@ -18,18 +19,23 @@ class UsersHeader extends StatelessWidget {
           children: [
             Text(
               'Usuarios Registrados',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                color: Color(0xff002855),
+                fontSize: 36,
+                fontWeight: FontWeight.w700,
+                height: 40 / 36,
+                letterSpacing: 0,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               'Control de accesos y roles institucionales para el sistema de predicción de deserción.',
-              style: TextStyle(
-                color: AppColors.grayMedium,
-                fontSize: 14,
+              style: GoogleFonts.inter(
+                color: Color(0xff64748B),
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                height: 28 / 18,
+                letterSpacing: 0,
               ),
             ),
           ],

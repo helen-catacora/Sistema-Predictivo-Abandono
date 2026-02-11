@@ -51,9 +51,7 @@ class UsersTable extends StatelessWidget {
       ),
       child: const Padding(
         padding: EdgeInsets.all(48),
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
+        child: Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -102,191 +100,201 @@ class UsersTable extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            headingRowColor: WidgetStateProperty.all(const Color(0xFF2C3E50)),
-            columns: const [
-              DataColumn(
-                label: Text(
-                  'NOMBRE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: DataTable(
+                  headingRowColor: WidgetStateProperty.all(
+                    const Color(0xff001233),
                   ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'CORREO INSTITUCIONAL',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'ROL',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'ESTADO',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'OPERACIONES',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-            rows: usuarios
-                .map(
-                  (u) => DataRow(
-                    cells: [
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundColor: _isAdmin(u.rol)
-                                  ? AppColors.navyMedium
-                                  : AppColors.grayLight,
-                              child: Text(
-                                _iniciales(u.nombre),
-                                style: TextStyle(
-                                  color: _isAdmin(u.rol)
-                                      ? AppColors.white
-                                      : AppColors.grayDark,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                  columns: const [
+                    DataColumn(
+                      label: Text(
+                        'NOMBRE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'CORREO INSTITUCIONAL',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'ROL',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'ESTADO',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'OPERACIONES',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: usuarios
+                      .map(
+                        (u) => DataRow(
+                          cells: [
+                            DataCell(
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 24,
+                                    backgroundColor: _isAdmin(u.rol)
+                                        ? AppColors.navyMedium
+                                        : AppColors.grayLight,
+                                    child: Text(
+                                      _iniciales(u.nombre),
+                                      style: TextStyle(
+                                        color: _isAdmin(u.rol)
+                                            ? AppColors.white
+                                            : AppColors.grayDark,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        u.nombre,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        u.rol,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 16),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  u.nombre,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
+                            DataCell(Text(u.correo)),
+                            DataCell(
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
                                 ),
-                                Text(
+                                decoration: BoxDecoration(
+                                  color: _isAdmin(u.rol)
+                                      ? AppColors.navyMedium
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: _isAdmin(u.rol)
+                                      ? null
+                                      : Border.all(color: Colors.grey.shade400),
+                                ),
+                                child: Text(
                                   u.rol,
                                   style: TextStyle(
+                                    color: _isAdmin(u.rol)
+                                        ? AppColors.white
+                                        : AppColors.grayDark,
                                     fontSize: 12,
-                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      DataCell(Text(u.correo)),
-                      DataCell(
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _isAdmin(u.rol)
-                                ? AppColors.navyMedium
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                            border: _isAdmin(u.rol)
-                                ? null
-                                : Border.all(color: Colors.grey.shade400),
-                          ),
-                          child: Text(
-                            u.rol,
-                            style: TextStyle(
-                              color: _isAdmin(u.rol)
-                                  ? AppColors.white
-                                  : AppColors.grayDark,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                      DataCell(
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: _isActivo(u.estado)
-                                    ? const Color(0xFF22C55E)
-                                    : Colors.grey.shade400,
-                                shape: BoxShape.circle,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              _isActivo(u.estado) ? 'Activo' : 'Inactivo',
-                              style: TextStyle(
-                                color: _isActivo(u.estado)
-                                    ? const Color(0xFF22C55E)
-                                    : Colors.grey.shade600,
-                                fontSize: 13,
+                            DataCell(
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                      color: _isActivo(u.estado)
+                                          ? const Color(0xFF22C55E)
+                                          : Colors.grey.shade400,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    _isActivo(u.estado) ? 'Activo' : 'Inactivo',
+                                    style: TextStyle(
+                                      color: _isActivo(u.estado)
+                                          ? const Color(0xFF22C55E)
+                                          : Colors.grey.shade600,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              TextButton.icon(
+                                onPressed: () => context.push(
+                                  AppRoutes.userFormEditar,
+                                  extra: u,
+                                ),
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: 18,
+                                  color: Colors.grey.shade600,
+                                ),
+                                label: Text(
+                                  'EDITAR',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      DataCell(
-                        TextButton.icon(
-                          onPressed: () => context.push(
-                            AppRoutes.userFormEditar,
-                            extra: u,
-                          ),
-                          icon: Icon(
-                            Icons.edit,
-                            size: 18,
-                            color: Colors.grey.shade600,
-                          ),
-                          label: Text(
-                            'EDITAR',
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
-          ),
+                      )
+                      .toList(),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -13,7 +13,7 @@ class ResumenParaleloSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Color(0xff002855), width: 4)),
@@ -31,12 +31,11 @@ class ResumenParaleloSection extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: Consumer<DashboardProvider>(
           builder: (context, dashboard, _) {
-            // final paralelos = dashboard.distribucionPorParalelo;
-            final paralelos = [dashboard.distribucionPorParalelo[0]];
+            // final paralelos = [dashboard.distribucionPorParalelo[0]];
             final isLoading = dashboard.isLoading;
             final hasError = dashboard.hasError;
 
-            if (hasError && paralelos.isEmpty) {
+            if (hasError) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -50,7 +49,7 @@ class ResumenParaleloSection extends StatelessWidget {
               );
             }
 
-            if (isLoading && paralelos.isEmpty) {
+            if (isLoading) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,7 +64,7 @@ class ResumenParaleloSection extends StatelessWidget {
                 ],
               );
             }
-
+            final paralelos = [dashboard.distribucionPorParalelo[0]];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

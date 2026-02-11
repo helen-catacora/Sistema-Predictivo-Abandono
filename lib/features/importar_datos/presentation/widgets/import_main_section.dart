@@ -17,25 +17,16 @@ class ImportMainSection extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: ImportInstructionsPanel(),
-                ),
+                Expanded(flex: 2, child: ImportInstructionsPanel()),
                 const SizedBox(width: 24),
-                Expanded(
-                  flex: 1,
-                  child: ImportSummaryCards(),
-                ),
+                Expanded(flex: 1, child: ImportSummaryCards()),
               ],
             ),
           );
         }
         return Column(
           children: [
-            SizedBox(
-              height: 380,
-              child: ImportInstructionsPanel(),
-            ),
+            SizedBox(height: 380, child: ImportInstructionsPanel()),
             const SizedBox(height: 24),
             ImportSummaryCards(),
           ],

@@ -1,26 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../core/constants/app_colors.dart';
-
-/// Panel derecho: Última Importación, Estadísticas, Campos Requeridos/Opcionales.
 class CreacionEstudiantesSidebar extends StatelessWidget {
   const CreacionEstudiantesSidebar({super.key});
-
-  static const _requiredFields = [
-    'ID Estudiante',
-    'Nombres Completos',
-    'Apellidos',
-    'Email Institucional',
-    'Teléfono',
-    'Dirección',
-    'Semestre / Nivel',
-  ];
-
-  static const _optionalFields = [
-    'Fecha de Nacimiento',
-    'Carrera',
-    'Contacto de Emergencia',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +16,6 @@ class CreacionEstudiantesSidebar extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         const _StatisticsCard(),
-        const SizedBox(height: 16),
-        const _RequiredOptionalFieldsCard(
-          requiredFields: _requiredFields,
-          optionalFields: _optionalFields,
-        ),
       ],
     );
   }
@@ -59,66 +36,138 @@ class _LastImportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final backGroundColor = success
+        ? const Color(0xffF0FDF4)
+        : const Color(0xFFEAB308);
+    final statusColor = success ? Color(0xff16A34A) : Color(0xFFEAB308);
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(left: BorderSide(color: Color(0xff22C55E), width: 4)),
         borderRadius: BorderRadius.circular(12),
-        border: Border(
-          left: BorderSide(
-            color: success ? const Color(0xFF22C55E) : const Color(0xFFEAB308),
-            width: 4,
-          ),
-          top: BorderSide(color: Colors.grey.shade200),
-          right: BorderSide(color: Colors.grey.shade200),
-          bottom: BorderSide(color: Colors.grey.shade200),
-        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.check_circle,
-                  color: success ? const Color(0xFF22C55E) : const Color(0xFFEAB308),
-                  size: 28,
+      padding: EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: backGroundColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Última Importación',
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              success ? 'Exitosa' : 'Con errores',
-              style: TextStyle(
-                color: success ? const Color(0xFF22C55E) : const Color(0xFFEAB308),
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                child: Icon(Icons.check_circle, color: statusColor, size: 20),
               ),
-            ),
-            const SizedBox(height: 12),
-            Text('Fecha: $date', style: _detailStyle),
-            Text('Registros: $records', style: _detailStyle),
-            Text('Archivo: $fileName', style: _detailStyle),
-          ],
-        ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Última Importación',
+                    style: GoogleFonts.inter(
+                      color: Color(0xff1E293B),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 24 / 16,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  Text(
+                    success ? 'Exitosa' : 'Con errores',
+                    style: TextStyle(
+                      color: statusColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Text(
+                'Fecha:',
+                style: GoogleFonts.inter(
+                  color: Color(0xff64748B),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+              Spacer(),
+              Text(
+                date,
+                style: GoogleFonts.inter(
+                  color: Color(0xff334155),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Text(
+                'Registros:',
+                style: GoogleFonts.inter(
+                  color: Color(0xff64748B),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+              Spacer(),
+              Text(
+                records,
+                style: GoogleFonts.inter(
+                  color: Color(0xff334155),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Text(
+                'Archivo:',
+                style: GoogleFonts.inter(
+                  color: Color(0xff64748B),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+              Spacer(),
+              Text(
+                fileName,
+                style: GoogleFonts.inter(
+                  color: Color(0xff334155),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
-
-  static const _detailStyle = TextStyle(
-    color: AppColors.navyMedium,
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-  );
 }
 
 class _StatisticsCard extends StatelessWidget {
@@ -128,13 +177,9 @@ class _StatisticsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(left: BorderSide(color: Color(0xffFFD60A), width: 4)),
         borderRadius: BorderRadius.circular(12),
-        border: Border(
-          left: const BorderSide(color: AppColors.accentYellow, width: 4),
-          top: BorderSide(color: Colors.grey.shade200),
-          right: BorderSide(color: Colors.grey.shade200),
-          bottom: BorderSide(color: Colors.grey.shade200),
-        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -143,36 +188,75 @@ class _StatisticsCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.people_outline, color: AppColors.accentYellow, size: 28),
-                const SizedBox(width: 8),
-                const Text(
-                  'Estadísticas',
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Color(0xffFEFCE8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  child: Icon(
+                    Icons.auto_graph_sharp,
+                    color: Color(0xffFFD60A),
+                    size: 20,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Estadísticas',
+                      style: GoogleFonts.inter(
+                        color: Color(0xff1E293B),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        height: 24 / 16,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    Text(
+                      'Total de Importaciones',
+                      style: TextStyle(
+                        color: Color(0xff64748B),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        height: 16 / 12,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Estudiantes Registrados',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              '23',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+            const SizedBox(height: 16),
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '47',
+                    style: GoogleFonts.inter(
+                      color: Color(0xff002855),
+                      fontSize: 36,
+                      fontWeight: FontWeight.w800,
+                      height: 40 / 36,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'CARGAS REALIZADAS',
+                    style: GoogleFonts.inter(
+                      color: Color(0xff64748B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      height: 16 / 12,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'IMPORTACIONES REALIZADAS',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
             ),
           ],
         ),
@@ -181,8 +265,9 @@ class _StatisticsCard extends StatelessWidget {
   }
 }
 
-class _RequiredOptionalFieldsCard extends StatelessWidget {
-  const _RequiredOptionalFieldsCard({
+class RequiredOptionalFieldsCard extends StatelessWidget {
+  const RequiredOptionalFieldsCard({
+    super.key,
     required this.requiredFields,
     required this.optionalFields,
   });
@@ -194,24 +279,38 @@ class _RequiredOptionalFieldsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.list_alt, color: AppColors.navyMedium, size: 24),
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Color(0xffEFF6FF),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.list_alt,
+                    color: Color(0xff002855),
+                    size: 24,
+                  ),
+                ),
                 const SizedBox(width: 8),
-                const Text(
+                Text(
                   'Campos Requeridos',
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
+                  style: GoogleFonts.inter(
+                    color: Color(0xff1E293B),
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
+                    height: 24 / 16,
+                    letterSpacing: 0,
                   ),
                 ),
               ],
@@ -222,43 +321,57 @@ class _RequiredOptionalFieldsCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green.shade600,
-                      size: 18,
-                    ),
+                    Icon(Icons.check_sharp, color: Color(0xff22C55E), size: 18),
                     const SizedBox(width: 8),
-                    Text(f, style: const TextStyle(fontSize: 13)),
+                    Text(
+                      f,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Color(0xff334155),
+                        fontWeight: FontWeight.w400,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
+            Divider(color: Color(0xffE2E8F0), height: 1),
+            SizedBox(height: 32),
             Text(
               'CAMPOS OPCIONALES',
-              style: TextStyle(
-                color: Colors.grey.shade600,
+              style: GoogleFonts.inter(
+                color: Color(0xff64748B),
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
+                height: 16 / 12,
+                letterSpacing: 0,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             ...optionalFields.map(
               (f) => Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: Radio<String>(
-                        value: f,
-                        groupValue: null,
-                        onChanged: (_) {},
-                      ),
+                      width: 14,
+                      height: 14,
+                      child: Radio<String>(value: f),
                     ),
                     const SizedBox(width: 8),
-                    Text(f, style: const TextStyle(fontSize: 13)),
+                    Text(
+                      f,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Color(0xff64748B),
+                        fontWeight: FontWeight.w400,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                      ),
+                    ),
                   ],
                 ),
               ),
