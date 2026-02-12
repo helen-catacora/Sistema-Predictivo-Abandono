@@ -13,6 +13,9 @@ abstract class ApiEndpoints {
   /// Estudiantes - importar desde Excel (POST multipart/form-data con archivo .xlsx)
   static const String estudiantesImportar = '/estudiantes/importar';
 
+  /// Estudiantes - perfil por id. GET /estudiantes/:id/perfil
+  static String estudiantePerfil(int id) => '/estudiantes/$id/perfil';
+
   /// Paralelos (para asistencia)
   static const String paralelos = '/paralelos';
 
@@ -24,6 +27,9 @@ abstract class ApiEndpoints {
 
   /// Usuarios (gestión)
   static const String usuarios = '/usuarios';
+
+  /// Usuarios - actualizar uno. PATCH /usuarios/:id
+  static String usuario(int id) => '/usuarios/$id';
 
   /// Predicciones - dashboard (resumen, distribución riesgo, por paralelo)
   static const String prediccionesDashboard = '/predicciones/dashboard';

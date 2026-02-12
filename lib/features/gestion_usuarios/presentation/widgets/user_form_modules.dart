@@ -12,13 +12,13 @@ const List<Map<String, String>> _modulos = [
     'icon': 'dashboard',
   },
   {
-    'id': 'Estudiantes',
+    'id': 'estudiantes',
     'title': 'Estudiantes',
     'desc': 'Gestión de estudiantes en riesgo',
     'icon': 'school',
   },
   {
-    'id': 'Asistencia',
+    'id': 'asistencias',
     'title': 'Asistencia',
     'desc': 'Registro y control de asistencia',
     'icon': 'event_available',
@@ -98,16 +98,7 @@ class UserFormModules extends StatelessWidget {
               children: [
                 Icon(Icons.info_outline, size: 20, color: AppColors.navyMedium),
                 const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Los módulos disponibles pueden variar según el rol '
-                    'seleccionado. Algunos módulos requieren permisos de Administrador.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.grayDark,
-                    ),
-                  ),
-                ),
+                
               ],
             ),
           ),

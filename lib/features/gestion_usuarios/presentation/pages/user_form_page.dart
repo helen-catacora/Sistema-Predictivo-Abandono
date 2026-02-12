@@ -1,14 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/usuario_item.dart';
+import '../../repositories/usuarios_repository.dart';
 import '../widgets/user_form_actions.dart';
 import '../widgets/user_form_credentials.dart';
 import '../widgets/user_form_modules.dart';
 import '../widgets/user_form_personal_info.dart';
 import '../widgets/user_form_quick_help.dart';
 import '../widgets/user_form_role.dart';
+
+/// Mapeo nombre de rol -> rol_id para PATCH /usuarios/:id (ajustar según backend).
+const Map<String, int> _rolNombreToId = {
+  'JEFE DE CARRERA': 1,
+  'DOCENTE A DEDICACIÓN EXCLUSIVA': 2,
+  'ENCARGADO DE CURSO': 3,
+};
 
 /// Página de registro/edición de usuario.
 class UserFormPage extends StatefulWidget {
@@ -26,6 +35,9 @@ class UserFormPage extends StatefulWidget {
 
 class _UserFormPageState extends State<UserFormPage> {
   final _formKey = GlobalKey<FormState>();
+  final UsuariosRepository _repository = UsuariosRepository();
+
+  bool _saving = false;
 
   late TextEditingController _nombresController;
   late TextEditingController _apellidosController;
@@ -39,9 +51,12 @@ class _UserFormPageState extends State<UserFormPage> {
   String _selectedRol = 'JEFE DE CARRERA';
   bool _estadoActivo = true;
   final Set<String> _modulosSeleccionados = {
-    'Panel Principal',
-    'Estudiantes',
-    'Asistencia',
+  //  'Panel Principal',
+   // 'estudiantes',
+    //'asistencias',
+  //  'reportes',
+  //  'predicciones',
+  //  'gestion_usuarios',
   };
 
   bool get _isEditMode => widget.usuario != null;
@@ -108,18 +123,100 @@ class _UserFormPageState extends State<UserFormPage> {
     });
   }
 
-  void _guardar() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // TODO: Conectar con API
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _isEditMode ? 'Usuario actualizado' : 'Usuario registrado',
+  Future<void> _guardar() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    if (_isEditMode) {
+      setState(() => _saving = true);
+      try {
+        final nombre =
+            '${_nombresController.text.trim()} ${_apellidosController.text.trim()}'
+                .trim();
+        final body = <String, dynamic>{
+          'nombre': nombre.isEmpty ? ' ' : nombre,
+          'carnet_identidad': _cedulaController.text.trim(),
+          'telefono': _telefonoController.text.trim(),
+          'cargo': _cargoController.text.trim(),
+          'correo': _correoController.text.trim(),
+          'rol_id': _rolNombreToId[_selectedRol] ?? 1,
+          'estado': _estadoActivo ? 'activo' : 'inactivo',
+          'modulos': _modulosSeleccionados.toList(),
+        };
+        await _repository.updateUsuario(widget.usuario!.id, body);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Usuario actualizado correctamente'),
+            backgroundColor: Color(0xFF22C55E),
           ),
-          backgroundColor: const Color(0xFF22C55E),
-        ),
-      );
-      context.pop();
+        );
+        context.pop();
+      } catch (e) {
+        if (!mounted) return;
+        setState(() => _saving = false);
+        String msg = 'Error al actualizar el usuario';
+        if (e is DioException) {
+          final data = e.response?.data;
+          if (data is Map) {
+            final detail = data['detail'];
+            if (detail is String) msg = detail;
+            if (detail is List && detail.isNotEmpty && detail[0] is Map) {
+              msg = (detail[0] as Map)['msg']?.toString() ?? msg;
+            }
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(msg),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
+    } else {
+      setState(() => _saving = true);
+      try {
+        final nombre =
+            '${_nombresController.text.trim()} ${_apellidosController.text.trim()}'
+                .trim();
+        final body = <String, dynamic>{
+          'nombre': nombre.isEmpty ? ' ' : nombre,
+          'carnet_identidad': _cedulaController.text.trim(),
+          'telefono': _telefonoController.text.trim(),
+          'cargo': _cargoController.text.trim(),
+          'correo': _correoController.text.trim(),
+          'contraseña': _passwordController.text,
+          'rol_id': _rolNombreToId[_selectedRol] ?? 1,
+        };
+        await _repository.createUsuario(body);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Usuario registrado correctamente'),
+            backgroundColor: Color(0xFF22C55E),
+          ),
+        );
+        context.pop();
+      } catch (e) {
+        if (!mounted) return;
+        setState(() => _saving = false);
+        String msg = 'Error al registrar el usuario';
+        if (e is DioException) {
+          final data = e.response?.data;
+          if (data is Map) {
+            final detail = data['detail'];
+            if (detail is String) msg = detail;
+            if (detail is List && detail.isNotEmpty && detail[0] is Map) {
+              msg = (detail[0] as Map)['msg']?.toString() ?? msg;
+            }
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(msg),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
     }
   }
 
@@ -172,11 +269,13 @@ class _UserFormPageState extends State<UserFormPage> {
                     UserFormModules(
                       selectedModules: _modulosSeleccionados,
                       onToggle: (m) {
+                        print(m.toString());
+                        print(_modulosSeleccionados.toString());
                         setState(() {
                           if (_modulosSeleccionados.contains(m)) {
                             _modulosSeleccionados.remove(m);
                           } else {
-                            _modulosSeleccionados.add(m);
+                            _modulosSeleccionados.add(m.toLowerCase());
                           }
                         });
                       },
@@ -194,6 +293,7 @@ class _UserFormPageState extends State<UserFormPage> {
                       onGuardar: _guardar,
                       onLimpiar: _limpiarFormulario,
                       onCancelar: _cancelar,
+                      saving: _saving,
                     ),
                     const SizedBox(height: 24),
                     const UserFormQuickHelp(),

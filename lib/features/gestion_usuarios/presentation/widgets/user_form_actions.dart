@@ -9,11 +9,13 @@ class UserFormActions extends StatelessWidget {
     required this.onGuardar,
     required this.onLimpiar,
     required this.onCancelar,
+    this.saving = false,
   });
 
   final VoidCallback onGuardar;
   final VoidCallback onLimpiar;
   final VoidCallback onCancelar;
+  final bool saving;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,18 @@ class UserFormActions extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: onGuardar,
-              icon: const Icon(Icons.save_outlined, size: 20),
-              label: const Text('GUARDAR USUARIO'),
+              onPressed: saving ? null : onGuardar,
+              icon: saving
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.navyMedium,
+                      ),
+                    )
+                  : const Icon(Icons.save_outlined, size: 20),
+              label: Text(saving ? 'GUARDANDO...' : 'GUARDAR USUARIO'),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.accentYellow,
                 foregroundColor: AppColors.navyMedium,

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/network/dio_client.dart';
+import '../data/models/estudiante_perfil_response.dart';
 import '../data/models/estudiantes_tabla_response.dart';
 
 /// Servicio de API para estudiantes.
@@ -25,5 +26,22 @@ class EstudiantesApiService {
     }
 
     return EstudiantesTablaResponse.fromJson(response.data!);
+  }
+
+  /// Obtiene el perfil completo de un estudiante.
+  /// GET /api/v1/estudiantes/:id/perfil
+  Future<EstudiantePerfilResponse> getPerfil(int estudianteId) async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.estudiantePerfil(estudianteId),
+    );
+
+    if (response.data == null) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        message: 'Respuesta vacía del servidor',
+      );
+    }
+
+    return EstudiantePerfilResponse.fromJson(response.data!);
   }
 }

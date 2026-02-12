@@ -5,6 +5,7 @@ import '../../features/asistencia/presentation/pages/asistencia_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/layout/dashboard_layout.dart';
+import '../../features/estudiantes/presentation/pages/estudiante_perfil_page.dart';
 import '../../features/estudiantes/presentation/pages/estudiantes_page.dart';
 import '../../features/gestion_usuarios/data/models/usuario_item.dart';
 import '../../features/gestion_usuarios/presentation/pages/gestion_usuarios_page.dart';
@@ -19,6 +20,7 @@ abstract class AppRoutes {
   static const String home = '/home';
   static const String homePanel = '/home/panel';
   static const String homeEstudiantes = '/home/estudiantes';
+  static String homeEstudiantePerfil(int id) => '/home/estudiantes/perfil/$id';
   static const String homeAsistencia = '/home/asistencia';
   static const String homeReportes = '/home/reportes';
   static const String homeImportarDatos = '/home/importar-datos';
@@ -77,6 +79,19 @@ final List<RouteBase> _routes = [
             ),
             GoRoute(
               path: 'estudiantes',
+              routes: [
+                GoRoute(
+                  path: 'perfil/:id',
+                  pageBuilder: (context, state) {
+                    final id = state.pathParameters['id'] ?? '0';
+                    final estudianteId = int.tryParse(id) ?? 0;
+                    return NoTransitionPage(
+                      key: state.pageKey,
+                      child: EstudiantePerfilPage(estudianteId: estudianteId),
+                    );
+                  },
+                ),
+              ],
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
                 child: const EstudiantesPage(),

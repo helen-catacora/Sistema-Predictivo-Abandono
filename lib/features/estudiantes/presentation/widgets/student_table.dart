@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
 import '../../data/models/estudiante_item.dart';
 import '../providers/estudiantes_provider.dart';
 import 'attendance_bar.dart';
@@ -270,7 +272,9 @@ class StudentTable extends StatelessWidget {
                             ),
                             DataCell(
                               FilledButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.push(AppRoutes.homeEstudiantePerfil(s.id));
+                                },
                                 style: FilledButton.styleFrom(
                                   backgroundColor: const Color(0xFFFACC15),
                                   foregroundColor: AppColors.grayDark,

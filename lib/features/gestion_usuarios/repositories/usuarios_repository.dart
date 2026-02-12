@@ -14,4 +14,14 @@ class UsuariosRepository {
     final response = await _apiService.getUsuarios();
     return response.usuarios;
   }
+
+  /// Actualiza un usuario (PATCH /usuarios/:id).
+  Future<void> updateUsuario(int id, Map<String, dynamic> body) async {
+    await _apiService.patchUsuario(id, body);
+  }
+
+  /// Crea un usuario (POST /usuarios).
+  Future<void> createUsuario(Map<String, dynamic> body) async {
+    await _apiService.postUsuario(body);
+  }
 }
