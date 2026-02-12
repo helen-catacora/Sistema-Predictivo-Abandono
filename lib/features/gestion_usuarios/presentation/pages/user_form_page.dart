@@ -23,10 +23,7 @@ const Map<String, int> _rolNombreToId = {
 
 /// Página de registro/edición de usuario.
 class UserFormPage extends StatefulWidget {
-  const UserFormPage({
-    super.key,
-    this.usuario,
-  });
+  const UserFormPage({super.key, this.usuario});
 
   /// Si no es null, modo edición.
   final UsuarioItem? usuario;
@@ -50,7 +47,8 @@ class _UserFormPageState extends State<UserFormPage> {
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
 
-  String _selectedRol = 'JEFE DE CARRERA';
+  String _selectedRol = '';
+  int _selectedRolId = 999;
   bool _estadoActivo = true;
   final Set<int> _modulosSeleccionados = {};
 
@@ -75,14 +73,18 @@ class _UserFormPageState extends State<UserFormPage> {
     if (u != null) {
       final partes = u.nombre.split(RegExp(r'\s+'));
       _nombresController.text = partes.isNotEmpty ? partes.first : '';
-      _apellidosController.text =
-          partes.length > 1 ? partes.sublist(1).join(' ') : '';
+      _apellidosController.text = partes.length > 1
+          ? partes.sublist(1).join(' ')
+          : '';
       _correoController.text = u.correo;
       _cargoController.text = u.rol;
       _selectedRol = u.rol;
+      _selectedRolId = u.rolId;
       _estadoActivo = u.estado.toLowerCase() == 'activo';
-      // Precargar IDs de módulos del usuario
       _modulosSeleccionados.addAll(u.modulos);
+      _cedulaController.text = u.carnetIdentidad;
+      _telefonoController.text = u.telefono;
+      _cargoController.text = u.cargo;
     }
   }
 
@@ -159,10 +161,7 @@ class _UserFormPageState extends State<UserFormPage> {
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(msg),
-            backgroundColor: Colors.red.shade700,
-          ),
+          SnackBar(content: Text(msg), backgroundColor: Colors.red.shade700),
         );
       }
     } else {
@@ -206,10 +205,7 @@ class _UserFormPageState extends State<UserFormPage> {
           }
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(msg),
-            backgroundColor: Colors.red.shade700,
-          ),
+          SnackBar(content: Text(msg), backgroundColor: Colors.red.shade700),
         );
       }
     }
@@ -229,80 +225,84 @@ class _UserFormPageState extends State<UserFormPage> {
           child: Form(
             key: _formKey,
             child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    const SizedBox(height: 24),
-                    UserFormPersonalInfo(
-                      nombresController: _nombresController,
-                      apellidosController: _apellidosController,
-                      cedulaController: _cedulaController,
-                      telefonoController: _telefonoController,
-                      cargoController: _cargoController,
-                    ),
-                    const SizedBox(height: 24),
-                    UserFormCredentials(
-                      correoController: _correoController,
-                      passwordController: _passwordController,
-                      confirmPasswordController: _confirmPasswordController,
-                      isEditMode: _isEditMode,
-                    ),
-                    const SizedBox(height: 24),
-                    UserFormRole(
-                      selectedRol: _selectedRol,
-                      estadoActivo: _estadoActivo,
-                      onRolChanged: (r) => setState(() => _selectedRol = r),
-                      onEstadoChanged: (v) =>
-                          setState(() => _estadoActivo = v),
-                    ),
-                    const SizedBox(height: 24),
-                    Consumer<ModulosProvider>(
-                      builder: (context, modulosProvider, _) {
-                        return UserFormModules(
-                          modulos: modulosProvider.modulos,
-                          selectedModules: _modulosSeleccionados,
-                          isLoading: modulosProvider.isLoading,
-                          onToggle: (m) {
-                            setState(() {
-                              if (_modulosSeleccionados.contains(m)) {
-                                _modulosSeleccionados.remove(m);
-                              } else {
-                                _modulosSeleccionados.add(m);
-                              }
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(),
+                      const SizedBox(height: 24),
+                      UserFormPersonalInfo(
+                        nombresController: _nombresController,
+                        apellidosController: _apellidosController,
+                        cedulaController: _cedulaController,
+                        telefonoController: _telefonoController,
+                        cargoController: _cargoController,
+                      ),
+                      const SizedBox(height: 24),
+                      UserFormCredentials(
+                        correoController: _correoController,
+                        passwordController: _passwordController,
+                        confirmPasswordController: _confirmPasswordController,
+                        isEditMode: _isEditMode,
+                      ),
+                      const SizedBox(height: 24),
+                      UserFormRole(
+                        selectedRol: _selectedRol.toUpperCase(),
+                        selectedRolId: _selectedRolId,
+                        estadoActivo: _estadoActivo,
+                        onRolChanged: (r) => setState(() {
+                          _selectedRol = r.$1;
+                          _selectedRolId = r.$2;
+                        }),
+                        onEstadoChanged: (v) =>
+                            setState(() => _estadoActivo = v),
+                      ),
+                      const SizedBox(height: 24),
+                      Consumer<ModulosProvider>(
+                        builder: (context, modulosProvider, _) {
+                          return UserFormModules(
+                            modulos: modulosProvider.modulos,
+                            selectedModules: _modulosSeleccionados,
+                            isLoading: modulosProvider.isLoading,
+                            onToggle: (m) {
+                              setState(() {
+                                if (_modulosSeleccionados.contains(m)) {
+                                  _modulosSeleccionados.remove(m);
+                                } else {
+                                  _modulosSeleccionados.add(m);
+                                }
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 32),
-              SizedBox(
-                width: 280,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    UserFormActions(
-                      onGuardar: _guardar,
-                      onLimpiar: _limpiarFormulario,
-                      onCancelar: _cancelar,
-                      saving: _saving,
-                    ),
-                    const SizedBox(height: 24),
-                    const UserFormQuickHelp(),
-                  ],
+                const SizedBox(width: 32),
+                SizedBox(
+                  width: 280,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      UserFormActions(
+                        onGuardar: _guardar,
+                        onLimpiar: _limpiarFormulario,
+                        onCancelar: _cancelar,
+                        saving: _saving,
+                      ),
+                      const SizedBox(height: 24),
+                      const UserFormQuickHelp(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -334,12 +334,10 @@ class _UserFormPageState extends State<UserFormPage> {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
                 Text(
                   _isEditMode ? 'Editar Usuario' : 'Registro de Nuevo Usuario',
@@ -349,31 +347,20 @@ class _UserFormPageState extends State<UserFormPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: 520,
-                  child: Text(
-                    'Complete los datos del usuario que tendrá acceso al sistema de predicción de deserción estudiantil.',
-                    style: TextStyle(
-                      color: AppColors.grayMedium,
-                      fontSize: 14,
-                    ),
-                  ),
+                Spacer(),
+                Text(
+                  'Los campos marcados con * son obligatorios',
+                  style: TextStyle(color: AppColors.grayMedium, fontSize: 12),
                 ),
               ],
             ),
-            Row(
-              children: [
-                Icon(Icons.info_outline, size: 18, color: AppColors.grayMedium),
-                const SizedBox(width: 8),
-                Text(
-                  'Los campos marcados con * son obligatorios',
-                  style: TextStyle(
-                    color: AppColors.grayMedium,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 520,
+              child: Text(
+                'Complete los datos del usuario que tendrá acceso al sistema de predicción de deserción estudiantil.',
+                style: TextStyle(color: AppColors.grayMedium, fontSize: 14),
+              ),
             ),
           ],
         ),

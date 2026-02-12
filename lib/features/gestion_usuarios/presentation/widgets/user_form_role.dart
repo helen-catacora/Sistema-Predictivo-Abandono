@@ -4,10 +4,10 @@ import '../../../../core/constants/app_colors.dart';
 import 'user_form_personal_info.dart';
 
 /// Roles disponibles.
-const List<String> _roles = [
-  'JEFE DE CARRERA',
-  'DOCENTE A DEDICACIÓN EXCLUSIVA',
-  'ENCARGADO DE CURSO',
+const List<({int rolId, String rolName})> _roles = [
+  (rolId: 1, rolName: 'JEFE DE CARRERA'),
+  (rolId: 2, rolName: 'DOCENTE A DEDICACIÓN EXCLUSIVA'),
+  (rolId: 3, rolName: 'ENCARGADO DE CURSO'),
 ];
 
 /// Sección Rol y Permisos.
@@ -18,11 +18,13 @@ class UserFormRole extends StatelessWidget {
     required this.estadoActivo,
     required this.onRolChanged,
     required this.onEstadoChanged,
+    required this.selectedRolId,
   });
 
   final String selectedRol;
+  final int selectedRolId;
   final bool estadoActivo;
-  final ValueChanged<String> onRolChanged;
+  final ValueChanged<(String, int)> onRolChanged;
   final ValueChanged<bool> onEstadoChanged;
 
   @override
@@ -49,9 +51,12 @@ class UserFormRole extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 12),
                       child: _RoleCard(
-                        rol: r,
-                        isSelected: selectedRol == r,
-                        onTap: () => onRolChanged(r),
+                        rol: r.rolName,
+                        rolId: r.rolId,
+                        isSelected:
+                            selectedRol == r.rolName ||
+                            selectedRolId == r.rolId,
+                        onTap: () => onRolChanged((r.rolName, r.rolId)),
                       ),
                     ),
                   ),
@@ -100,9 +105,11 @@ class _RoleCard extends StatelessWidget {
     required this.rol,
     required this.isSelected,
     required this.onTap,
+    required this.rolId,
   });
 
   final String rol;
+  final int rolId;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -110,56 +117,54 @@ class _RoleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final usePurple = rol == 'DOCENTE A DEDICACIÓN EXCLUSIVA';
     return Material(
-        color: isSelected
-            ? (usePurple
-                ? Colors.purple.shade100
-                : AppColors.blueLight)
-            : Colors.grey.shade100,
+      color: isSelected
+          ? (usePurple ? Colors.purple.shade100 : AppColors.blueLight)
+          : Colors.grey.shade100,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isSelected
-                    ? (usePurple ? Colors.purple : AppColors.navyMedium)
-                    : Colors.grey.shade300,
-                width: isSelected ? 2 : 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: isSelected
-                      ? (usePurple ? Colors.purple : AppColors.navyMedium)
-                      : Colors.grey.shade400,
-                  child: Icon(
-                    Icons.person_outline,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    rol,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: isSelected
-                          ? AppColors.navyMedium
-                          : AppColors.grayDark,
-                    ),
-                  ),
-                ),
-              ],
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? (usePurple ? Colors.purple : AppColors.navyMedium)
+                  : Colors.grey.shade300,
+              width: isSelected ? 2 : 1,
             ),
           ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: isSelected
+                    ? (usePurple ? Colors.purple : AppColors.navyMedium)
+                    : Colors.grey.shade400,
+                child: Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  rol,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    color: isSelected
+                        ? AppColors.navyMedium
+                        : AppColors.grayDark,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      );
+      ),
+    );
   }
 }
