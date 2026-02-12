@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/usuario_item.dart';
 import '../../repositories/usuarios_repository.dart';
+import '../providers/modulos_provider.dart';
 import '../widgets/user_form_actions.dart';
 import '../widgets/user_form_credentials.dart';
 import '../widgets/user_form_modules.dart';
@@ -50,14 +52,7 @@ class _UserFormPageState extends State<UserFormPage> {
 
   String _selectedRol = 'JEFE DE CARRERA';
   bool _estadoActivo = true;
-  final Set<String> _modulosSeleccionados = {
-  //  'Panel Principal',
-   // 'estudiantes',
-    //'asistencias',
-  //  'reportes',
-  //  'predicciones',
-  //  'gestion_usuarios',
-  };
+  final Set<int> _modulosSeleccionados = {};
 
   bool get _isEditMode => widget.usuario != null;
 
@@ -86,6 +81,8 @@ class _UserFormPageState extends State<UserFormPage> {
       _cargoController.text = u.rol;
       _selectedRol = u.rol;
       _estadoActivo = u.estado.toLowerCase() == 'activo';
+      // Precargar IDs de módulos del usuario
+      _modulosSeleccionados.addAll(u.modulos);
     }
   }
 
@@ -115,11 +112,6 @@ class _UserFormPageState extends State<UserFormPage> {
       _selectedRol = 'JEFE DE CARRERA';
       _estadoActivo = true;
       _modulosSeleccionados.clear();
-      _modulosSeleccionados.addAll([
-        'Panel Principal',
-        'Estudiantes',
-        'Asistencia',
-      ]);
     });
   }
 
@@ -132,6 +124,7 @@ class _UserFormPageState extends State<UserFormPage> {
         final nombre =
             '${_nombresController.text.trim()} ${_apellidosController.text.trim()}'
                 .trim();
+        // PATCH /usuarios/:id — modulos: listado de ids de módulos seleccionados
         final body = <String, dynamic>{
           'nombre': nombre.isEmpty ? ' ' : nombre,
           'carnet_identidad': _cedulaController.text.trim(),
@@ -140,7 +133,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'correo': _correoController.text.trim(),
           'rol_id': _rolNombreToId[_selectedRol] ?? 1,
           'estado': _estadoActivo ? 'activo' : 'inactivo',
-          'modulos': _modulosSeleccionados.toList(),
+          'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.updateUsuario(widget.usuario!.id, body);
         if (!mounted) return;
@@ -178,6 +171,7 @@ class _UserFormPageState extends State<UserFormPage> {
         final nombre =
             '${_nombresController.text.trim()} ${_apellidosController.text.trim()}'
                 .trim();
+        // POST /usuarios — modulos: listado de ids de módulos seleccionados
         final body = <String, dynamic>{
           'nombre': nombre.isEmpty ? ' ' : nombre,
           'carnet_identidad': _cedulaController.text.trim(),
@@ -186,6 +180,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'correo': _correoController.text.trim(),
           'contraseña': _passwordController.text,
           'rol_id': _rolNombreToId[_selectedRol] ?? 1,
+          'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.createUsuario(body);
         if (!mounted) return;
@@ -266,18 +261,22 @@ class _UserFormPageState extends State<UserFormPage> {
                           setState(() => _estadoActivo = v),
                     ),
                     const SizedBox(height: 24),
-                    UserFormModules(
-                      selectedModules: _modulosSeleccionados,
-                      onToggle: (m) {
-                        print(m.toString());
-                        print(_modulosSeleccionados.toString());
-                        setState(() {
-                          if (_modulosSeleccionados.contains(m)) {
-                            _modulosSeleccionados.remove(m);
-                          } else {
-                            _modulosSeleccionados.add(m.toLowerCase());
-                          }
-                        });
+                    Consumer<ModulosProvider>(
+                      builder: (context, modulosProvider, _) {
+                        return UserFormModules(
+                          modulos: modulosProvider.modulos,
+                          selectedModules: _modulosSeleccionados,
+                          isLoading: modulosProvider.isLoading,
+                          onToggle: (m) {
+                            setState(() {
+                              if (_modulosSeleccionados.contains(m)) {
+                                _modulosSeleccionados.remove(m);
+                              } else {
+                                _modulosSeleccionados.add(m);
+                              }
+                            });
+                          },
+                        );
                       },
                     ),
                   ],

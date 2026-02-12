@@ -31,6 +31,9 @@ abstract class ApiEndpoints {
   /// Usuarios - actualizar uno. PATCH /usuarios/:id
   static String usuario(int id) => '/usuarios/$id';
 
+  /// Módulos del sistema (para asignación a usuarios). GET /modulos
+  static const String modulos = '/modulos';
+
   /// Predicciones - dashboard (resumen, distribución riesgo, por paralelo)
   static const String prediccionesDashboard = '/predicciones/dashboard';
 

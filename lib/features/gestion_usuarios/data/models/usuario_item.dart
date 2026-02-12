@@ -6,6 +6,7 @@ class UsuarioItem {
     required this.correo,
     required this.rol,
     required this.estado,
+    this.modulos = const <int>[],
   });
 
   factory UsuarioItem.fromJson(Map<String, dynamic> json) {
@@ -15,6 +16,10 @@ class UsuarioItem {
       correo: json['correo'] as String? ?? '',
       rol: json['rol'] as String? ?? '',
       estado: json['estado'] as String? ?? '',
+      modulos: (json['modulos'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          [],
     );
   }
 
@@ -23,4 +28,5 @@ class UsuarioItem {
   final String correo;
   final String rol;
   final String estado;
+  final List<int> modulos;
 }

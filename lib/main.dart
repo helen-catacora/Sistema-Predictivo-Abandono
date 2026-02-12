@@ -11,6 +11,7 @@ import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/estudiantes/presentation/providers/estudiantes_provider.dart';
 import 'features/importar_datos/presentation/providers/importar_estudiantes_provider.dart';
 import 'features/importar_datos/presentation/providers/importar_predicciones_provider.dart';
+import 'features/gestion_usuarios/presentation/providers/modulos_provider.dart';
 import 'features/gestion_usuarios/presentation/providers/usuarios_provider.dart';
 import 'features/panel_principal/presentation/providers/alertas_provider.dart';
 import 'features/panel_principal/presentation/providers/dashboard_provider.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MateriasProvider()),
         ChangeNotifierProvider(create: (_) => AsistenciasProvider()),
         ChangeNotifierProvider(create: (_) => UsuariosProvider()),
+        ChangeNotifierProvider(create: (_) => ModulosProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => AlertasProvider()),
         ChangeNotifierProvider(create: (_) => ReportesTiposProvider()),

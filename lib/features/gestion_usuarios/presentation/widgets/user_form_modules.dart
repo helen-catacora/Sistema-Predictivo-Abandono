@@ -3,56 +3,22 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import 'user_form_personal_info.dart';
 
-/// Módulos del sistema.
-const List<Map<String, String>> _modulos = [
-  {
-    'id': 'Panel Principal',
-    'title': 'Panel Principal',
-    'desc': 'Acceso al dashboard principal del sistema',
-    'icon': 'dashboard',
-  },
-  {
-    'id': 'estudiantes',
-    'title': 'Estudiantes',
-    'desc': 'Gestión de estudiantes en riesgo',
-    'icon': 'school',
-  },
-  {
-    'id': 'asistencias',
-    'title': 'Asistencia',
-    'desc': 'Registro y control de asistencia',
-    'icon': 'event_available',
-  },
-  {
-    'id': 'Reportes',
-    'title': 'Reportes',
-    'desc': 'Generación y exportación de reportes',
-    'icon': 'assessment',
-  },
-  {
-    'id': 'Predicciones',
-    'title': 'Predicciones',
-    'desc': 'Visualización de predicciones de abandono',
-    'icon': 'trending_up',
-  },
-  {
-    'id': 'Gestión de Usuarios',
-    'title': 'Gestión de Usuarios',
-    'desc': 'Administración de usuarios del sistema',
-    'icon': 'people',
-  },
-];
-
 /// Sección Asignación de Módulos.
+/// Recibe la lista de módulos desde la BD y el set de módulos seleccionados (por nombre).
 class UserFormModules extends StatelessWidget {
   const UserFormModules({
     super.key,
+    required this.modulos,
     required this.selectedModules,
     required this.onToggle,
+    this.isLoading = false,
   });
 
-  final Set<String> selectedModules;
-  final ValueChanged<String> onToggle;
+  /// Lista de módulos del sistema [{id: int, nombre: String}].
+  final List<Map<String, dynamic>> modulos;
+  final Set<int> selectedModules;
+  final ValueChanged<int> onToggle;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -70,21 +36,24 @@ class UserFormModules extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: _modulos
-                .map(
-                  (m) => _ModuleCard(
-                    title: m['title']!,
-                    description: m['desc']!,
-                    icon: _iconFromName(m['icon']!),
-                    isSelected: selectedModules.contains(m['id']),
-                    onTap: () => onToggle(m['id']!),
-                  ),
-                )
-                .toList(),
-          ),
+          if (isLoading)
+            const Center(child: CircularProgressIndicator())
+          else
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: modulos.map((m) {
+                final id = (m['id'] as num).toInt();
+                final nombre = m['nombre'] as String;
+                return _ModuleCard(
+                  title: nombre,
+                  description: _descripcionModulo(nombre),
+                  icon: _iconFromModulo(nombre),
+                  isSelected: selectedModules.contains(id),
+                  onTap: () => onToggle(id),
+                );
+              }).toList(),
+            ),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(12),
@@ -98,7 +67,15 @@ class UserFormModules extends StatelessWidget {
               children: [
                 Icon(Icons.info_outline, size: 20, color: AppColors.navyMedium),
                 const SizedBox(width: 12),
-                
+                Expanded(
+                  child: Text(
+                    'Los módulos seleccionados determinan las secciones del sistema a las que el usuario podrá acceder.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.navyMedium,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -107,20 +84,35 @@ class UserFormModules extends StatelessWidget {
     );
   }
 
-  IconData _iconFromName(String name) {
-    switch (name) {
-      case 'dashboard':
-        return Icons.dashboard_outlined;
-      case 'school':
-        return Icons.school_outlined;
-      case 'event_available':
-        return Icons.event_available_outlined;
-      case 'assessment':
-        return Icons.assessment_outlined;
-      case 'trending_up':
-        return Icons.trending_up_outlined;
-      case 'people':
+  String _descripcionModulo(String nombre) {
+    switch (nombre) {
+      case 'Gestión de Usuarios':
+        return 'Administración de usuarios del sistema';
+      case 'Gestión de Datos de Estudiantes':
+        return 'Gestión de estudiantes y sus datos';
+      case 'Visualización de Resultados':
+        return 'Dashboard y predicciones de abandono';
+      case 'Control de Asistencia':
+        return 'Registro y control de asistencia';
+      case 'Reportes':
+        return 'Generación y exportación de reportes';
+      default:
+        return nombre;
+    }
+  }
+
+  IconData _iconFromModulo(String nombre) {
+    switch (nombre) {
+      case 'Gestión de Usuarios':
         return Icons.people_outline;
+      case 'Gestión de Datos de Estudiantes':
+        return Icons.school_outlined;
+      case 'Visualización de Resultados':
+        return Icons.trending_up_outlined;
+      case 'Control de Asistencia':
+        return Icons.event_available_outlined;
+      case 'Reportes':
+        return Icons.assessment_outlined;
       default:
         return Icons.apps_outlined;
     }

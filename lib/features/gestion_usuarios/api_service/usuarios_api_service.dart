@@ -39,11 +39,30 @@ class UsuariosApiService {
 
   /// Crea un usuario.
   /// POST /api/v1/usuarios
-  /// Body: nombre, carnet_identidad, telefono, cargo, correo, contraseña, rol_id.
+  /// Body: nombre, carnet_identidad, telefono, cargo, correo, contraseña, rol_id, modulos.
   Future<void> postUsuario(Map<String, dynamic> body) async {
     await _dio.post<dynamic>(
       ApiEndpoints.usuarios,
       data: body,
     );
+  }
+
+  /// Obtiene los módulos disponibles del sistema.
+  /// GET /api/v1/modulos
+  /// Retorna lista de {id: int, nombre: String}.
+  Future<List<Map<String, dynamic>>> getModulos() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.modulos,
+    );
+
+    if (response.data == null) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        message: 'Respuesta vacía del servidor',
+      );
+    }
+
+    final list = response.data!['modulos'] as List<dynamic>? ?? [];
+    return list.cast<Map<String, dynamic>>();
   }
 }

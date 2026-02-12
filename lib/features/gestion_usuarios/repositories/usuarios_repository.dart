@@ -1,6 +1,5 @@
 import '../api_service/usuarios_api_service.dart';
 import '../data/models/usuario_item.dart';
-import '../data/models/usuarios_response.dart';
 
 /// Repositorio de usuarios.
 class UsuariosRepository {
@@ -23,5 +22,10 @@ class UsuariosRepository {
   /// Crea un usuario (POST /usuarios).
   Future<void> createUsuario(Map<String, dynamic> body) async {
     await _apiService.postUsuario(body);
+  }
+
+  /// Obtiene los módulos disponibles del sistema.
+  Future<List<Map<String, dynamic>>> getModulos() async {
+    return await _apiService.getModulos();
   }
 }
