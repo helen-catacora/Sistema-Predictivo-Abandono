@@ -6,11 +6,13 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/menu_item.dart';
-import '../widgets/sidebar_brand.dart';
 import '../widgets/menu_section.dart';
-import '../widgets/user_profile.dart';
+import '../widgets/sidebar_brand.dart';
+import '../widgets/sidebar_logout_button.dart';
 
 /// Menú lateral del panel de control.
+/// El perfil del usuario se accede desde el ítem "Mi Perfil" en Administración.
+/// En la parte inferior solo se muestra el botón Cerrar Sesión.
 class AppSidebar extends StatelessWidget {
   const AppSidebar({super.key, required this.selectedPath});
 
@@ -79,9 +81,15 @@ class AppSidebar extends StatelessWidget {
                       MenuItem(
                         path: '${AppRoutes.home}/gestion-usuarios',
                         label: 'Gestión de Usuarios',
-                        icon: Icons.person_outline,
+                        icon: Icons.admin_panel_settings_outlined,
                         isSelected:
                             selectedPath == '${AppRoutes.home}/gestion-usuarios',
+                      ),
+                      MenuItem(
+                        path: AppRoutes.homeMiPerfil,
+                        label: 'Mi Perfil',
+                        icon: Icons.person_outline,
+                        isSelected: selectedPath == AppRoutes.homeMiPerfil,
                       ),
                     ],
                   ),
@@ -89,14 +97,13 @@ class AppSidebar extends StatelessWidget {
               ),
             ),
           ),
-          UserProfile(
-            onLogout: () {
+          SidebarLogoutButton(
+            onPressed: () {
               context.read<AuthProvider>().logout().then((_) {
                 if (context.mounted) context.go(AppRoutes.login);
               });
             },
           ),
-          const SizedBox(height: 16),
         ],
       ),
     );

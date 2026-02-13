@@ -7,6 +7,12 @@ abstract class ApiEndpoints {
   /// Auth
   static const String authLogin = '/auth/login';
 
+  /// Usuario actual en sesión. GET /me
+  static const String me = '/me';
+
+  /// Cambiar contraseña del usuario actual. POST /me/cambiar-contrasena
+  static const String meCambiarContrasena = '/me/cambiar-contrasena';
+
   /// Estudiantes
   static const String estudiantesTabla = '/estudiantes/tabla';
 

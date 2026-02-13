@@ -5,6 +5,7 @@ import '../../features/asistencia/presentation/pages/asistencia_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/layout/dashboard_layout.dart';
+import '../../features/dashboard/presentation/pages/mi_perfil_page.dart';
 import '../../features/estudiantes/presentation/pages/estudiante_perfil_page.dart';
 import '../../features/estudiantes/presentation/pages/estudiantes_page.dart';
 import '../../features/gestion_usuarios/data/models/usuario_item.dart';
@@ -25,6 +26,7 @@ abstract class AppRoutes {
   static const String homeReportes = '/home/reportes';
   static const String homeImportarDatos = '/home/importar-datos';
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
+  static const String homeMiPerfil = '/home/mi-perfil';
   static const String userFormNuevo = '/home/gestion-usuarios/nuevo';
   static const String userFormEditar = '/home/gestion-usuarios/editar';
 }
@@ -116,6 +118,13 @@ final List<RouteBase> _routes = [
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
                 child: const ImportarDatosPage(),
+              ),
+            ),
+            GoRoute(
+              path: 'mi-perfil',
+              pageBuilder: (context, state) => NoTransitionPage(
+                key: state.pageKey,
+                child: const MiPerfilPage(),
               ),
             ),
             GoRoute(

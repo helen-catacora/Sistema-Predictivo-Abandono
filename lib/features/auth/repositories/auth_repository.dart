@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/storage/token_storage.dart';
 import '../api_service/auth_api_service.dart';
 import '../data/models/login_response.dart';
+import '../data/models/me_response.dart';
 
 /// Excepción cuando las credenciales son incorrectas.
 class AuthException implements Exception {
@@ -63,4 +64,22 @@ class AuthRepository {
 
   /// Obtiene el rol_id del usuario actual.
   int? get rolId => TokenStorage.getRolId();
+
+  /// Obtiene los datos del usuario actual (GET /me).
+  Future<MeResponse> getMe() async {
+    return _apiService.getMe();
+  }
+
+  /// Actualiza los datos del usuario actual (PATCH /me).
+  Future<void> updateMe(Map<String, dynamic> body) async {
+    await _apiService.patchMe(body);
+  }
+
+  /// Cambia la contraseña del usuario actual (POST /me/cambiar-contrasena).
+  Future<void> cambiarContrasena(String contrasenaActual, String contrasenaNueva) async {
+    await _apiService.postCambiarContrasena({
+      'contrasena_actual': contrasenaActual,
+      'contrasena_nueva': contrasenaNueva,
+    });
+  }
 }
