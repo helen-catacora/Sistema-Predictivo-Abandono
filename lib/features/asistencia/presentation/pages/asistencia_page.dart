@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/materias_provider.dart';
-import '../providers/paralelos_provider.dart';
 import '../widgets/attendance_filter_section.dart';
 import '../widgets/attendance_footer.dart';
 import '../widgets/attendance_header.dart';
@@ -21,10 +17,10 @@ class _AsistenciaPageState extends State<AsistenciaPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ParalelosProvider>().loadParalelos();
-      context.read<MateriasProvider>().loadMaterias();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<ParalelosProvider>().loadParalelos();
+    //   context.read<MateriasProvider>().loadMaterias();
+    // });
   }
 
   @override

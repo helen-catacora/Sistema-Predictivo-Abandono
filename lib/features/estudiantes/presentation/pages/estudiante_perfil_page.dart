@@ -13,10 +13,7 @@ import '../widgets/perfil/perfil_acciones_section.dart';
 
 /// Pantalla de perfil de un estudiante (GET /estudiantes/:id/perfil).
 class EstudiantePerfilPage extends StatefulWidget {
-  const EstudiantePerfilPage({
-    super.key,
-    required this.estudianteId,
-  });
+  const EstudiantePerfilPage({super.key, required this.estudianteId});
 
   final int estudianteId;
 
@@ -116,59 +113,79 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
     }
 
     final p = _perfil!;
-    final probabilidad = (p.riesgoYPrediccion?.prediccionActual?.probabilidadAbandono ?? 0) * 100;
-    final nivelRiesgo = p.riesgoYPrediccion?.prediccionActual?.nivelRiesgo ?? '';
+    final probabilidad =
+        (p.riesgoYPrediccion?.prediccionActual?.probabilidadAbandono ?? 0) *
+        100;
+    final nivelRiesgo =
+        p.riesgoYPrediccion?.prediccionActual?.nivelRiesgo ?? '';
 
     return Scaffold(
       backgroundColor: AppColors.grayLight,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            backgroundColor: AppColors.white,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.pop(),
-            ),
-            title: const Text(
-              'Perfil del Estudiante',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+          // SliverAppBar(
+          //   backgroundColor: AppColors.white,
+          //   leading: IconButton(
+          //     icon: const Icon(Icons.arrow_back),
+          //     onPressed: () => context.pop(),
+          //   ),
+          //   title: const Text(
+          //     'Perfil del Estudiante',
+          //     style: TextStyle(
+          //       color: AppColors.navyMedium,
+          //       fontWeight: FontWeight.bold,
+          //       fontSize: 18,
+          //     ),
+          //   ),
+          //   actions: [
+          //     Container(
+          //       margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+          //       padding: const EdgeInsets.symmetric(
+          //         horizontal: 16,
+          //         vertical: 12,
+          //       ),
+          //       decoration: BoxDecoration(
+          //         color: AppColors.navyMedium,
+          //         borderRadius: BorderRadius.circular(8),
+          //       ),
+          //       child: Row(
+          //         mainAxisSize: MainAxisSize.min,
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text(
+          //             'PROBABILIDAD DE DESERCIÓN',
+          //             style: TextStyle(
+          //               color: Colors.white.withValues(alpha: 0.9),
+          //               fontSize: 10,
+          //               fontWeight: FontWeight.w600,
+          //             ),
+          //           ),
+          //           Text(
+          //             '${probabilidad.toStringAsFixed(0)}%',
+          //             style: const TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 22,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          SliverToBoxAdapter(
+            child: GestureDetector(
+              onTap: () {
+                context.pop();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Align(
+                  alignment: AlignmentGeometry.centerLeft,
+                  child: Icon(Icons.arrow_back, color: Colors.black, size: 30),
+                ),
               ),
             ),
-            actions: [
-              Container(
-                margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.navyMedium,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PROBABILIDAD DE DESERCIÓN',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '${probabilidad.toStringAsFixed(0)}%',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -203,7 +220,6 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                                     probabilidadPorcentaje: probabilidad,
                                   ),
                                   const SizedBox(height: 16),
-                                  PerfilAlertasSection(alertas: p.alertas),
                                 ],
                               ),
                             ),
@@ -218,6 +234,7 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                                   ),
                                   const SizedBox(height: 16),
                                   PerfilAccionesSection(acciones: p.acciones),
+                                  PerfilAlertasSection(alertas: p.alertas),
                                 ],
                               ),
                             ),
@@ -244,6 +261,7 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                           ),
                           const SizedBox(height: 16),
                           PerfilAccionesSection(acciones: p.acciones),
+                          PerfilAlertasSection(alertas: p.alertas),
                         ],
                       );
                     },

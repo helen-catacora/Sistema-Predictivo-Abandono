@@ -7,7 +7,6 @@ import '../widgets/mi_perfil/cambiar_contrasena_dialog.dart';
 import '../widgets/mi_perfil/editar_perfil_dialog.dart';
 import '../widgets/mi_perfil/mi_perfil_account_config.dart';
 import '../widgets/mi_perfil/mi_perfil_banner.dart';
-import '../widgets/mi_perfil/mi_perfil_breadcrumb.dart';
 import '../widgets/mi_perfil/mi_perfil_personal_info.dart';
 
 /// Página "Mi Perfil" del usuario en sesión.
@@ -122,10 +121,8 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         //const MiPerfilHeader(),
-        const MiPerfilBreadcrumb(),
-        Expanded(
-          child: _buildContent(),
-        ),
+        // const MiPerfilBreadcrumb(),
+        Expanded(child: _buildContent()),
       ],
     );
   }

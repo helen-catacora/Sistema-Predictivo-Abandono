@@ -63,22 +63,20 @@ class _LoginPageState extends State<LoginPage> {
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Expanded(flex: 1, child: LoginLeftPanel()),
                       Expanded(
                         flex: 1,
-                        child: LoginLeftPanel(),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child:                         Consumer<AuthProvider>(
-                          builder: (_, auth, __) => LoginRightPanel(
+                        child: Consumer<AuthProvider>(
+                          builder: (_, auth, _) => LoginRightPanel(
                             formKey: _formKey,
                             emailController: _emailController,
                             passwordController: _passwordController,
                             obscurePassword: _obscurePassword,
                             rememberSession: _rememberSession,
                             isLoading: auth.isLoading,
-                            onTogglePassword: () =>
-                                setState(() => _obscurePassword = !_obscurePassword),
+                            onTogglePassword: () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
                             onToggleRemember: (v) =>
                                 setState(() => _rememberSession = v ?? false),
                             onLogin: _onLogin,
@@ -92,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         LoginLeftPanel(compact: true),
                         Consumer<AuthProvider>(
-                          builder: (_, auth, __) => LoginRightPanel(
+                          builder: (_, auth, _) => LoginRightPanel(
                             formKey: _formKey,
                             emailController: _emailController,
                             passwordController: _passwordController,
@@ -100,7 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                             rememberSession: _rememberSession,
                             isLoading: auth.isLoading,
                             onTogglePassword: () => setState(
-                                () => _obscurePassword = !_obscurePassword),
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
                             onToggleRemember: (v) =>
                                 setState(() => _rememberSession = v ?? false),
                             onLogin: _onLogin,

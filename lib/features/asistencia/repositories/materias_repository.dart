@@ -1,11 +1,10 @@
 import '../api_service/materias_api_service.dart';
 import '../data/models/materia_item.dart';
-import '../data/models/materias_response.dart';
 
 /// Repositorio de materias.
 class MateriasRepository {
   MateriasRepository({MateriasApiService? apiService})
-      : _apiService = apiService ?? MateriasApiService();
+    : _apiService = apiService ?? MateriasApiService();
 
   final MateriasApiService _apiService;
 

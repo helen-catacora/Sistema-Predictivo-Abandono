@@ -1,15 +1,11 @@
-import 'package:dio/dio.dart';
-
 import '../api_service/estudiantes_api_service.dart';
 import '../data/models/estudiante_item.dart';
 import '../data/models/estudiante_perfil_response.dart';
-import '../data/models/estudiantes_tabla_response.dart';
 
 /// Repositorio de estudiantes.
 class EstudiantesRepository {
-  EstudiantesRepository({
-    EstudiantesApiService? apiService,
-  }) : _apiService = apiService ?? EstudiantesApiService();
+  EstudiantesRepository({EstudiantesApiService? apiService})
+    : _apiService = apiService ?? EstudiantesApiService();
 
   final EstudiantesApiService _apiService;
 

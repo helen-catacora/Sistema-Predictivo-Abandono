@@ -62,10 +62,12 @@ class AlertasResponse {
       totalActivas: (json['total_activas'] as num?)?.toInt() ?? 0,
       totalCriticas: (json['total_criticas'] as num?)?.toInt() ?? 0,
       alertas: list is List
-          ? (list as List)
-              .map((e) =>
-                  AlertaItem.fromJson(Map<String, dynamic>.from(e as Map)))
-              .toList()
+          ? (list)
+                .map(
+                  (e) =>
+                      AlertaItem.fromJson(Map<String, dynamic>.from(e as Map)),
+                )
+                .toList()
           : <AlertaItem>[],
     );
   }

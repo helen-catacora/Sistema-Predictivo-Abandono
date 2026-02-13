@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/estudiantes_provider.dart';
 import '../widgets/academic_risk_header.dart';
 import '../widgets/student_filter_section.dart';
 import '../widgets/student_table.dart';
@@ -19,7 +16,7 @@ class _EstudiantesPageState extends State<EstudiantesPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<EstudiantesProvider>().loadEstudiantes();
+      // context.read<EstudiantesProvider>().loadEstudiantes();
     });
   }
 

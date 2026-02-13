@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/creacion_estudiantes/importar_datos_creacion_estudiantes_content.dart';
 import '../widgets/import_file_selector.dart';
-import '../widgets/import_history_table.dart';
 import '../widgets/import_main_section.dart';
 import '../widgets/import_page_header.dart';
 
@@ -140,7 +139,7 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
         //     ),
         //   ],
         // ),
-       // const SizedBox(height: 16),
+        // const SizedBox(height: 16),
         //const ImportHistoryTable(),
       ],
     );

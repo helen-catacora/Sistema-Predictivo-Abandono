@@ -65,10 +65,7 @@ class _UserFormCredentialsState extends State<UserFormCredentials> {
                 const SizedBox(width: 6),
                 Text(
                   'Debe ser un correo institucional válido de EMI',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
             ),
@@ -118,9 +115,7 @@ class _UserFormCredentialsState extends State<UserFormCredentials> {
                 prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscureConfirm
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+                    _obscureConfirm ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: () =>
                       setState(() => _obscureConfirm = !_obscureConfirm),

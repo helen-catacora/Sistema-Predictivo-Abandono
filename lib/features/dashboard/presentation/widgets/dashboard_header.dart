@@ -10,7 +10,8 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPanel = GoRouterState.of(context).matchedLocation == AppRoutes.homePanel ||
+    final isPanel =
+        GoRouterState.of(context).matchedLocation == AppRoutes.homePanel ||
         GoRouterState.of(context).matchedLocation == AppRoutes.home;
 
     return Container(
@@ -55,7 +56,6 @@ class DashboardHeader extends StatelessWidget {
             //   onPressed: () {},
             // ),
             const SizedBox(width: 16),
-            
           ],
         ],
       ),
@@ -63,8 +63,9 @@ class DashboardHeader extends StatelessWidget {
   }
 }
 
-class _HeaderButton extends StatelessWidget {
-  const _HeaderButton({
+class HeaderButton extends StatelessWidget {
+  const HeaderButton({
+    super.key,
     required this.icon,
     required this.label,
     required this.onPressed,

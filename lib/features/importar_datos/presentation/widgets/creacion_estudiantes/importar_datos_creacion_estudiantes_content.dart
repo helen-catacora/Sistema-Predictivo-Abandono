@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/constants/app_colors.dart';
-import '../import_section_header.dart';
 import 'creacion_estudiantes_file_selector.dart';
-import 'creacion_estudiantes_historial_table.dart';
 import 'creacion_estudiantes_instructions_card.dart';
 
 /// Contenido completo de la pantalla "Importar Datos para Creación de Estudiantes".
@@ -60,11 +58,11 @@ class ImportarDatosCreacionEstudiantesContent extends StatelessWidget {
       children: [
         const CreacionEstudiantesInstructionsCard(),
         const SizedBox(height: 32),
-        const ImportSectionHeader(title: 'Seleccionar Archivo'),
+        // const ImportSectionHeader(title: 'Seleccionar Archivo'),
         const SizedBox(height: 16),
         const CreacionEstudiantesFileSelector(),
-       // const SizedBox(height: 32),
-       // const CreacionEstudiantesHistorialTable(),
+        // const SizedBox(height: 32),
+        // const CreacionEstudiantesHistorialTable(),
       ],
     );
   }

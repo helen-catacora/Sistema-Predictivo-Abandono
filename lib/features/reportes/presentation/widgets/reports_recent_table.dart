@@ -26,8 +26,9 @@ String _formatFecha(String isoDate) {
 Color _colorForTipo(String tipo) {
   final t = tipo.toLowerCase();
   if (t.contains('predictivo')) return AppColors.navyMedium;
-  if (t.contains('riesgo') || t.contains('estudiantes'))
+  if (t.contains('riesgo') || t.contains('estudiantes')) {
     return AppColors.accentYellow;
+  }
   if (t.contains('paralelo')) return Colors.purple;
   if (t.contains('asistencia')) return Colors.red;
   if (t.contains('individual')) return Colors.teal;

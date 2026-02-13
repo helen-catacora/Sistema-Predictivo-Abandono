@@ -88,8 +88,7 @@ class UserFormPersonalInfo extends StatelessWidget {
             controller: cargoController,
             decoration: const InputDecoration(
               labelText: 'Cargo o Función *',
-              hintText:
-                  'Ej: Docente Tiempo Completo, Secretaria Académica',
+              hintText: 'Ej: Docente Tiempo Completo, Secretaria Académica',
               border: OutlineInputBorder(),
             ),
             validator: (v) =>
@@ -103,6 +102,7 @@ class UserFormPersonalInfo extends StatelessWidget {
 
 class FormSection extends StatelessWidget {
   const FormSection({
+    super.key,
     required this.icon,
     required this.title,
     required this.child,
@@ -147,10 +147,7 @@ class FormSection extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: child,
-          ),
+          Padding(padding: const EdgeInsets.all(20), child: child),
         ],
       ),
     );

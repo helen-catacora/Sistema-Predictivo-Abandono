@@ -1,21 +1,13 @@
 import 'package:flutter/foundation.dart';
-
-import '../../data/models/login_response.dart';
 import '../../repositories/auth_repository.dart';
 
 /// Estado del proceso de login.
-enum AuthStatus {
-  initial,
-  loading,
-  authenticated,
-  unauthenticated,
-  error,
-}
+enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
 /// Provider de autenticación.
 class AuthProvider extends ChangeNotifier {
   AuthProvider({AuthRepository? repository})
-      : _repository = repository ?? AuthRepository();
+    : _repository = repository ?? AuthRepository();
 
   final AuthRepository _repository;
 
@@ -30,10 +22,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _status == AuthStatus.loading;
 
   /// Inicia sesión con email y contraseña.
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> login({required String email, required String password}) async {
     _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();

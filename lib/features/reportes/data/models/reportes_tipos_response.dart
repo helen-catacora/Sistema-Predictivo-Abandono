@@ -8,10 +8,13 @@ class ReportesTiposResponse {
     final list = json['tipos'];
     return ReportesTiposResponse(
       tipos: list is List
-          ? (list as List)
-              .map((e) =>
-                  ReporteTipoItem.fromJson(Map<String, dynamic>.from(e as Map)))
-              .toList()
+          ? (list)
+                .map(
+                  (e) => ReporteTipoItem.fromJson(
+                    Map<String, dynamic>.from(e as Map),
+                  ),
+                )
+                .toList()
           : <ReporteTipoItem>[],
     );
   }

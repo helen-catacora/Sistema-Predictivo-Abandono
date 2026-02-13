@@ -1,22 +1,15 @@
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../data/models/reporte_tipo_item.dart';
 import '../../repositories/reportes_repository.dart';
 
-enum ReportesTiposStatus {
-  initial,
-  loading,
-  success,
-  error,
-}
+enum ReportesTiposStatus { initial, loading, success, error }
 
 /// Provider de tipos de reportes (GET /reportes/tipos).
 class ReportesTiposProvider extends ChangeNotifier {
   ReportesTiposProvider({ReportesRepository? repository})
-      : _repository = repository ?? ReportesRepository();
+    : _repository = repository ?? ReportesRepository();
 
   final ReportesRepository _repository;
 

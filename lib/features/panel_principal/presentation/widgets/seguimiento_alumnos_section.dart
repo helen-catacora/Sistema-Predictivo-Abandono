@@ -21,9 +21,9 @@ class _SeguimientoAlumnosSectionState extends State<SeguimientoAlumnosSection> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<EstudiantesProvider>().loadEstudiantes();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<EstudiantesProvider>().loadEstudiantes();
+    // });
   }
 
   @override

@@ -113,7 +113,17 @@ class _CreacionEstudiantesFileSelectorState
                               ),
                             ),
                             const SizedBox(width: 12),
-                                                      ],
+                            Text(
+                              'Seleccionar Archivo',
+                              style: GoogleFonts.inter(
+                                color: Color(0xff1E293B),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                height: 28 / 18,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 24),
                         MouseRegion(

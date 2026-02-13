@@ -200,9 +200,7 @@ class LoginRightPanel extends StatelessWidget {
                       ),
                       const Spacer(),
                       GestureDetector(
-                        onTap: () {
-                          // TODO: ¿Olvidó su contraseña?
-                        },
+                        onTap: () {},
                         child: Text(
                           '¿Olvidó su contraseña?',
                           style: GoogleFonts.inter(
@@ -243,14 +241,14 @@ class LoginRightPanel extends StatelessWidget {
                           else
                             Text(
                               'INICIAR SESIÓN',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              height: 24 / 16,
-                              letterSpacing: 0,
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                height: 24 / 16,
+                                letterSpacing: 0,
+                              ),
                             ),
-                          ),
                           if (!isLoading) ...[
                             const SizedBox(width: 8),
                             Icon(

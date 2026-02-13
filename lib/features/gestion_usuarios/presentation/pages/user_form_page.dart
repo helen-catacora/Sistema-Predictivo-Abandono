@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sistemapredictivoabandono/features/gestion_usuarios/presentation/providers/usuarios_provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/usuario_item.dart';
@@ -133,7 +134,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'telefono': _telefonoController.text.trim(),
           'cargo': _cargoController.text.trim(),
           'correo': _correoController.text.trim(),
-          'rol_id': _rolNombreToId[_selectedRol] ?? 1,
+          'rol_id': _rolNombreToId[_selectedRol.toUpperCase()] ?? 3,
           'estado': _estadoActivo ? 'activo' : 'inactivo',
           'modulos': List<int>.from(_modulosSeleccionados),
         };
@@ -145,6 +146,7 @@ class _UserFormPageState extends State<UserFormPage> {
             backgroundColor: Color(0xFF22C55E),
           ),
         );
+        context.read<UsuariosProvider>().loadUsuarios();
         context.pop();
       } catch (e) {
         if (!mounted) return;
@@ -178,7 +180,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'cargo': _cargoController.text.trim(),
           'correo': _correoController.text.trim(),
           'contraseña': _passwordController.text,
-          'rol_id': _rolNombreToId[_selectedRol] ?? 1,
+          'rol_id': _rolNombreToId[_selectedRol.toUpperCase()] ?? 3,
           'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.createUsuario(body);
@@ -189,6 +191,7 @@ class _UserFormPageState extends State<UserFormPage> {
             backgroundColor: Color(0xFF22C55E),
           ),
         );
+        context.read<UsuariosProvider>().loadUsuarios();
         context.pop();
       } catch (e) {
         if (!mounted) return;

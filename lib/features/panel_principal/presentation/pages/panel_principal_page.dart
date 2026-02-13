@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/alertas_provider.dart';
-import '../providers/dashboard_provider.dart';
 import '../widgets/alertas_criticas_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
@@ -24,10 +20,10 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DashboardProvider>().loadDashboard();
-      context.read<AlertasProvider>().loadAlertas();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<DashboardProvider>().loadDashboard();
+    //   context.read<AlertasProvider>().loadAlertas();
+    // });
   }
 
   @override
@@ -45,14 +41,9 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: const TendenciaHistoricaSection(),
-                    ),
+                    Expanded(flex: 2, child: const TendenciaHistoricaSection()),
                     const SizedBox(width: 20),
-                    Expanded(
-                      child: const AlertasCriticasSection(),
-                    ),
+                    Expanded(child: const AlertasCriticasSection()),
                   ],
                 );
               }
@@ -74,4 +65,3 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
     );
   }
 }
-

@@ -102,7 +102,7 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
                           ),
                           const SizedBox(height: 8),
                           DropdownButtonFormField<int>(
-                            value: paralelos.isEmpty
+                            initialValue: paralelos.isEmpty
                                 ? null
                                 : (_selectedParaleloId ?? paralelos.first.id),
                             decoration: InputDecoration(
@@ -166,7 +166,7 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
                           ),
                           const SizedBox(height: 8),
                           DropdownButtonFormField<int>(
-                            value: materiasFiltradas.isEmpty
+                            initialValue: materiasFiltradas.isEmpty
                                 ? null
                                 : (_selectedMateriaId ??
                                       (materiasFiltradas.isNotEmpty

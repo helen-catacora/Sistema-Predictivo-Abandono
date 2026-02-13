@@ -9,29 +9,33 @@ class ImportPageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          'Importar Datos para Predicción',
-          style: GoogleFonts.inter(
-            color: AppColors.gray002855,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            height: 36 / 30,
-            letterSpacing: 0,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'CARGUE ARCHIVOS CON INFORMACIÓN ESTUDIANTIL PARA ANÁLISIS PREDICTIVO',
-          style: GoogleFonts.inter(
-            color: AppColors.grey64748B,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            height: 20 / 14,
-            letterSpacing: 0.7,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Importar Datos para Predicción',
+              style: GoogleFonts.inter(
+                color: AppColors.gray002855,
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                height: 36 / 30,
+                letterSpacing: 0,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'CARGUE ARCHIVOS CON INFORMACIÓN ESTUDIANTIL PARA ANÁLISIS PREDICTIVO',
+              style: GoogleFonts.inter(
+                color: AppColors.grey64748B,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                height: 20 / 14,
+                letterSpacing: 0.7,
+              ),
+            ),
+          ],
         ),
       ],
     );

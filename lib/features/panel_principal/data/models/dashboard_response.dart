@@ -117,16 +117,22 @@ class DashboardResponse {
               totalAlertasCriticas: 0,
             ),
       distribucionRiesgo: distRiesgo is List
-          ? (distRiesgo as List)
-              .map((e) => DistribucionRiesgoItem.fromJson(
-                  Map<String, dynamic>.from(e as Map)))
-              .toList()
+          ? (distRiesgo)
+                .map(
+                  (e) => DistribucionRiesgoItem.fromJson(
+                    Map<String, dynamic>.from(e as Map),
+                  ),
+                )
+                .toList()
           : <DistribucionRiesgoItem>[],
       distribucionPorParalelo: distParalelo is List
-          ? (distParalelo as List)
-              .map((e) => DistribucionPorParaleloItem.fromJson(
-                  Map<String, dynamic>.from(e as Map)))
-              .toList()
+          ? (distParalelo)
+                .map(
+                  (e) => DistribucionPorParaleloItem.fromJson(
+                    Map<String, dynamic>.from(e as Map),
+                  ),
+                )
+                .toList()
           : <DistribucionPorParaleloItem>[],
     );
   }

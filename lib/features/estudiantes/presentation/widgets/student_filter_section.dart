@@ -122,7 +122,7 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: provider.carreraFilter ?? 'todas',
+                        initialValue: provider.carreraFilter ?? 'todas',
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
