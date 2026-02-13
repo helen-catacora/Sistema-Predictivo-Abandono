@@ -37,34 +37,25 @@ class DashboardHeader extends StatelessWidget {
           ),
           const Spacer(),
           if (isPanel) ...[
-            _HeaderButton(
-              icon: Icons.psychology_outlined,
-              label: 'NUEVA PREDICCIÓN',
-              onPressed: () {},
-            ),
-            const SizedBox(width: 12),
-            _HeaderButton(
-              icon: Icons.history,
-              label: 'VER HISTORIAL',
-              onPressed: () {},
-            ),
-            const SizedBox(width: 12),
-            _HeaderButton(
-              icon: Icons.description_outlined,
-              label: 'CARGAR EXCEL',
-              onPressed: () {},
-            ),
+            // _HeaderButton(
+            //   icon: Icons.psychology_outlined,
+            //   label: 'NUEVA PREDICCIÓN',
+            //   onPressed: () {},
+            // ),
+            // const SizedBox(width: 12),
+            // _HeaderButton(
+            //   icon: Icons.history,
+            //   label: 'VER HISTORIAL',
+            //   onPressed: () {},
+            // ),
+            // const SizedBox(width: 12),
+            // _HeaderButton(
+            //   icon: Icons.description_outlined,
+            //   label: 'CARGAR EXCEL',
+            //   onPressed: () {},
+            // ),
             const SizedBox(width: 16),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notifications_outlined, color: AppColors.white),
-              tooltip: 'Notificaciones',
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.help_outline, color: AppColors.white),
-              tooltip: 'Ayuda',
-            ),
+            
           ],
         ],
       ),

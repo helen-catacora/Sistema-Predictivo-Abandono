@@ -126,22 +126,22 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
         const SizedBox(height: 16),
         const ImportFileSelector(),
         const SizedBox(height: 32),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.filter_list, size: 18),
-              label: const Text('Filtrar'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.grey.shade700,
-                side: BorderSide(color: Colors.grey.shade300),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const ImportHistoryTable(),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     OutlinedButton.icon(
+        //       onPressed: () {},
+        //       icon: const Icon(Icons.filter_list, size: 18),
+        //       label: const Text('Filtrar'),
+        //       style: OutlinedButton.styleFrom(
+        //         foregroundColor: Colors.grey.shade700,
+        //         side: BorderSide(color: Colors.grey.shade300),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+       // const SizedBox(height: 16),
+        //const ImportHistoryTable(),
       ],
     );
   }

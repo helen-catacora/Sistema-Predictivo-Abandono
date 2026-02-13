@@ -37,25 +37,25 @@ class AttendanceHeader extends StatelessWidget {
               ),
             ),
             Row(
-              children: [
-                OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.download, size: 18),
-                  label: const Text('Exportar'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.navyMedium,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                FilledButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.save, size: 18),
-                  label: const Text('Guardar Registro'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.navyMedium,
-                  ),
-                ),
-              ],
+              // children: [
+              //   OutlinedButton.icon(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.download, size: 18),
+              //     label: const Text('Exportar'),
+              //     style: OutlinedButton.styleFrom(
+              //       foregroundColor: AppColors.navyMedium,
+              //     ),
+              //   ),
+              //   const SizedBox(width: 12),
+              //   FilledButton.icon(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.save, size: 18),
+              //     label: const Text('Guardar Registro'),
+              //     style: FilledButton.styleFrom(
+              //       backgroundColor: AppColors.navyMedium,
+              //     ),
+              //   ),
+              // ],
             ),
           ],
         ),

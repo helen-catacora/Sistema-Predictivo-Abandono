@@ -35,7 +35,7 @@ class EstadoAcademicoSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Estado Académico - Gestión 2024',
+              'Estado Académico',
               style: GoogleFonts.inter(
                 color: AppColors.gray002855,
                 fontSize: 30,
@@ -45,16 +45,16 @@ class EstadoAcademicoSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              'SISTEMA DE ALERTA TEMPRANA DE ABANDONO ESTUDIANTIL (EMI)',
-              style: GoogleFonts.inter(
-                color: AppColors.grey64748B,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                height: 20 / 14,
-                letterSpacing: 0.7,
-              ),
-            ),
+            // Text(
+            //   'SISTEMA DE ALERTA TEMPRANA DE ABANDONO ESTUDIANTIL (EMI)',
+            //   style: GoogleFonts.inter(
+            //     color: AppColors.grey64748B,
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.w500,
+            //     height: 20 / 14,
+            //     letterSpacing: 0.7,
+            //   ),
+            // ),
             if (hasError) ...[
               const SizedBox(height: 12),
               Text(

@@ -63,8 +63,8 @@ class ImportarDatosCreacionEstudiantesContent extends StatelessWidget {
         const ImportSectionHeader(title: 'Seleccionar Archivo'),
         const SizedBox(height: 16),
         const CreacionEstudiantesFileSelector(),
-        const SizedBox(height: 32),
-        const CreacionEstudiantesHistorialTable(),
+       // const SizedBox(height: 32),
+       // const CreacionEstudiantesHistorialTable(),
       ],
     );
   }

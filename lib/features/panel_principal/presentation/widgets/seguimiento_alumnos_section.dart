@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
+import '../../../estudiantes/presentation/providers/estudiantes_provider.dart';
+import '../../../estudiantes/presentation/widgets/student_table.dart';
 
-/// Sección Seguimiento de Alumnos con tabla.
-class SeguimientoAlumnosSection extends StatelessWidget {
+/// Sección Seguimiento de Alumnos con tabla (primeros 3 estudiantes).
+/// "Ver todos los estudiantes" navega a /home/estudiantes.
+class SeguimientoAlumnosSection extends StatefulWidget {
   const SeguimientoAlumnosSection({super.key});
+
+  @override
+  State<SeguimientoAlumnosSection> createState() =>
+      _SeguimientoAlumnosSectionState();
+}
+
+class _SeguimientoAlumnosSectionState extends State<SeguimientoAlumnosSection> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EstudiantesProvider>().loadEstudiantes();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,145 +74,47 @@ class SeguimientoAlumnosSection extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.filter_list, size: 18),
-                      label: const Text('Filtrar'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.grayDark,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    FilledButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.download, size: 18),
-                      label: const Text('Exportar'),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.navyMedium,
-                      ),
-                    ),
+                    // OutlinedButton.icon(
+                    //   onPressed: () {},
+                    //   icon: const Icon(Icons.filter_list, size: 18),
+                    //   label: const Text('Filtrar'),
+                    //   style: OutlinedButton.styleFrom(
+                    //     foregroundColor: AppColors.grayDark,
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 12),
+                    // FilledButton.icon(
+                    //   onPressed: () {},
+                    //   icon: const Icon(Icons.download, size: 18),
+                    //   label: const Text('Exportar'),
+                    //   style: FilledButton.styleFrom(
+                    //     backgroundColor: AppColors.navyMedium,
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            Card(
-              elevation: 0,
-              color: AppColors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Colors.grey.shade200),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: constraints
-                              .maxWidth, // Hace que ocupe al menos todo el ancho del Card
-                        ),
-                        child: DataTable(
-                          headingRowColor: WidgetStateProperty.all(
-                            AppColors.navyDark,
-                          ),
-                          columns: const [
-                            DataColumn(
-                              label: Text(
-                                'ESTUDIANTE',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'NIVEL / SEMESTRE',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'ASISTENCIA',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'NIVEL DE RIESGO',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'ACCIONES',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: [
-                            _buildRow(
-                              'ALVAREZ, CARLOS',
-                              'ID: 2024-0015',
-                              '2DO SEMESTRE',
-                              'CIENCIAS EXACTAS',
-                              85,
-                              true,
-                              65,
-                              false,
-                            ),
-                            _buildRow(
-                              'ROJAS, ANA LUCÍA',
-                              'ID: 2024-0128',
-                              '1ER SEMESTRE',
-                              'TECNOLOGÍA',
-                              62,
-                              false,
-                              82,
-                              true,
-                            ),
-                            _buildRow(
-                              'TORRES, MARCOS',
-                              'ID: 2024-0542',
-                              '3ER SEMESTRE',
-                              'INGENIERÍA',
-                              91,
-                              true,
-                              45,
-                              false,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            Consumer<EstudiantesProvider>(
+              builder: (context, provider, _) {
+                if (provider.isLoading && provider.estudiantes.isEmpty) {
+                  return _buildLoadingCard();
+                }
+                if (provider.hasError && provider.estudiantes.isEmpty) {
+                  return _buildErrorCard(
+                    provider.errorMessage ?? 'Error al cargar',
+                    provider.loadEstudiantes,
+                  );
+                }
+                final primerosTres = provider.estudiantes.take(3).toList();
+                return StudentDataTable(estudiantes: primerosTres);
+              },
             ),
             const SizedBox(height: 12),
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.homeEstudiantes),
                 child: const Text(
                   'Ver todos los estudiantes',
                   style: TextStyle(
@@ -209,147 +131,54 @@ class SeguimientoAlumnosSection extends StatelessWidget {
     );
   }
 
-  DataRow _buildRow(
-    String name,
-    String id,
-    String nivel,
-    String carrera,
-    int asistencia,
-    bool asistenciaOk,
-    int riesgo,
-    bool riesgoAlto,
-  ) {
-    final initial = name.isNotEmpty ? name[0] : '?';
-    return DataRow(
-      cells: [
-        DataCell(
-          Row(
+  Widget _buildLoadingCard() {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 32),
+        child: Center(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: AppColors.navyMedium,
-                child: Text(
-                  initial.toUpperCase(),
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    id,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
+              CircularProgressIndicator(),
+              SizedBox(height: 12),
+              Text('Cargando estudiantes...'),
             ],
           ),
         ),
-        DataCell(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(nivel),
-              Text(
-                carrera,
-                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-              ),
-            ],
-          ),
-        ),
-        DataCell(
-          SizedBox(
-            width: 120,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$asistencia%',
-                  style: TextStyle(
-                    color: asistenciaOk ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                _ProgressBar(value: asistencia / 100, isHigh: asistenciaOk),
-              ],
-            ),
-          ),
-        ),
-        DataCell(
-          SizedBox(
-            width: 120,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$riesgo%',
-                  style: TextStyle(
-                    color: riesgoAlto ? Colors.red : AppColors.navyMedium,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                _ProgressBar(value: riesgo / 100, isHigh: riesgoAlto),
-              ],
-            ),
-          ),
-        ),
-        DataCell(
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.visibility_outlined, size: 20),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.more_vert, size: 20),
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
-}
 
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.value, required this.isHigh});
-
-  final double value;
-  final bool isHigh;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 6,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(3),
+  Widget _buildErrorCard(String message, VoidCallback onRetry) {
+    return Card(
+      elevation: 0,
+      color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(3),
-        child: LinearProgressIndicator(
-          value: value.clamp(0.0, 1.0),
-          backgroundColor: Colors.grey.shade200,
-          valueColor: AlwaysStoppedAnimation<Color>(
-            isHigh ? Colors.red : AppColors.navyMedium,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 40, color: Colors.red.shade700),
+              const SizedBox(height: 8),
+              Text(message, textAlign: TextAlign.center),
+              const SizedBox(height: 12),
+              TextButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Reintentar'),
+              ),
+            ],
           ),
         ),
       ),

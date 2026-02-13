@@ -92,6 +92,19 @@ class StudentTable extends StatelessWidget {
   }
 
   Widget _buildTable(BuildContext context, List<EstudianteItem> estudiantes) {
+    return StudentDataTable(estudiantes: estudiantes);
+  }
+}
+
+/// Tabla de datos de estudiantes (misma estructura que en EstudiantesPage).
+/// Reutilizable para mostrar cualquier lista, p. ej. los primeros 3 en el panel principal.
+class StudentDataTable extends StatelessWidget {
+  const StudentDataTable({super.key, required this.estudiantes});
+
+  final List<EstudianteItem> estudiantes;
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: AppColors.white,
@@ -138,18 +151,6 @@ class StudentTable extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // DataColumn(
-                    //   label: Text(
-                    //     '% ASISTENCIA',
-                    //     style: GoogleFonts.inter(
-                    //       color: Colors.white,
-                    //       fontSize: 12,
-                    //       fontWeight: FontWeight.w700,
-                    //       height: 16 / 12,
-                    //       letterSpacing: 0.6,
-                    //     ),
-                    //   ),
-                    // ),
                     DataColumn(
                       label: Text(
                         'PROMEDIO',
@@ -246,13 +247,6 @@ class StudentTable extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // DataCell(
-                            //   Text(
-                            //     s.promedio != null
-                            //         ? '${s.promedio} / 5.0'
-                            //         : '-',
-                            //   ),
-                            // ),
                             DataCell(
                               RiskLevelIndicator(
                                 level: RiskLevel.fromString(s.nivelRiesgo),
