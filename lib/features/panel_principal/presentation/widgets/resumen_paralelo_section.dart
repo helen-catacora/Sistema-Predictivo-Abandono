@@ -7,8 +7,21 @@ import '../../data/models/dashboard_response.dart';
 import '../providers/dashboard_provider.dart';
 
 /// Sección Resumen por Paralelo (datos de distribucion_por_paralelo).
-class ResumenParaleloSection extends StatelessWidget {
+class ResumenParaleloSection extends StatefulWidget {
   const ResumenParaleloSection({super.key});
+
+  @override
+  State<ResumenParaleloSection> createState() => _ResumenParaleloSectionState();
+}
+
+class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +77,7 @@ class ResumenParaleloSection extends StatelessWidget {
                 ],
               );
             }
-            final paralelos = [dashboard.distribucionPorParalelo[0]];
+            final paralelos = dashboard.distribucionPorParalelo;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -85,16 +98,32 @@ class ResumenParaleloSection extends StatelessWidget {
                         builder: (context, constraints) {
                           final isWide = constraints.maxWidth > 700;
                           if (isWide) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: paralelos
-                                  .map(
-                                    (p) => Padding(
+                            return Scrollbar(
+                              trackVisibility: true,
+                              thumbVisibility: true,
+                              controller: _scrollController,
+                              child: SingleChildScrollView(
+                                controller: _scrollController,
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // children: paralelos
+                                  //     .map(
+                                  //       (p) => Padding(
+                                  //         padding: const EdgeInsets.only(right: 12),
+                                  //         child: _ParaleloCard(item: p),
+                                  //       ),
+                                  //     )
+                                  //     .toList(),
+                                  children: List.generate(paralelos.length, (index){
+                                    final paralelo = paralelos[index];
+                                    return Padding(
                                       padding: const EdgeInsets.only(right: 12),
-                                      child: _ParaleloCard(item: p),
-                                    ),
-                                  )
-                                  .toList(),
+                                      child: _ParaleloCard(item: paralelo),
+                                    );
+                                  }),
+                                ),                         
+                              ),
                             );
                           }
                           return Column(

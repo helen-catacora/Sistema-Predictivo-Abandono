@@ -57,7 +57,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
             },
           ),
           const SizedBox(height: 24),
-          const ResumenParaleloSection(),
+           ResumenParaleloSection(),
           const SizedBox(height: 24),
           const SeguimientoAlumnosSection(),
         ],
