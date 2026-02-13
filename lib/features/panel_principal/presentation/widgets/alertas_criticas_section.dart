@@ -5,8 +5,47 @@ import '../../../../core/constants/app_colors.dart';
 import '../../data/models/alertas_response.dart';
 import '../providers/alertas_provider.dart';
 
-/// Máximo de alertas a mostrar en la tarjeta (las más prioritarias).
-const int _maxAlertasVisibles = 8;
+/// Máximo de alertas a mostrar en la sección (solo las 3 primeras).
+const int _maxAlertasVisibles = 3;
+
+void _showTodasLasAlertasDialog(
+  BuildContext context,
+  List<AlertaItem> alertas,
+) {
+  showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.warning_amber_rounded,
+              color: AppColors.accentYellow, size: 24),
+          const SizedBox(width: 8),
+          const Text('Todas las Alertas'),
+        ],
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: ListView.builder(
+          itemCount: alertas.length,
+          itemBuilder: (context, i) => Padding(
+            padding: i < alertas.length - 1
+                ? const EdgeInsets.only(bottom: 12)
+                : EdgeInsets.zero,
+            child: _AlertItemFromApi(alerta: alertas[i]),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cerrar'),
+        ),
+      ],
+    ),
+  );
+}
 
 /// Sección Alertas Críticas (datos de GET /alertas).
 class AlertasCriticasSection extends StatelessWidget {
@@ -100,7 +139,12 @@ class AlertasCriticasSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: () {},
+                  onPressed: lista.isEmpty
+                      ? null
+                      : () => _showTodasLasAlertasDialog(
+                            context,
+                            alertasProvider.alertasPrioritarias,
+                          ),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
                     foregroundColor: AppColors.grayDark,
@@ -109,9 +153,9 @@ class AlertasCriticasSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  icon: const Icon(Icons.folder_outlined, size: 20),
+                  icon: const Icon(Icons.list_alt, size: 20),
                   label: const Text(
-                    'PROTOCOLO DE INTERVENCIÓN',
+                    'Ver Todas las Alertas',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
