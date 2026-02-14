@@ -9,9 +9,9 @@ class EstudiantesRepository {
 
   final EstudiantesApiService _apiService;
 
-  /// Obtiene la lista de estudiantes para la tabla.
-  Future<List<EstudianteItem>> getTabla() async {
-    final response = await _apiService.getTabla();
+  /// Obtiene la lista de estudiantes para la tabla (opcionalmente filtrada por paralelo).
+  Future<List<EstudianteItem>> getTabla({int? paraleloId}) async {
+    final response = await _apiService.getTabla(paraleloId: paraleloId);
     return response.estudiantes;
   }
 

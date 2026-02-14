@@ -181,7 +181,7 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Align(
-                  alignment: AlignmentGeometry.centerLeft,
+                  alignment: Alignment.centerLeft,
                   child: Icon(Icons.arrow_back, color: Colors.black, size: 30),
                 ),
               ),
@@ -261,21 +261,11 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                           ),
                           const SizedBox(height: 16),
                           PerfilAccionesSection(acciones: p.acciones),
-                          PerfilAlertasSection(alertas: p.alertas),
                         ],
                       );
                     },
                   ),
                   const SizedBox(height: 32),
-                  Center(
-                    child: Text(
-                      '© 2024 ESCUELA MILITAR DE INGENIERÍA - CIENCIAS BÁSICAS',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -201,39 +201,12 @@ class PerfilRiesgoMlSection extends StatelessWidget {
         columns: const [
           DataColumn(label: Text('Factor', style: TextStyle(fontWeight: FontWeight.bold))),
           DataColumn(label: Text('Valor', style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(label: Text('Importancia', style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(label: Text('Impacto', style: TextStyle(fontWeight: FontWeight.bold))),
         ],
         rows: entries.map((e) {
-          final val = e.value;
-          final numVal = val is num ? val.toDouble() : 0.0;
-          final importance = (numVal * 100).clamp(0.0, 100.0);
-          final impact = importance >= 80
-              ? 'MUY ALTO'
-              : importance >= 60
-                  ? 'ALTO'
-                  : importance >= 40
-                      ? 'MEDIO'
-                      : 'BAJO';
           return DataRow(
             cells: [
               DataCell(Text(e.key)),
-              DataCell(Text(val.toString())),
-              DataCell(SizedBox(
-                width: 80,
-                child: LinearProgressIndicator(
-                  value: importance / 100,
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    importance >= 80
-                        ? Colors.red
-                        : importance >= 60
-                            ? Colors.orange
-                            : Colors.amber,
-                  ),
-                ),
-              )),
-              DataCell(Text(impact, style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(Text(e.value.toString())),
             ],
           );
         }).toList(),

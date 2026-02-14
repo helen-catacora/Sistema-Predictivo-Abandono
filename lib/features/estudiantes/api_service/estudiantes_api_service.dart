@@ -12,10 +12,13 @@ class EstudiantesApiService {
   final Dio _dio;
 
   /// Obtiene la tabla de estudiantes en riesgo.
-  /// GET /api/v1/estudiantes/tabla
-  Future<EstudiantesTablaResponse> getTabla() async {
+  /// GET /api/v1/estudiantes/tabla — opcional paralelo_id para filtrar por paralelo.
+  Future<EstudiantesTablaResponse> getTabla({int? paraleloId}) async {
+    final queryParams = <String, dynamic>{};
+    if (paraleloId != null) queryParams['paralelo_id'] = paraleloId;
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.estudiantesTabla,
+      queryParameters: queryParams.isNotEmpty ? queryParams : null,
     );
 
     if (response.data == null) {

@@ -8,8 +8,8 @@ class AttendanceBar extends StatelessWidget {
   final int percentage;
 
   Color get _color {
-    if (percentage < 70) return const Color(0xFFEF4444);
-    if (percentage < 85) return const Color(0xFFFACC15);
+    if (percentage < 50) return const Color(0xFFEF4444);
+    if (percentage < 80) return const Color(0xFFFACC15);
     return const Color(0xFF22C55E);
   }
 

@@ -158,14 +158,14 @@ class DesempenioAcademicoPerfil {
     this.materias = const [],
   });
 
-  final int porcentajeAsistenciaGeneral;
+  final double porcentajeAsistenciaGeneral;
   final int faltasConsecutivas;
   final List<MateriaDesempenioPerfil> materias;
 
   factory DesempenioAcademicoPerfil.fromJson(Map<String, dynamic> json) {
     return DesempenioAcademicoPerfil(
       porcentajeAsistenciaGeneral:
-          (json['porcentaje_asistencia_general'] as num?)?.toInt() ?? 0,
+          (json['porcentaje_asistencia_general'] as num?)?.toDouble() ?? 0,
       faltasConsecutivas:
           (json['faltas_consecutivas'] as num?)?.toInt() ?? 0,
       materias: (json['materias'] as List<dynamic>?)
@@ -189,7 +189,7 @@ class MateriaDesempenioPerfil {
   final int materiaId;
   final String nombre;
   final String? gestionAcademica;
-  final int porcentajeAsistencia;
+  final double porcentajeAsistencia;
   final AsistenciasCountPerfil? asistencias;
 
   factory MateriaDesempenioPerfil.fromJson(Map<String, dynamic> json) {
@@ -198,7 +198,7 @@ class MateriaDesempenioPerfil {
       nombre: json['nombre'] as String? ?? '',
       gestionAcademica: json['gestion_academica'] as String?,
       porcentajeAsistencia:
-          (json['porcentaje_asistencia'] as num?)?.toInt() ?? 0,
+          (json['porcentaje_asistencia'] as num?)?.toDouble() ?? 0,
       asistencias: json['asistencias'] != null
           ? AsistenciasCountPerfil.fromJson(
               json['asistencias'] as Map<String, dynamic>)

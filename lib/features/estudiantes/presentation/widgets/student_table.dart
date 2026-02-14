@@ -153,7 +153,7 @@ class StudentDataTable extends StatelessWidget {
                     ),
                     DataColumn(
                       label: Text(
-                        'PROMEDIO',
+                        'ASISTENCIA',
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,

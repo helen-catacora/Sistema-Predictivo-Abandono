@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import '../providers/estudiantes_provider.dart';
 
 /// Sección de búsqueda y filtros para estudiantes.
@@ -30,8 +31,9 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EstudiantesProvider>(
-      builder: (context, provider, _) {
+    return Consumer2<EstudiantesProvider, ParalelosProvider>(
+      builder: (context, provider, paralelosProvider, _) {
+        final paralelos = paralelosProvider.paralelos;
         return Card(
           elevation: 0,
           color: AppColors.white,
@@ -111,6 +113,94 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        'PARALELO',
+                        style: GoogleFonts.inter(
+                          color: AppColors.grey64748B,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<int?>(
+                        value: provider.paraleloFilter,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Color(0xffE2E8F0),
+                              width: 1,
+                            ),
+                          ),
+                          fillColor: Color(0xffF8FAFC),
+                          filled: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          isDense: true,
+                        ),
+                        items: [
+                          DropdownMenuItem<int?>(
+                            value: null,
+                            child: Text(
+                              paralelosProvider.isLoading && paralelos.isEmpty
+                                  ? 'Cargando paralelos...'
+                                  : 'Todos los paralelos',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.darkBlue1E293B,
+                                height: 20 / 14,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ),
+                          ...paralelos.map(
+                            (p) => DropdownMenuItem<int?>(
+                              value: p.id,
+                              child: Text(
+                                p.nombre,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.darkBlue1E293B,
+                                  height: 20 / 14,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          provider.setParaleloFilter(value);
+                          provider.loadEstudiantes();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         'FACULTAD / CARRERA',
                         style: GoogleFonts.inter(
                           color: AppColors.grey64748B,
@@ -122,7 +212,7 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        initialValue: provider.carreraFilter ?? 'todas',
+                        value: provider.carreraFilter ?? 'todas',
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -194,6 +284,8 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                     _searchController.clear();
                     provider.setSearchQuery('');
                     provider.setCarreraFilter(null);
+                    provider.setParaleloFilter(null);
+                    provider.loadEstudiantes();
                   },
                   icon: const Icon(Icons.tune, size: 20),
                   label: const Text('Limpiar filtros'),

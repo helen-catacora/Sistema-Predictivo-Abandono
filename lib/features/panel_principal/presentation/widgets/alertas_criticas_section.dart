@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
 import '../../data/models/alertas_response.dart';
 import '../providers/alertas_provider.dart';
 
@@ -12,9 +14,10 @@ void _showTodasLasAlertasDialog(
   BuildContext context,
   List<AlertaItem> alertas,
 ) {
+  final navigatorContext = context;
   showDialog<void>(
     context: context,
-    builder: (context) => AlertDialog(
+    builder: (dialogContext) => AlertDialog(
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -26,20 +29,29 @@ void _showTodasLasAlertasDialog(
       ),
       content: SizedBox(
         width: double.maxFinite,
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(dialogContext).size.height * 0.5,
         child: ListView.builder(
           itemCount: alertas.length,
-          itemBuilder: (context, i) => Padding(
-            padding: i < alertas.length - 1
-                ? const EdgeInsets.only(bottom: 12)
-                : EdgeInsets.zero,
-            child: _AlertItemFromApi(alerta: alertas[i]),
-          ),
+          itemBuilder: (_, i) {
+            final alerta = alertas[i];
+            return Padding(
+              padding: i < alertas.length - 1
+                  ? const EdgeInsets.only(bottom: 12)
+                  : EdgeInsets.zero,
+              child: _AlertItemFromApi(
+                alerta: alerta,
+                onVerPerfil: () {
+                  Navigator.of(dialogContext).pop();
+                  navigatorContext.push(AppRoutes.homeEstudiantePerfil(alerta.estudianteId));
+                },
+              ),
+            );
+          },
         ),
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(dialogContext).pop(),
           child: const Text('Cerrar'),
         ),
       ],
@@ -119,7 +131,7 @@ class AlertasCriticasSection extends StatelessWidget {
                   child: Text(
                     'No hay alertas en este momento.',
                     style: TextStyle(
-                      color: AppColors.grayMedium,
+                      color: const Color.fromARGB(255, 156, 156, 156),
                       fontSize: 13,
                     ),
                   ),
@@ -147,7 +159,7 @@ class AlertasCriticasSection extends StatelessWidget {
                           ),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
-                    foregroundColor: AppColors.grayDark,
+                    foregroundColor: const Color.fromARGB(255, 204, 204, 204),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -172,13 +184,19 @@ class AlertasCriticasSection extends StatelessWidget {
 }
 
 class _AlertItemFromApi extends StatelessWidget {
-  const _AlertItemFromApi({required this.alerta});
+  const _AlertItemFromApi({
+    required this.alerta,
+    this.onVerPerfil,
+  });
 
   final AlertaItem alerta;
+  /// Si no es null, se muestra el botón "Ver Perfil" (p. ej. en el diálogo).
+  final VoidCallback? onVerPerfil;
 
+  /// Texto principal: se prioriza descripcion (response GET /alertas).
   String get _detail {
-    if (alerta.titulo.isNotEmpty) return alerta.titulo;
     if (alerta.descripcion.isNotEmpty) return alerta.descripcion;
+    if (alerta.titulo.isNotEmpty) return alerta.titulo;
     if (alerta.faltasConsecutivas > 0) {
       return 'Faltas consecutivas: ${alerta.faltasConsecutivas}';
     }
@@ -249,16 +267,43 @@ class _AlertItemFromApi extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  _detail,
-                  style: TextStyle(
-                    color: _detailColor,
-                    fontSize: 12,
+                if (alerta.titulo.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    alerta.titulo,
+                    style: TextStyle(
+                      color: _detailColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                ],
+                if (alerta.descripcion.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    alerta.descripcion,
+                    style: TextStyle(
+                      color: _detailColor,
+                      fontSize: 12,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                if (alerta.titulo.isEmpty && alerta.descripcion.isEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    _detail,
+                    style: TextStyle(
+                      color: _detailColor,
+                      fontSize: 12,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ],
             ),
           ),
@@ -279,6 +324,19 @@ class _AlertItemFromApi extends StatelessWidget {
               ),
             ),
           ),
+          if (onVerPerfil != null) ...[
+            const SizedBox(width: 8),
+            FilledButton(
+              onPressed: onVerPerfil,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.accentYellow,
+                foregroundColor: AppColors.grayDark,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: const Size(0, 36),
+              ),
+              child: const Text('Ver Perfil'),
+            ),
+          ],
         ],
       ),
     );

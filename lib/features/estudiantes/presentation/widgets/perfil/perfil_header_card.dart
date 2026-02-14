@@ -108,7 +108,7 @@ class PerfilHeaderCard extends StatelessWidget {
                   Text(
                     riesgoAlto
                         ? 'RIESGO ALTO DE DESERCIÓN'
-                        : 'RIESGO $nivelRiesgo',
+                        : 'RIESGO ${nivelRiesgo.toUpperCase()} DE DESERCIÓN',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,

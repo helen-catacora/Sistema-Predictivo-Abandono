@@ -24,6 +24,7 @@ class EstudiantesProvider extends ChangeNotifier {
   String? _errorMessage;
   String _searchQuery = '';
   String? _carreraFilter;
+  int? _paraleloFilter;
 
   EstudiantesStatus get status => _status;
   List<EstudianteItem> get estudiantes => List.unmodifiable(_estudiantes);
@@ -32,6 +33,7 @@ class EstudiantesProvider extends ChangeNotifier {
   bool get hasError => _status == EstudiantesStatus.error;
   String get searchQuery => _searchQuery;
   String? get carreraFilter => _carreraFilter;
+  int? get paraleloFilter => _paraleloFilter;
 
   /// Lista de estudiantes filtrada por búsqueda y carrera.
   List<EstudianteItem> get filteredEstudiantes {
@@ -68,14 +70,20 @@ class EstudiantesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Carga los estudiantes desde el backend.
+  void setParaleloFilter(int? paraleloId) {
+    if (_paraleloFilter == paraleloId) return;
+    _paraleloFilter = paraleloId;
+    notifyListeners();
+  }
+
+  /// Carga los estudiantes desde el backend (opcionalmente filtrados por paralelo).
   Future<void> loadEstudiantes() async {
     _status = EstudiantesStatus.loading;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _estudiantes = await _repository.getTabla();
+      _estudiantes = await _repository.getTabla(paraleloId: _paraleloFilter);
       _status = EstudiantesStatus.success;
       _errorMessage = null;
     } catch (e, st) {

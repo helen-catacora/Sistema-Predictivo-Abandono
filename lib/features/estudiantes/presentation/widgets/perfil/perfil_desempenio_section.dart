@@ -14,7 +14,7 @@ class PerfilDesempenioSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = desempenio?.porcentajeAsistenciaGeneral ?? 0;
     final materias = desempenio?.materias ?? [];
-    final isCritico = pct < 75;
+    final isCritico = pct < 50;
 
     return PerfilSectionCard(
       icon: Icons.bar_chart,
@@ -34,7 +34,7 @@ class PerfilDesempenioSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '$pct%',
+              '${pct.toStringAsFixed(1)}%',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class PerfilDesempenioSection extends StatelessWidget {
                   value: (pct / 100).clamp(0.0, 1.0),
                   backgroundColor: Colors.grey.shade200,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    pct < 70 ? Colors.red : pct < 85 ? Colors.orange : Colors.green,
+                    pct < 50 ? Colors.red : pct < 80 ? Colors.orange : Colors.green,
                   ),
                 ),
               ),
@@ -109,13 +109,13 @@ class PerfilDesempenioSection extends StatelessWidget {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            '${m.porcentajeAsistencia}%',
+                            '${m.porcentajeAsistencia.toStringAsFixed(1)}%',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: m.porcentajeAsistencia < 70
+                              color: m.porcentajeAsistencia < 50
                                   ? Colors.red
-                                  : m.porcentajeAsistencia < 85
+                                  : m.porcentajeAsistencia < 80
                                       ? Colors.orange
                                       : Colors.green,
                             ),
@@ -131,9 +131,9 @@ class PerfilDesempenioSection extends StatelessWidget {
                                 value: (m.porcentajeAsistencia / 100).clamp(0.0, 1.0),
                                 backgroundColor: Colors.grey.shade200,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  m.porcentajeAsistencia < 70
+                                  m.porcentajeAsistencia < 50
                                       ? Colors.red
-                                      : m.porcentajeAsistencia < 85
+                                      : m.porcentajeAsistencia < 80
                                           ? Colors.orange
                                           : Colors.green,
                                 ),
