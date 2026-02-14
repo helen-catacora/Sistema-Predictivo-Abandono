@@ -92,7 +92,7 @@ class LoginLeftPanel extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     'Control de asistencia y detección temprana de posibles casos '
-                    'de abandono mediante análisis de datos académicos.',
+                    'de abandono.',
                     style: GoogleFonts.inter(
                       color: AppColors.whiteD1D5DB,
                       fontSize: 18,
@@ -101,31 +101,39 @@ class LoginLeftPanel extends StatelessWidget {
                       letterSpacing: 0,
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  LoginFeatureItem(
-                    icon: FontAwesomeIcons.solidCalendarCheck,
-                    title: 'Control de Asistencia',
-                    description:
-                        'Registro y seguimiento detallado de la asistencia estudiantil '
-                        'en tiempo real',
+                  const SizedBox(height: 30),
+                  
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        LoginFeatureItem(
+                      icon: FontAwesomeIcons.solidCalendarCheck,
+                      title: 'Control de Asistencia',
+                      description:
+                          'Registro y seguimiento detallado de la asistencia estudiantil ',
+                    ),
+                    // const SizedBox(height: 24),
+                    LoginFeatureItem(
+                      icon: Icons.trending_up_outlined,
+                      title: 'Detección de Riesgos',
+                      description:
+                          'Identificación temprana de estudiantes con posibilidad de '
+                          'abandono académico',
+                    ),
+                    // const SizedBox(height: 24),
+                    LoginFeatureItem(
+                      icon: Icons.people_alt_rounded,
+                      title: 'Gestión Integral',
+                      description:
+                          'Reportes para la toma de decisiones académicas '
+                          'estratégicas',
+                    ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 24),
-                  LoginFeatureItem(
-                    icon: Icons.trending_up_outlined,
-                    title: 'Detección de Riesgos',
-                    description:
-                        'Identificación temprana de estudiantes con posibilidad de '
-                        'abandono académico',
-                  ),
-                  const SizedBox(height: 24),
-                  LoginFeatureItem(
-                    icon: Icons.people_alt_rounded,
-                    title: 'Gestión Integral',
-                    description:
-                        'Reportes y análisis para la toma de decisiones académicas '
-                        'estratégicas',
-                  ),
-                  Spacer(),
+                  // Spacer(),
+                  const SizedBox(height: 30),
                   Text(
                     'ESCUELA MILITAR DE INGENIERÍA',
                     style: TextStyle(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/features/asistencia/presentation/providers/materias_provider.dart';
 import 'package:sistemapredictivoabandono/features/asistencia/presentation/providers/paralelos_provider.dart';
+import 'package:sistemapredictivoabandono/features/auth/presentation/providers/me_provider.dart';
 import 'package:sistemapredictivoabandono/features/estudiantes/presentation/providers/estudiantes_provider.dart';
 import 'package:sistemapredictivoabandono/features/gestion_usuarios/presentation/providers/usuarios_provider.dart';
 import 'package:sistemapredictivoabandono/features/panel_principal/presentation/providers/alertas_provider.dart';
@@ -11,6 +12,7 @@ import 'package:sistemapredictivoabandono/features/reportes/presentation/provide
 import 'package:sistemapredictivoabandono/features/reportes/presentation/providers/reportes_tipos_provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../gestion_usuarios/presentation/providers/modulos_provider.dart';
 import 'app_sidebar.dart';
 import '../widgets/dashboard_footer.dart';
@@ -28,10 +30,13 @@ class DashboardLayout extends StatefulWidget {
 }
 
 class _DashboardLayoutState extends State<DashboardLayout> {
+  bool _redirectToFirstAvailableDone = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MeProvider>().loadMe();
       context.read<DashboardProvider>().loadDashboard();
       context.read<AlertasProvider>().loadAlertas();
       context.read<EstudiantesProvider>().loadEstudiantes();
@@ -49,6 +54,26 @@ class _DashboardLayoutState extends State<DashboardLayout> {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
+    final meProvider = context.watch<MeProvider>();
+
+    if (meProvider.status == MeStatus.success &&
+        !_redirectToFirstAvailableDone &&
+        (location == AppRoutes.homePanel ||
+            location == AppRoutes.home ||
+            location == '${AppRoutes.home}/')) {
+      final modulos = meProvider.modulos;
+      final tienePanel = AppSidebar.firstAvailablePath(modulos) == AppRoutes.homePanel;
+      if (!tienePanel) {
+        _redirectToFirstAvailableDone = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.go(AppSidebar.firstAvailablePath(modulos));
+          }
+        });
+      } else {
+        _redirectToFirstAvailableDone = true;
+      }
+    }
 
     return ModulosLoader(
       child: Scaffold(

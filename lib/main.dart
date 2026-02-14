@@ -8,6 +8,7 @@ import 'features/asistencia/presentation/providers/asistencias_provider.dart';
 import 'features/asistencia/presentation/providers/materias_provider.dart';
 import 'features/asistencia/presentation/providers/paralelos_provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/auth/presentation/providers/me_provider.dart';
 import 'features/estudiantes/presentation/providers/estudiantes_provider.dart';
 import 'features/importar_datos/presentation/providers/importar_estudiantes_provider.dart';
 import 'features/importar_datos/presentation/providers/importar_predicciones_provider.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ChangeNotifierProvider(create: (_) => MeProvider()),
         ChangeNotifierProvider(create: (_) => EstudiantesProvider()),
         ChangeNotifierProvider(create: (_) => ParalelosProvider()),
         ChangeNotifierProvider(create: (_) => MateriasProvider()),

@@ -302,22 +302,22 @@ class LoginRightPanel extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text.rich(
-                    TextSpan(
-                      text: '¿Necesita ayuda? ',
-                      style: TextStyle(color: AppColors.grayDark, fontSize: 14),
-                      children: [
-                        TextSpan(
-                          text: 'Contacte a Soporte Técnico',
-                          style: const TextStyle(
-                            color: AppColors.navyMedium,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  // Text.rich(
+                  //   TextSpan(
+                  //     text: '¿Necesita ayuda? ',
+                  //     style: TextStyle(color: AppColors.grayDark, fontSize: 14),
+                  //     children: [
+                  //       TextSpan(
+                  //         text: 'Contacte a Soporte Técnico',
+                  //         style: const TextStyle(
+                  //           color: AppColors.navyMedium,
+                  //           fontWeight: FontWeight.w600,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   textAlign: TextAlign.center,
+                  // ),
                 ],
               ),
             ),
