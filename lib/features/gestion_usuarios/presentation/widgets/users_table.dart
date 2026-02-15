@@ -107,6 +107,8 @@ class UsersTable extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: constraints.maxWidth),
                 child: DataTable(
+                  dataRowMinHeight: 56,
+                  dataRowMaxHeight: 72,
                   headingRowColor: WidgetStateProperty.all(
                     const Color(0xff001233),
                   ),

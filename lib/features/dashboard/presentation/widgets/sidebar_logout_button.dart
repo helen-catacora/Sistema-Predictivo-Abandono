@@ -16,19 +16,19 @@ class SidebarLogoutButton extends StatelessWidget {
         width: double.infinity,
         child: OutlinedButton.icon(
           onPressed: onPressed,
-          icon: const Icon(Icons.logout, size: 20, color: AppColors.white),
+          icon: const Icon(Icons.logout, size: 20, color: AppColors.navyDark),
           label: const Text(
             'Cerrar Sesión',
             style: TextStyle(
-              color: AppColors.white,
+              color: AppColors.navyDark,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
           ),
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 14),
-            side: const BorderSide(color: AppColors.white),
-            backgroundColor: Colors.transparent,
+            side: const BorderSide(color: AppColors.navyDark),
+            backgroundColor: Colors.white,
           ),
         ),
       ),

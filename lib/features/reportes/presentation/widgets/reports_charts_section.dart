@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
-/// Sección de gráficos: Distribución de Riesgo y Causas de Deserción.
+/// Sección de gráficos: Distribución de Riesgo y Causas de Abandono Estudiantil.
 class ReportsChartsSection extends StatelessWidget {
   const ReportsChartsSection({super.key});
 
@@ -85,7 +85,7 @@ class ReportsChartsSection extends StatelessWidget {
         const SizedBox(width: 20),
         Expanded(
           child: _ChartCard(
-            title: 'Causas de Deserción',
+            title: 'Causas del Abandono Estudiantil',
             child: SizedBox(
               height: 260,
               child: PieChart(

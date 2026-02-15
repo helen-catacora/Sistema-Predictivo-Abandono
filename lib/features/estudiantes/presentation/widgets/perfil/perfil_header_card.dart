@@ -107,8 +107,8 @@ class PerfilHeaderCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     riesgoAlto
-                        ? 'RIESGO ALTO DE DESERCIÓN'
-                        : 'RIESGO ${nivelRiesgo.toUpperCase()} DE DESERCIÓN',
+                        ? 'RIESGO ALTO DE ABANDONO'
+                        : 'RIESGO ${nivelRiesgo.toUpperCase()} DE ABANDONO',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,

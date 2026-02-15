@@ -31,7 +31,7 @@ class UsersHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Control de accesos y roles institucionales para el sistema de predicción de deserción.',
+              'Control de accesos y roles institucionales para el sistema de predicción de abandono estudiantil.',
               style: GoogleFonts.inter(
                 color: Color(0xff64748B),
                 fontSize: 18,
@@ -50,7 +50,7 @@ class UsersHeader extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.accentYellow,
             foregroundColor: AppColors.navyMedium,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

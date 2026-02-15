@@ -153,7 +153,7 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
           //         crossAxisAlignment: CrossAxisAlignment.start,
           //         children: [
           //           Text(
-          //             'PROBABILIDAD DE DESERCIÓN',
+          //             'PROBABILIDAD DE ABANDONO',
           //             style: TextStyle(
           //               color: Colors.white.withValues(alpha: 0.9),
           //               fontSize: 10,

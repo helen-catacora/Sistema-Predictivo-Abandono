@@ -159,7 +159,7 @@ class AlertasCriticasSection extends StatelessWidget {
                           ),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
-                    foregroundColor: const Color.fromARGB(255, 204, 204, 204),
+                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

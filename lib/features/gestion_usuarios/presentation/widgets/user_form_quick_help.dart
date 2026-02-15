@@ -52,9 +52,9 @@ class UserFormQuickHelp extends StatelessWidget {
             _TipItem(
               'Asigne el rol apropiado según las funciones del usuario',
             ),
-            _TipItem(
-              'El usuario recibirá un correo con sus credenciales',
-            ),
+            // _TipItem(
+            //   'El usuario recibirá un correo con sus credenciales',
+            // ),
           ],
         ),
       ),

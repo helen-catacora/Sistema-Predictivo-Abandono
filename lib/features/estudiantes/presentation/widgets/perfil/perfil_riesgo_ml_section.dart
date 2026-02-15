@@ -40,7 +40,7 @@ class PerfilRiesgoMlSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'PROBABILIDAD DE DESERCIÓN',
+                    'PROBABILIDAD DE ABANDONO',
                     style: TextStyle(
                       color: Colors.red.shade800,
                       fontSize: 12,
