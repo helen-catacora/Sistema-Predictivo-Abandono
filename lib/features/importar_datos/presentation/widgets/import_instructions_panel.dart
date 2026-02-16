@@ -77,7 +77,7 @@ class ImportInstructionsPanel extends StatelessWidget {
           _buildStep(
             '2',
             'Campos Requeridos:',
-            'ID Estudiante, Nombres, Apellidos, Semestre, Promedio, Asistencia (%).',
+            'Verificar campos requeridos',
           ),
           const SizedBox(height: 16),
           _buildStep(

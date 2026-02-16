@@ -270,18 +270,22 @@ class RequiredFieldsCard extends StatelessWidget {
   const RequiredFieldsCard({super.key});
 
   static const _requiredFields = [
-    'ID Estudiante',
-    'Nombres Completos',
-    'Apellidos',
-    'Semestre / Nivel',
-    'Promedio General',
-    'Porcentaje Asistencia',
-  ];
+    'Codigo del Estudiante',
+    'Número de Materias',
+    'Número de Materias Reprobadas',
+    'Número de Materia en 2T',
+    'Promedio General',  
+    ];
 
   static const _optionalFields = [
-    'Email Institucional',
-    'Teléfono',
-    'Dirección',
+    'Edad',
+    'Grado del Estudiante',
+    'Genero',
+    'Estrato Socioeconomico',
+    'Vive con',
+    'Apoyo Economico',
+    'Modalidad de Ingreso',
+    'Tipo de Colegio al que pertenecio',
   ];
 
   @override

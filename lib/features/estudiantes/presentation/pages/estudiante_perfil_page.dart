@@ -233,7 +233,20 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                                     desempenio: p.desempenioAcademico,
                                   ),
                                   const SizedBox(height: 16),
-                                  PerfilAccionesSection(acciones: p.acciones),
+                                  PerfilAccionesSection(
+                                    estudianteId: widget.estudianteId,
+                                    loadAcciones: () => _repository.getAcciones(
+                                      estudianteId: widget.estudianteId,
+                                      limite: 50,
+                                    ),
+                                    onCreateAccion: (descripcion, fecha) async {
+                                      await _repository.crearAccion(
+                                        descripcion: descripcion,
+                                        fecha: fecha,
+                                        estudianteId: widget.estudianteId,
+                                      );
+                                    },
+                                  ),
                                   PerfilAlertasSection(alertas: p.alertas),
                                 ],
                               ),
@@ -260,7 +273,20 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                             desempenio: p.desempenioAcademico,
                           ),
                           const SizedBox(height: 16),
-                          PerfilAccionesSection(acciones: p.acciones),
+                          PerfilAccionesSection(
+                            estudianteId: widget.estudianteId,
+                            loadAcciones: () => _repository.getAcciones(
+                              estudianteId: widget.estudianteId,
+                              limite: 50,
+                            ),
+                            onCreateAccion: (descripcion, fecha) async {
+                              await _repository.crearAccion(
+                                descripcion: descripcion,
+                                fecha: fecha,
+                                estudianteId: widget.estudianteId,
+                              );
+                            },
+                          ),
                         ],
                       );
                     },

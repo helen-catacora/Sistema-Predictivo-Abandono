@@ -1,14 +1,213 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/constants/app_colors.dart';
-import '../../../data/models/estudiante_perfil_response.dart';
+import '../../../data/models/acciones_list_response.dart';
 import 'perfil_section_card.dart';
 
-/// Sección Acciones e Intervenciones del perfil.
-class PerfilAccionesSection extends StatelessWidget {
-  const PerfilAccionesSection({super.key, this.acciones = const []});
+/// Formato de fecha para la API (YYYY-MM-DD).
+String _formatFechaApi(DateTime d) {
+  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+}
 
-  final List<AccionPerfil> acciones;
+/// Diálogo para registrar una nueva acción (descripcion, fecha).
+/// Devuelve (descripcion, fecha YYYY-MM-DD) o null si cancela.
+Future<(String, String)?> _showNuevaAccionDialog(BuildContext context) async {
+  final now = DateTime.now();
+  return showDialog<(String, String)>(
+    context: context,
+    builder: (context) => _NuevaAccionDialog(initialFecha: now),
+  );
+}
+
+class _NuevaAccionDialog extends StatefulWidget {
+  const _NuevaAccionDialog({required this.initialFecha});
+
+  final DateTime initialFecha;
+
+  @override
+  State<_NuevaAccionDialog> createState() => _NuevaAccionDialogState();
+}
+
+class _NuevaAccionDialogState extends State<_NuevaAccionDialog> {
+  late TextEditingController _descripcionController;
+  late TextEditingController _fechaController;
+  DateTime _fecha = DateTime.now();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _fecha = widget.initialFecha;
+    _descripcionController = TextEditingController();
+    _fechaController = TextEditingController(text: _formatFechaApi(_fecha));
+  }
+
+  @override
+  void dispose() {
+    _descripcionController.dispose();
+    _fechaController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _fecha,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+    if (picked != null && mounted) {
+      setState(() {
+        _fecha = picked;
+        _fechaController.text = _formatFechaApi(picked);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Nueva Acción'),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _descripcionController,
+                decoration: const InputDecoration(
+                  labelText: 'Descripción *',
+                  hintText: 'Ej. Entrevista con psicopedagogía',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+                maxLength: 2000,
+                validator: (v) =>
+                    (v == null || v.trim().isEmpty) ? 'Requerido' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _fechaController,
+                decoration: InputDecoration(
+                  labelText: 'Fecha *',
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: _pickDate,
+                  ),
+                ),
+                readOnly: true,
+                onTap: _pickDate,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Requerido';
+                  final d = DateTime.tryParse(v.trim());
+                  if (d == null) return 'Formato YYYY-MM-DD';
+                  return null;
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: () {
+            if (_formKey.currentState?.validate() ?? false) {
+              final desc = _descripcionController.text.trim();
+              final fechaStr = _fechaController.text.trim();
+              Navigator.of(context).pop((desc, fechaStr));
+            }
+          },
+          style: FilledButton.styleFrom(backgroundColor: AppColors.navyMedium),
+          child: const Text('Guardar'),
+        ),
+      ],
+    );
+  }
+}
+
+/// Sección Acciones e Intervenciones del perfil.
+/// Carga la lista desde GET /acciones?estudiante_id=&limite=50.
+class PerfilAccionesSection extends StatefulWidget {
+  const PerfilAccionesSection({
+    super.key,
+    required this.estudianteId,
+    required this.loadAcciones,
+    this.onCreateAccion,
+    this.limite = 50,
+  });
+
+  final int estudianteId;
+  /// Devuelve la lista de acciones (GET /acciones).
+  final Future<List<AccionListItem>> Function() loadAcciones;
+  /// Al crear una acción (descripcion, fecha). Si es null, el botón "Nueva Acción" no hace la petición.
+  final Future<void> Function(String descripcion, String fecha)? onCreateAccion;
+  final int limite;
+
+  @override
+  State<PerfilAccionesSection> createState() => _PerfilAccionesSectionState();
+}
+
+class _PerfilAccionesSectionState extends State<PerfilAccionesSection> {
+  List<AccionListItem> _acciones = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAcciones();
+  }
+
+  Future<void> _loadAcciones() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final list = await widget.loadAcciones();
+      if (mounted) setState(() => _acciones = list);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _onNuevaAccionPressed(BuildContext context) async {
+    final onCreate = widget.onCreateAccion;
+    if (onCreate == null) return;
+    final result = await _showNuevaAccionDialog(context);
+    if (result == null || !context.mounted) return;
+    final (descripcion, fecha) = result;
+    try {
+      await onCreate(descripcion, fecha);
+      await _loadAcciones();
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Acción registrada correctamente'),
+          backgroundColor: Color(0xFF22C55E),
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString().replaceFirst('Exception: ', '')),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +223,9 @@ class PerfilAccionesSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FilledButton.icon(
-                  onPressed: () {},
+                  onPressed: widget.onCreateAccion == null
+                      ? null
+                      : () => _onNuevaAccionPressed(context),
                   icon: const Icon(Icons.add, size: 18),
                   label: const Text('Nueva Acción'),
                   style: FilledButton.styleFrom(
@@ -35,7 +236,20 @@ class PerfilAccionesSection extends StatelessWidget {
                 ),
               ],
             ),
-            if (acciones.isEmpty)
+            if (_loading)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (_error != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  _error!,
+                  style: TextStyle(color: Colors.red.shade700, fontSize: 14),
+                ),
+              )
+            else if (_acciones.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
@@ -44,7 +258,7 @@ class PerfilAccionesSection extends StatelessWidget {
                 ),
               )
             else
-              ...acciones.take(10).map((a) => _AccionTile(accion: a)),
+              ..._acciones.take(widget.limite).map((a) => _AccionListTile(accion: a)),
           ],
         ),
       ),
@@ -52,16 +266,16 @@ class PerfilAccionesSection extends StatelessWidget {
   }
 }
 
-class _AccionTile extends StatelessWidget {
-  const _AccionTile({required this.accion});
+class _AccionListTile extends StatelessWidget {
+  const _AccionListTile({required this.accion});
 
-  final AccionPerfil accion;
+  final AccionListItem accion;
 
   @override
   Widget build(BuildContext context) {
-    final desc = accion.descripcion ?? '';
+    final desc = accion.descripcion;
     final titulo = desc.length > 60 ? '${desc.substring(0, 60)}...' : desc;
-    final fecha = accion.fecha ?? '-';
+    final fecha = accion.fecha;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),

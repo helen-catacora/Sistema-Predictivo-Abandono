@@ -15,7 +15,7 @@ class ImportPageHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Importar Datos para Predicción',
+              'Importar Datos para Predicción de Abandono Estudiantil',
               style: GoogleFonts.inter(
                 color: AppColors.gray002855,
                 fontSize: 30,

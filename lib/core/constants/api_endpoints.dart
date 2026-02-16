@@ -57,4 +57,7 @@ abstract class ApiEndpoints {
 
   /// Reportes - historial paginado (GET /reportes/historial?page=1&page_size=20)
   static const String reportesHistorial = '/reportes/historial';
+
+  /// Acciones de seguimiento. POST /acciones (body: descripcion, fecha, estudiante_id)
+  static const String acciones = '/acciones';
 }

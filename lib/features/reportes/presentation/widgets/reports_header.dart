@@ -30,7 +30,7 @@ class ReportsHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'ANÁLISIS INTEGRAL DE DESERCIÓN ESTUDIANTIL - GESTIÓN ${DateTime.now().year}',
+              'ANÁLISIS INTEGRAL DE ABANDONO ESTUDIANTIL - GESTIÓN ${DateTime.now().year}',
               style: GoogleFonts.inter(
                 color: AppColors.grey64748B,
                 fontSize: 14,

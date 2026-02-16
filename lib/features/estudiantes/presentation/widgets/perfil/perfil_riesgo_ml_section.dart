@@ -79,58 +79,58 @@ class PerfilRiesgoMlSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'CLASIFICACIÓN HISTÓRICA',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                _historialChip('Semestre Actual', pred?.nivelRiesgo ?? '-'),
-                const SizedBox(width: 12),
-                _historialChip(
-                  'Semestre Anterior',
-                  historial.length >= 2
-                      ? (historial[historial.length - 2].nivelRiesgo ?? '-')
-                      : '-',
-                ),
-                const SizedBox(width: 12),
-                if (historial.length >= 2)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.trending_up, size: 18, color: Colors.orange.shade700),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Incremento',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.orange.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Evolución Temporal del Riesgo',
-              style: TextStyle(
-                color: AppColors.navyMedium,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 160,
-              child: _buildChart(historial),
-            ),
+            // const Text(
+            //   'CLASIFICACIÓN HISTÓRICA',
+            //   style: TextStyle(
+            //     color: AppColors.navyMedium,
+            //     fontSize: 12,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // Row(
+            //   children: [
+            //     _historialChip('Semestre Actual', pred?.nivelRiesgo ?? '-'),
+            //     const SizedBox(width: 12),
+            //     _historialChip(
+            //       'Semestre Anterior',
+            //       historial.length >= 2
+            //           ? (historial[historial.length - 2].nivelRiesgo ?? '-')
+            //           : '-',
+            //     ),
+            //     const SizedBox(width: 12),
+            //     if (historial.length >= 2)
+            //       Row(
+            //         mainAxisSize: MainAxisSize.min,
+            //         children: [
+            //           Icon(Icons.trending_up, size: 18, color: Colors.orange.shade700),
+            //           const SizedBox(width: 4),
+            //           Text(
+            //             'Incremento',
+            //             style: TextStyle(
+            //               fontSize: 12,
+            //               color: Colors.orange.shade700,
+            //               fontWeight: FontWeight.w600,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //   ],
+            // ),
+            // const SizedBox(height: 20),
+            // const Text(
+            //   'Evolución Temporal del Riesgo',
+            //   style: TextStyle(
+            //     color: AppColors.navyMedium,
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.w600,
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // SizedBox(
+            //   height: 160,
+            //   child: _buildChart(historial),
+            // ),
             if (features.isNotEmpty) ...[
               const SizedBox(height: 20),
               const Text(

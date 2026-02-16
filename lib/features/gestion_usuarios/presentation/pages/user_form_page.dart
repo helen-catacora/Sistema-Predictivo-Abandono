@@ -361,7 +361,7 @@ class _UserFormPageState extends State<UserFormPage> {
             SizedBox(
               width: 520,
               child: Text(
-                'Complete los datos del usuario que tendrá acceso al sistema de predicción de deserción estudiantil.',
+                'Complete los datos del usuario que tendrá acceso al sistema de predicción de abandono estudiantil.',
                 style: TextStyle(color: AppColors.grayMedium, fontSize: 14),
               ),
             ),

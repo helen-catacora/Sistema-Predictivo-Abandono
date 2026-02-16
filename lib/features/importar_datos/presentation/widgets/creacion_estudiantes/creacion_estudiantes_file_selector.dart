@@ -23,19 +23,17 @@ class CreacionEstudiantesFileSelector extends StatefulWidget {
 class _CreacionEstudiantesFileSelectorState
     extends State<CreacionEstudiantesFileSelector> {
   static const _requiredFields = [
-    'ID Estudiante',
-    'Nombres Completos',
+    'Codigo del Estudiante',
+    'Nombres',
     'Apellidos',
-    'Email Institucional',
-    'Teléfono',
-    'Dirección',
-    'Semestre / Nivel',
+    'Semestre',
+    'Paralelo',
+    'Materias',
+    'Grado',
   ];
 
   static const _optionalFields = [
     'Fecha de Nacimiento',
-    'Carrera',
-    'Contacto de Emergencia',
   ];
 
   bool _isDragging = false;

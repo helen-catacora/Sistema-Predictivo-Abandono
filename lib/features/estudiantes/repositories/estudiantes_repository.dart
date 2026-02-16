@@ -1,4 +1,5 @@
 import '../api_service/estudiantes_api_service.dart';
+import '../data/models/acciones_list_response.dart';
 import '../data/models/estudiante_item.dart';
 import '../data/models/estudiante_perfil_response.dart';
 
@@ -18,5 +19,30 @@ class EstudiantesRepository {
   /// Obtiene el perfil completo de un estudiante.
   Future<EstudiantePerfilResponse> getPerfil(int estudianteId) async {
     return _apiService.getPerfil(estudianteId);
+  }
+
+  /// Lista acciones de seguimiento (GET /acciones?estudiante_id=&limite=).
+  Future<List<AccionListItem>> getAcciones({
+    required int estudianteId,
+    int limite = 50,
+  }) async {
+    final response = await _apiService.getAcciones(
+      estudianteId: estudianteId,
+      limite: limite,
+    );
+    return response.acciones;
+  }
+
+  /// Crea una acción de seguimiento para un estudiante (POST /acciones).
+  Future<void> crearAccion({
+    required String descripcion,
+    required String fecha,
+    required int estudianteId,
+  }) async {
+    await _apiService.postCrearAccion(
+      descripcion: descripcion,
+      fecha: fecha,
+      estudianteId: estudianteId,
+    );
   }
 }

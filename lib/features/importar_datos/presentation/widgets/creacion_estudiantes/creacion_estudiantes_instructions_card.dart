@@ -84,7 +84,7 @@ class CreacionEstudiantesInstructionsCard extends StatelessWidget {
                   _buildStep(
                     '2',
                     'Campos Requeridos:',
-                    'ID Estudiante, Nombres, Apellidos, Email, Teléfono, Dirección, Semestre.',
+                    'Verificar Campos Requeridos.',
                   ),
                   const SizedBox(height: 16),
                   _buildStep(

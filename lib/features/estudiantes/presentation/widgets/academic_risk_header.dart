@@ -6,7 +6,7 @@ import 'package:sistemapredictivoabandono/shared/widgets/refresh_button.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
-/// Encabezado de la página Estudiantes en Riesgo Académico.
+/// Encabezado de la página Estudiantes en Riesgo Académico de Abandono Estudiantil.
 class AcademicRiskHeader extends StatelessWidget {
   const AcademicRiskHeader({super.key});
 
@@ -18,7 +18,7 @@ class AcademicRiskHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Estudiantes en Riesgo Académico',
+              'Estudiantes en Riesgo de Abandono Estudiantil',
               style: GoogleFonts.inter(
                 color: AppColors.gray002855,
                 fontSize: 30,
@@ -29,7 +29,7 @@ class AcademicRiskHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Monitoreo de indicadores críticos y probabilidad de deserción en Ciencias Básicas.',
+              'Monitoreo de indicadores críticos y casos de abandono estudiantil en Ciencias Básicas.',
               style: GoogleFonts.inter(
                 color: AppColors.grey64748B,
                 fontSize: 16,
