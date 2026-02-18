@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Indicador de nivel de riesgo (ALTO, MEDIO, BAJO).
 enum RiskLevel {
+  critico,
   alto,
   medio,
   bajo;
@@ -14,6 +15,8 @@ enum RiskLevel {
         return RiskLevel.medio;
       case 'BAJO':
         return RiskLevel.bajo;
+      case 'CRITICO':
+        return RiskLevel.critico;
       default:
         return RiskLevel.medio;
     }
@@ -28,6 +31,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   static Color _colorFor(RiskLevel level) {
     switch (level) {
+      case RiskLevel.critico:
       case RiskLevel.alto:
         return const Color(0xffB91C1C);
       case RiskLevel.medio:
@@ -39,6 +43,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   static Color _dotColor(RiskLevel level) {
     switch (level) {
+      case RiskLevel.critico:
       case RiskLevel.alto:
         return const Color(0xffDC2626);
       case RiskLevel.medio:
@@ -50,6 +55,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   static Color _backGroundColor(RiskLevel level) {
     switch (level) {
+      case RiskLevel.critico:
       case RiskLevel.alto:
         return const Color(0xffFEF2F2);
       case RiskLevel.medio:
@@ -61,6 +67,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   static Color _borderColor(RiskLevel level) {
     switch (level) {
+      case RiskLevel.critico:
       case RiskLevel.alto:
         return const Color(0xffFECACA);
       case RiskLevel.medio:
@@ -72,6 +79,8 @@ class RiskLevelIndicator extends StatelessWidget {
 
   static String _labelFor(RiskLevel level) {
     switch (level) {
+      case RiskLevel.critico:
+        return 'CRITICO';
       case RiskLevel.alto:
         return 'ALTO';
       case RiskLevel.medio:

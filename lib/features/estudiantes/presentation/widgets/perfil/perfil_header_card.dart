@@ -18,6 +18,7 @@ class PerfilHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final riesgoAlto = nivelRiesgo.toUpperCase().contains('ALTO') ||
         nivelRiesgo.toUpperCase().contains('CRITICO');
+    
 
     return Container(
       width: double.infinity,
@@ -107,7 +108,7 @@ class PerfilHeaderCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     riesgoAlto
-                        ? 'RIESGO ALTO DE ABANDONO'
+                        ? 'RIESGO ${nivelRiesgo.toUpperCase()} DE ABANDONO'
                         : 'RIESGO ${nivelRiesgo.toUpperCase()} DE ABANDONO',
                     style: const TextStyle(
                       color: Colors.white,
