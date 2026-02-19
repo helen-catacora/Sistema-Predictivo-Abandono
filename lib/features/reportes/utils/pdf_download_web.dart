@@ -1,19 +1,24 @@
-// ignore_for_file: deprecated_member_use
-
+import 'dart:js_interop';
 import 'dart:typed_data';
 
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:web/web.dart' as web;
 
 /// En web: dispara la descarga del PDF mediante un blob.
+/// Usa package:web (compatible con dart2wasm, sustituye dart:html).
 /// Devuelve null (la descarga la maneja el navegador).
 String? savePdf(Uint8List bytes, String filename) {
-  final blob = html.Blob([bytes]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
-  final anchor = html.AnchorElement()
+  final blob = web.Blob(
+    [bytes.toJS].toJS,
+    web.BlobPropertyBag(type: 'application/pdf'),
+  );
+  final url = web.URL.createObjectURL(blob);
+  final anchor = web.HTMLAnchorElement()
     ..href = url
     ..download = filename;
   anchor.click();
-  html.Url.revokeObjectUrl(url);
+  // Revocar la URL después de un retraso; si se revoca de inmediato, la descarga puede fallar.
+  Future.delayed(const Duration(seconds: 3), () {
+    web.URL.revokeObjectURL(url);
+  });
   return null;
 }

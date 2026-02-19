@@ -295,6 +295,7 @@ class AlertasCriticasSection extends StatelessWidget {
         final visible = lista.take(_maxAlertasVisibles).toList();
 
         return Container(
+          height: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.navyMedium,
@@ -375,10 +376,9 @@ class AlertasCriticasSection extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: lista.isEmpty
                       ? null
-                      : () => _showTodasLasAlertasDialog(
-                            context,
-                            alertasProvider.alertasPrioritarias,
-                          ),
+                      : () {
+                        GoRouter.of(context).push(AppRoutes.homePanelAllAlertas);
+                      },
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
                     foregroundColor: const Color.fromARGB(255, 0, 0, 0),

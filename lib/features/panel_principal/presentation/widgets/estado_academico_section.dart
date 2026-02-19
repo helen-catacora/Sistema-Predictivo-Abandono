@@ -78,9 +78,11 @@ class EstadoAcademicoSection extends StatelessWidget {
             const SizedBox(height: 20),
             LayoutBuilder(
               builder: (context, constraints) {
-                return Row(
-                  spacing: 20,
-                  children: [
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: 20,
+                    children: [
                     Expanded(
                       child: MetricCard(
                         title: 'ESTUDIANTES EN RIESGO ALTO',
@@ -146,7 +148,8 @@ class EstadoAcademicoSection extends StatelessWidget {
                         iconPath: 'assets/alertas.png',
                       ),
                     ),
-                  ],
+                    ],
+                  ),
                 );
               },
             ),

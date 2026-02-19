@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +12,9 @@ import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import '../../../estudiantes/data/models/estudiante_item.dart';
 import '../../../estudiantes/presentation/providers/estudiantes_provider.dart';
 import '../../data/models/reporte_tipo_item.dart';
-import '../../utils/pdf_download_stub.dart'
-    if (dart.library.html) '../../utils/pdf_download_web.dart'
+// En web: dart.library.io no existe, se usa pdf_download_web (blob). En móvil/escritorio: se usa pdf_download_stub (File).
+import '../../utils/pdf_download_web.dart'
+    if (dart.library.io) '../../utils/pdf_download_stub.dart'
     as pdf_util;
 import '../providers/reportes_tipos_provider.dart';
 
@@ -151,16 +154,37 @@ class ReportsAvailableSection extends StatelessWidget {
                   ),
                 )
               else
-                Wrap(
-                  runSpacing: 20,
-                  spacing: 50,
-                  children: List.generate(tipos.length, (index) {
-                    final reportType = tipos[index];
-                    return _ReportTemplateCard(
-                      item: reportType,
-                      onGenerar: () => _onGenerarReporte(context, reportType),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    const crossAxisSpacing = 24.0;
+                    const mainAxisSpacing = 20.0;
+                    const minCardWidth = 280.0;
+                    const cardAspectRatio = 330 / 250;
+                    final width = constraints.maxWidth;
+                    final crossAxisCount =
+                        (width / (minCardWidth + crossAxisSpacing)).floor();
+                    final columnCount = max(3, crossAxisCount);
+
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: columnCount,
+                        crossAxisSpacing: crossAxisSpacing,
+                        mainAxisSpacing: mainAxisSpacing,
+                        childAspectRatio: cardAspectRatio,
+                      ),
+                      itemCount: tipos.length,
+                      itemBuilder: (context, index) {
+                        final reportType = tipos[index];
+                        return _ReportTemplateCard(
+                          item: reportType,
+                          onGenerar: () =>
+                              _onGenerarReporte(context, reportType),
+                        );
+                      },
                     );
-                  }),
+                  },
                 ),
             ],
           );
@@ -344,11 +368,11 @@ class _ReportTemplateCard extends StatelessWidget {
 
     return Consumer<ReportesTiposProvider>(
       builder: (context, provider, _) {
-        final isGenerating = provider.isGenerating;
+        final isGenerating = provider.isGeneratingTipo(item.tipo);
 
         return Container(
-          height: 250,
-          width: 330,
+          width: double.infinity,
+          height: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.greyF8FAFC,
             border: Border.all(color: AppColors.greyE2E8F0, width: 1),

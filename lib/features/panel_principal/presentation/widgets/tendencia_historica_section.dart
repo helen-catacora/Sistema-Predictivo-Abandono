@@ -80,9 +80,11 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
         final maxY = (maxCantidad * 1.2).clamp(10.0, double.infinity);
         final interval = maxY <= 20 ? 5.0 : (maxY / 5).ceilToDouble();
 
-        return Card(
-          elevation: 0,
-          color: AppColors.white,
+        return SizedBox(
+          height: double.infinity,
+          child: Card(
+            elevation: 0,
+            color: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.grey.shade200),
@@ -255,6 +257,7 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
               ],
             ),
           ),
+        ),
         );
       },
     );

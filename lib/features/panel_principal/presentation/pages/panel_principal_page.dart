@@ -38,13 +38,20 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
             builder: (context, constraints) {
               final isWide = constraints.maxWidth > 900;
               if (isWide) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 2, child: const TendenciaHistoricaSection()),
-                    const SizedBox(width: 20),
-                    Expanded(child: const AlertasCriticasSection()),
-                  ],
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: const TendenciaHistoricaSection(),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: const AlertasCriticasSection(),
+                      ),
+                    ],
+                  ),
                 );
               }
               return const Column(

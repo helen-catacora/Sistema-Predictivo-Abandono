@@ -24,8 +24,9 @@ class ReportesTiposProvider extends ChangeNotifier {
   bool get hasError => _status == ReportesTiposStatus.error;
   bool get hasData => _tipos.isNotEmpty;
 
-  bool _isGenerating = false;
-  bool get isGenerating => _isGenerating;
+  String? _generatingTipo;
+  bool get isGenerating => _generatingTipo != null;
+  bool isGeneratingTipo(String tipo) => _generatingTipo == tipo;
 
   /// Construye el body y llama al API para generar el PDF.
   /// Para por_paralelo debe pasarse [paraleloId]; para individual, [estudianteId].
@@ -49,17 +50,17 @@ class ReportesTiposProvider extends ChangeNotifier {
       throw ArgumentError('Se requiere estudiante_id para este reporte');
     }
 
-    _isGenerating = true;
+    _generatingTipo = item.tipo;
     notifyListeners();
 
     try {
       final bytes = await _repository.generar(body);
-      _isGenerating = false;
+      _generatingTipo = null;
       notifyListeners();
       return bytes;
     } catch (e, st) {
       debugPrint('ReportesTiposProvider.generarReporte error: $e\n$st');
-      _isGenerating = false;
+      _generatingTipo = null;
       notifyListeners();
       rethrow;
     }

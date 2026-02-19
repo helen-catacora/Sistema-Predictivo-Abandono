@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sistemapredictivoabandono/features/panel_principal/presentation/pages/all_alertas_page.dart';
 
 import '../../features/asistencia/presentation/pages/asistencia_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -20,6 +21,7 @@ abstract class AppRoutes {
   static const String login = '/login';
   static const String home = '/home';
   static const String homePanel = '/home/panel';
+  static const String homePanelAllAlertas = '/home/panel/all-alertas';
   static const String homeEstudiantes = '/home/estudiantes';
   static String homeEstudiantePerfil(int id) => '/home/estudiantes/perfil/$id';
   static const String homeAsistencia = '/home/asistencia';
@@ -78,6 +80,15 @@ final List<RouteBase> _routes = [
                 key: state.pageKey,
                 child: const PanelPrincipalPage(),
               ),
+              routes: [
+                GoRoute(
+                  path: 'all-alertas',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    key: state.pageKey,
+                    child: AllAlertasPage(),
+                  ),
+                ),
+              ],
             ),
             GoRoute(
               path: 'estudiantes',

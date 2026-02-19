@@ -34,7 +34,11 @@ class ReportesApiService {
     final response = await _dio.post<List<int>>(
       ApiEndpoints.reportesGenerar,
       data: body,
-      options: Options(responseType: ResponseType.bytes),
+      options: Options(
+        responseType: ResponseType.bytes,
+        headers: {'Accept': 'application/pdf'},
+        validateStatus: (status) => status != null && status == 200,
+      ),
     );
 
     if (response.data == null || response.data!.isEmpty) {

@@ -247,23 +247,23 @@ class ReportsRecentTable extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    reportes.isEmpty && !isLoading
-                        ? '0 reportes'
-                        : 'Mostrando ${reportes.length} de $total reportes',
-                    style: TextStyle(color: AppColors.grayMedium, fontSize: 12),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      'Ver historial completo',
-                      style: TextStyle(
-                        color: AppColors.navyMedium,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  // Text(
+                  //   reportes.isEmpty && !isLoading
+                  //       ? '0 reportes'
+                  //       : 'Mostrando ${reportes.length} de $total reportes',
+                  //   style: TextStyle(color: AppColors.grayMedium, fontSize: 12),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: Text(
+                  //     'Ver historial completo',
+                  //     style: TextStyle(
+                  //       color: AppColors.navyMedium,
+                  //       fontSize: 13,
+                  //       fontWeight: FontWeight.w600,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
