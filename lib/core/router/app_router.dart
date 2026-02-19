@@ -14,6 +14,7 @@ import '../../features/gestion_usuarios/presentation/pages/gestion_usuarios_page
 import '../../features/gestion_usuarios/presentation/pages/user_form_page.dart';
 import '../../features/importar_datos/presentation/pages/importar_datos_page.dart';
 import '../../features/panel_principal/presentation/pages/panel_principal_page.dart';
+import '../../features/paralelos/presentation/pages/paralelos_page.dart';
 import '../../features/reportes/presentation/pages/reportes_page.dart';
 
 /// Rutas de la aplicación.
@@ -26,6 +27,7 @@ abstract class AppRoutes {
   static String homeEstudiantePerfil(int id) => '/home/estudiantes/perfil/$id';
   static const String homeAsistencia = '/home/asistencia';
   static const String homeReportes = '/home/reportes';
+  static const String homeParalelos = '/home/paralelos';
   static const String homeImportarDatos = '/home/importar-datos';
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
   static const String homeMiPerfil = '/home/mi-perfil';
@@ -122,6 +124,13 @@ final List<RouteBase> _routes = [
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
                 child: const ReportesPage(),
+              ),
+            ),
+            GoRoute(
+              path: 'paralelos',
+              pageBuilder: (context, state) => NoTransitionPage(
+                key: state.pageKey,
+                child: const ParalelosPage(),
               ),
             ),
             GoRoute(

@@ -70,6 +70,17 @@ Color _iconColorForTipo(String tipo) {
   }
 }
 
+String _nombreArea(int areaId) {
+  switch (areaId) {
+    case 1:
+      return 'Tecnologicas';
+    case 2:
+      return 'No Tecnologicas';
+    default:
+      return 'Área $areaId';
+  }
+}
+
 /// Sección de reportes disponibles (datos de GET /reportes/tipos).
 class ReportsAvailableSection extends StatelessWidget {
   const ReportsAvailableSection({super.key});
@@ -218,14 +229,33 @@ class ReportsAvailableSection extends StatelessWidget {
     }
 
     if (item.requiereEstudiante) {
+      final paralelosProvider = context.read<ParalelosProvider>();
       final estudiantesProvider = context.read<EstudiantesProvider>();
-      if (estudiantesProvider.estudiantes.isEmpty) {
-        await estudiantesProvider.loadEstudiantes();
+      if (paralelosProvider.paralelos.isEmpty) {
+        await paralelosProvider.loadParalelos();
       }
       if (!context.mounted) return;
+      final paralelo = await _showParaleloPicker(
+        context,
+        paralelosProvider.paralelos,
+        confirmLabel: 'Siguiente',
+      );
+      if (paralelo == null) return;
+      if (!context.mounted) return;
+      final estudiantesDelParalelo =
+          await estudiantesProvider.getEstudiantesPorParalelo(paralelo.id);
+      if (!context.mounted) return;
+      if (estudiantesDelParalelo.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No hay estudiantes en el paralelo seleccionado'),
+          ),
+        );
+        return;
+      }
       final selected = await _showEstudiantePicker(
         context,
-        estudiantesProvider.estudiantes,
+        estudiantesDelParalelo,
       );
       if (selected == null) return;
       estudianteId = selected.id;
@@ -274,14 +304,15 @@ class ReportsAvailableSection extends StatelessWidget {
 
   Future<ParaleloItem?> _showParaleloPicker(
     BuildContext context,
-    List<ParaleloItem> paralelos,
-  ) async {
+    List<ParaleloItem> paralelos, {
+    String confirmLabel = 'Generar',
+  }) async {
     if (paralelos.isEmpty) return null;
     ParaleloItem? selected = paralelos.first;
     return showDialog<ParaleloItem>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Seleccionar paralelo'),
+        title: const Text('Seleccionar Paralelo'),
         content: StatefulBuilder(
           builder: (ctx, setState) => DropdownButton<ParaleloItem>(
             value: selected,
@@ -290,7 +321,7 @@ class ReportsAvailableSection extends StatelessWidget {
                 .map(
                   (p) => DropdownMenuItem(
                     value: p,
-                    child: Text('${p.nombre} (ID: ${p.id})'),
+                    child: Text('${p.nombre} — ${_nombreArea(p.areaId)}'),
                   ),
                 )
                 .toList(),
@@ -304,7 +335,7 @@ class ReportsAvailableSection extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(selected),
-            child: const Text('Generar'),
+            child: Text(confirmLabel),
           ),
         ],
       ),
@@ -320,7 +351,7 @@ class ReportsAvailableSection extends StatelessWidget {
     return showDialog<EstudianteItem>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Seleccionar estudiante'),
+        title: const Text('Seleccionar Estudiante'),
         content: StatefulBuilder(
           builder: (ctx, setState) => DropdownButton<EstudianteItem>(
             value: selected,

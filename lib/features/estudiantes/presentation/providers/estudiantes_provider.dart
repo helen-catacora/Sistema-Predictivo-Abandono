@@ -76,6 +76,16 @@ class EstudiantesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Obtiene la lista de estudiantes de un paralelo (sin modificar el estado del provider).
+  Future<List<EstudianteItem>> getEstudiantesPorParalelo(int paraleloId) async {
+    try {
+      return await _repository.getTabla(paraleloId: paraleloId);
+    } catch (e, st) {
+      debugPrint('EstudiantesProvider.getEstudiantesPorParalelo error: $e\n$st');
+      return [];
+    }
+  }
+
   /// Carga los estudiantes desde el backend (opcionalmente filtrados por paralelo).
   Future<void> loadEstudiantes() async {
     _status = EstudiantesStatus.loading;
