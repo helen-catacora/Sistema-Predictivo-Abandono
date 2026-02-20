@@ -21,6 +21,22 @@ class AttendanceFilterSection extends StatefulWidget {
 class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
   int? _selectedParaleloId;
   int? _selectedMateriaId;
+  late final TextEditingController _fechaController;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    final fechaStr =
+        '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+    _fechaController = TextEditingController(text: fechaStr);
+  }
+
+  @override
+  void dispose() {
+    _fechaController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,9 +251,9 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
                           ),
                           const SizedBox(height: 8),
                           TextField(
+                            controller: _fechaController,
+                            readOnly: true,
                             decoration: InputDecoration(
-                              hintText: 'dd/mm/aaaa',
-                              hintStyle: TextStyle(color: Colors.grey.shade500),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(

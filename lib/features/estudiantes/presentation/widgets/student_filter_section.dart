@@ -34,6 +34,16 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
     return Consumer2<EstudiantesProvider, ParalelosProvider>(
       builder: (context, provider, paralelosProvider, _) {
         final paralelos = paralelosProvider.paralelos;
+        final carreraFilter = provider.carreraFilter;
+        final paralelosVisibles = carreraFilter == null ||
+                carreraFilter.isEmpty ||
+                carreraFilter == 'todas'
+            ? paralelos
+            : paralelos.where((p) {
+                final areaStr =
+                    p.areaNombre ?? _nombreArea(p.areaId);
+                return areaStr == carreraFilter;
+              }).toList();
         return Card(
           elevation: 0,
           color: AppColors.white,
@@ -124,7 +134,9 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int?>(
-                        initialValue: provider.paraleloFilter,
+                        value: paralelosVisibles.any((p) => p.id == provider.paraleloFilter)
+                            ? provider.paraleloFilter
+                            : null,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -171,11 +183,11 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                               ),
                             ),
                           ),
-                          ...paralelos.map(
+                          ...paralelosVisibles.map(
                             (p) => DropdownMenuItem<int?>(
                               value: p.id,
                               child: Text(
-                                p.nombre,
+                                '${p.nombre}-${p.areaNombre ?? _nombreArea(p.areaId)}',
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -201,7 +213,7 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'FACULTAD / CARRERA',
+                        'CARRERA',
                         style: GoogleFonts.inter(
                           color: AppColors.grey64748B,
                           fontSize: 12,
@@ -273,7 +285,21 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                             ),
                           ),
                         ],
-                        onChanged: (value) => provider.setCarreraFilter(value),
+                        onChanged: (value) {
+                          provider.setCarreraFilter(value);
+                          final nuevaCarrera = (value == null || value == 'todas') ? null : value;
+                          final listaPorCarrera = nuevaCarrera == null
+                              ? paralelos
+                              : paralelos
+                                  .where((p) =>
+                                      (p.areaNombre ?? _nombreArea(p.areaId)) == nuevaCarrera)
+                                  .toList();
+                          if (provider.paraleloFilter != null &&
+                              !listaPorCarrera.any((p) => p.id == provider.paraleloFilter)) {
+                            provider.setParaleloFilter(null);
+                            provider.loadEstudiantes();
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -307,5 +333,16 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
         );
       },
     );
+  }
+
+  static String _nombreArea(int areaId) {
+    switch (areaId) {
+      case 1:
+        return 'Tecnologicas';
+      case 2:
+        return 'No Tecnologicas';
+      default:
+        return 'Área $areaId';
+    }
   }
 }
