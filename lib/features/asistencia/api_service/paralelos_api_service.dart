@@ -26,4 +26,12 @@ class ParalelosApiService {
 
     return ParalelosResponse.fromJson(response.data!);
   }
+
+  /// Asigna un encargado al paralelo. PATCH /api/v1/paralelos/:id
+  Future<void> updateParaleloEncargado(int paraleloId, int encargadoId) async {
+    await _dio.patch<Map<String, dynamic>>(
+      ApiEndpoints.paralelo(paraleloId),
+      data: {'encargado_id': encargadoId},
+    );
+  }
 }

@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 
+import '../../data/models/resumen_importaciones_response.dart';
 import '../../repositories/predicciones_masiva_repository.dart';
 
 /// Provider para la importación masiva (POST /predicciones/masiva).
@@ -13,9 +14,14 @@ class ImportarPrediccionesProvider extends ChangeNotifier {
 
   bool _isImporting = false;
   String? _errorMessage;
+  bool _isLoadingResumen = false;
+  ResumenImportacionesResponse? _resumenImportaciones;
 
   bool get isImporting => _isImporting;
   String? get errorMessage => _errorMessage;
+  bool get isLoadingResumen => _isLoadingResumen;
+  ResumenImportacionesResponse? get resumenImportaciones =>
+      _resumenImportaciones;
 
   /// Envía el archivo xlsx al endpoint de predicción masiva.
   /// Devuelve true si tuvo éxito, false si hubo error (y actualiza errorMessage).
@@ -34,6 +40,7 @@ class ImportarPrediccionesProvider extends ChangeNotifier {
       await _repository.enviarArchivo(file);
       _isImporting = false;
       _errorMessage = null;
+      await loadResumenImportaciones();
       notifyListeners();
       return true;
     } catch (e, st) {
@@ -55,6 +62,25 @@ class ImportarPrediccionesProvider extends ChangeNotifier {
 
   void clearError() {
     _errorMessage = null;
+    notifyListeners();
+  }
+
+  /// Carga el resumen de importaciones. GET /predicciones/resumen-importaciones
+  Future<void> loadResumenImportaciones() async {
+    _isLoadingResumen = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _resumenImportaciones =
+          await _repository.getResumenImportaciones();
+      _isLoadingResumen = false;
+    } catch (e, st) {
+      debugPrint(
+          'ImportarPrediccionesProvider.loadResumenImportaciones error: $e\n$st');
+      _isLoadingResumen = false;
+      _resumenImportaciones = null;
+    }
     notifyListeners();
   }
 }

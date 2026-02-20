@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 
 import '../api_service/predicciones_masiva_api_service.dart';
+import '../data/models/resumen_importaciones_response.dart';
 
 /// Repositorio para envío de predicción masiva (archivo xlsx).
 class PrediccionesMasivaRepository {
@@ -11,4 +12,7 @@ class PrediccionesMasivaRepository {
   final PrediccionesMasivaApiService _apiService;
 
   Future<void> enviarArchivo(PlatformFile file) => _apiService.postMasiva(file);
+
+  Future<ResumenImportacionesResponse> getResumenImportaciones() =>
+      _apiService.getResumenImportaciones();
 }

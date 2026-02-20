@@ -65,12 +65,6 @@ class AppSidebar extends StatelessWidget {
       icon: Icons.assessment_outlined,
       modulo: SidebarModulos.reportes,
     ),
-    _SidebarEntry(
-      path: AppRoutes.homeParalelos,
-      label: 'Paralelos',
-      icon: Icons.groups_outlined,
-      modulo: null,
-    ),
   ];
 
   static const List<_SidebarEntry> _gestionDatos = [
@@ -78,6 +72,12 @@ class AppSidebar extends StatelessWidget {
       path: AppRoutes.homeImportarDatos,
       label: 'Importar Datos',
       icon: Icons.file_download_outlined,
+      modulo: SidebarModulos.gestionDatosEstudiantes,
+    ),
+    _SidebarEntry(
+      path: AppRoutes.homeParalelos,
+      label: 'Paralelos',
+      icon: Icons.groups_outlined,
       modulo: SidebarModulos.gestionDatosEstudiantes,
     ),
   ];

@@ -1,24 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/importar_predicciones_provider.dart';
 
 /// Tarjetas de resumen: Última Importación, Estadísticas, Campos Requeridos.
-class ImportSummaryCards extends StatelessWidget {
+class ImportSummaryCards extends StatefulWidget {
   const ImportSummaryCards({super.key});
 
   @override
+  State<ImportSummaryCards> createState() => _ImportSummaryCardsState();
+}
+
+class _ImportSummaryCardsState extends State<ImportSummaryCards> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ImportarPrediccionesProvider>().loadResumenImportaciones();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _LastImportCard(
-          date: '15/01/2024',
-          records: '1,248',
-          fileName: 'estudiantes_2024.xlsx',
-          success: true,
-        ),
-        const _StatisticsCard(),
-      ],
+    return Consumer<ImportarPrediccionesProvider>(
+      builder: (context, provider, _) {
+        final resumen = provider.resumenImportaciones;
+        final ultima = resumen?.ultimaImportacion;
+
+        final date = ultima != null ? _formatearFecha(ultima.fechaCarga) : '—';
+        final records = ultima != null
+            ? ultima.cantidadRegistros.toString().replaceAllMapped(
+                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                (m) => '${m[1]},',
+              )
+            : '—';
+        final fileName = ultima?.nombreArchivo ?? '—';
+        final total = resumen?.totalImportaciones ?? 0;
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            if (provider.isLoadingResumen && resumen == null)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            else
+              _LastImportCard(
+                date: date,
+                records: records,
+                fileName: fileName,
+                tieneDatos: ultima != null,
+              ),
+            const SizedBox(height: 16),
+            _StatisticsCard(total: total),
+          ],
+        );
+      },
     );
+  }
+
+  String _formatearFecha(String isoDate) {
+    try {
+      final dt = DateTime.parse(isoDate);
+      return '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
+    } catch (_) {
+      return isoDate;
+    }
   }
 }
 
@@ -27,20 +78,20 @@ class _LastImportCard extends StatelessWidget {
     required this.date,
     required this.records,
     required this.fileName,
-    required this.success,
+    required this.tieneDatos,
   });
 
   final String date;
   final String records;
   final String fileName;
-  final bool success;
+  final bool tieneDatos;
 
   @override
   Widget build(BuildContext context) {
-    final backGroundColor = success
-        ? const Color(0xffF0FDF4)
-        : const Color(0xFFEAB308);
-    final statusColor = success ? Color(0xff16A34A) : Color(0xFFEAB308);
+    final backGroundColor =
+        tieneDatos ? const Color(0xffF0FDF4) : const Color(0xffF1F5F9);
+    final statusColor =
+        tieneDatos ? Color(0xff16A34A) : Color(0xff64748B);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -76,7 +127,7 @@ class _LastImportCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    success ? 'Exitosa' : 'Con errores',
+                    tieneDatos ? 'Exitosa' : 'Sin importaciones previas',
                     style: TextStyle(
                       color: statusColor,
                       fontSize: 16,
@@ -172,10 +223,16 @@ class _LastImportCard extends StatelessWidget {
 }
 
 class _StatisticsCard extends StatelessWidget {
-  const _StatisticsCard();
+  const _StatisticsCard({required this.total});
+
+  final int total;
 
   @override
   Widget build(BuildContext context) {
+    final totalStr = total.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]},',
+    );
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -236,7 +293,7 @@ class _StatisticsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '47',
+                    totalStr,
                     style: GoogleFonts.inter(
                       color: Color(0xff002855),
                       fontSize: 36,

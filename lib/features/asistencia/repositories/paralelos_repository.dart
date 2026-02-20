@@ -13,4 +13,9 @@ class ParalelosRepository {
     final response = await _apiService.getParalelos();
     return response.paralelos;
   }
+
+  /// Asigna un encargado al paralelo. PATCH /paralelos/:id
+  Future<void> updateParaleloEncargado(int paraleloId, int encargadoId) async {
+    await _apiService.updateParaleloEncargado(paraleloId, encargadoId);
+  }
 }

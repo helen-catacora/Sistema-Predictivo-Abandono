@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../data/models/importacion_estudiantes_response.dart';
+import '../../data/models/resumen_importaciones_response.dart';
 import '../../repositories/estudiantes_importar_repository.dart';
 
 /// Provider para la importación de estudiantes (POST /estudiantes/importar).
@@ -16,10 +17,15 @@ class ImportarEstudiantesProvider extends ChangeNotifier {
   bool _isImporting = false;
   String? _errorMessage;
   ImportacionEstudiantesResponse? _lastResponse;
+  bool _isLoadingResumen = false;
+  ResumenImportacionesResponse? _resumenImportaciones;
 
   bool get isImporting => _isImporting;
   String? get errorMessage => _errorMessage;
   ImportacionEstudiantesResponse? get lastResponse => _lastResponse;
+  bool get isLoadingResumen => _isLoadingResumen;
+  ResumenImportacionesResponse? get resumenImportaciones =>
+      _resumenImportaciones;
 
   /// Envía el archivo .xlsx al endpoint de importación de estudiantes.
   /// Devuelve la respuesta si tuvo éxito, null si hubo error (y actualiza errorMessage).
@@ -40,6 +46,7 @@ class ImportarEstudiantesProvider extends ChangeNotifier {
       _isImporting = false;
       _errorMessage = null;
       _lastResponse = response;
+      await loadResumenImportaciones();
       notifyListeners();
       return response;
     } catch (e, st) {
@@ -67,6 +74,26 @@ class ImportarEstudiantesProvider extends ChangeNotifier {
 
   void clearError() {
     _errorMessage = null;
+    notifyListeners();
+  }
+
+  /// Carga el resumen de importaciones de estudiantes.
+  /// GET /estudiantes/resumen-importaciones
+  Future<void> loadResumenImportaciones() async {
+    _isLoadingResumen = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _resumenImportaciones =
+          await _repository.getResumenImportaciones();
+      _isLoadingResumen = false;
+    } catch (e, st) {
+      debugPrint(
+          'ImportarEstudiantesProvider.loadResumenImportaciones error: $e\n$st');
+      _isLoadingResumen = false;
+      _resumenImportaciones = null;
+    }
     notifyListeners();
   }
 }

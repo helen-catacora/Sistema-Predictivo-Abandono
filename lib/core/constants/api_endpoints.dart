@@ -19,11 +19,16 @@ abstract class ApiEndpoints {
   /// Estudiantes - importar desde Excel (POST multipart/form-data con archivo .xlsx)
   static const String estudiantesImportar = '/estudiantes/importar';
 
+  /// Estudiantes - resumen de importaciones. GET /estudiantes/resumen-importaciones
+  static const String estudiantesResumenImportaciones =
+      '/estudiantes/resumen-importaciones';
+
   /// Estudiantes - perfil por id. GET /estudiantes/:id/perfil
   static String estudiantePerfil(int id) => '/estudiantes/$id/perfil';
 
-  /// Paralelos (para asistencia)
+  /// Paralelos (para asistencia). GET /paralelos, PATCH /paralelos/:id
   static const String paralelos = '/paralelos';
+  static String paralelo(int id) => '/paralelos/$id';
 
   /// Materias (para asistencia)
   static const String materias = '/materias';
@@ -45,6 +50,10 @@ abstract class ApiEndpoints {
 
   /// Predicciones - carga masiva (POST multipart/form-data con archivo xlsx)
   static const String prediccionesMasiva = '/predicciones/masiva';
+
+  /// Predicciones - resumen de importaciones. GET /predicciones/resumen-importaciones
+  static const String prediccionesResumenImportaciones =
+      '/predicciones/resumen-importaciones';
 
   /// Alertas (listado con total, activas, críticas)
   static const String alertas = '/alertas';

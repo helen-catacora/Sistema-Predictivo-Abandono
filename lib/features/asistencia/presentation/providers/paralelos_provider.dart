@@ -28,6 +28,8 @@ class ParalelosProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get isLoading => _status == ParalelosStatus.loading;
   bool get hasError => _status == ParalelosStatus.error;
+  bool _isAssigning = false;
+  bool get isAssigning => _isAssigning;
 
   /// Carga los paralelos desde el backend.
   Future<void> loadParalelos() async {
@@ -54,5 +56,33 @@ class ParalelosProvider extends ChangeNotifier {
       _paralelos = [];
     }
     notifyListeners();
+  }
+
+  /// Asigna un encargado al paralelo y recarga la lista.
+  Future<bool> assignEncargado(int paraleloId, int encargadoId) async {
+    _isAssigning = true;
+    notifyListeners();
+
+    try {
+      await _repository.updateParaleloEncargado(paraleloId, encargadoId);
+      await loadParalelos();
+      _isAssigning = false;
+      notifyListeners();
+      return true;
+    } catch (e, st) {
+      debugPrint('ParalelosProvider.assignEncargado error: $e\n$st');
+      _isAssigning = false;
+      String? msg;
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map) {
+          msg = (data['detail'] ?? data['message'])?.toString();
+        }
+        msg ??= e.message;
+      }
+      _errorMessage = msg ?? 'Error al asignar encargado';
+      notifyListeners();
+      return false;
+    }
   }
 }

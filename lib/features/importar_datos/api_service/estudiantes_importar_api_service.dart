@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/network/dio_client.dart';
 import '../data/models/importacion_estudiantes_response.dart';
+import '../data/models/resumen_importaciones_response.dart';
 
 /// Servicio para POST /estudiantes/importar con archivo .xlsx en multipart/form-data.
 class EstudiantesImportarApiService {
@@ -47,5 +48,22 @@ class EstudiantesImportarApiService {
       throw ArgumentError('Respuesta vacía del servidor');
     }
     return ImportacionEstudiantesResponse.fromJson(data);
+  }
+
+  /// Obtiene el resumen de importaciones de estudiantes.
+  /// GET /api/v1/estudiantes/resumen-importaciones
+  Future<ResumenImportacionesResponse> getResumenImportaciones() async {
+    final response = await _dio.get<Map<String, dynamic>>(
+      ApiEndpoints.estudiantesResumenImportaciones,
+    );
+
+    if (response.data == null) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        message: 'Respuesta vacía del servidor',
+      );
+    }
+
+    return ResumenImportacionesResponse.fromJson(response.data!);
   }
 }

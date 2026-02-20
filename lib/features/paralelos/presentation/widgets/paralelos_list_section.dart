@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../asistencia/data/models/paralelo_item.dart';
 import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import 'paralelo_table_row.dart';
+import 'paralelos_asignar_encargado_dialog.dart';
 import 'paralelos_helpers.dart';
 
 /// Sección "Listado de Paralelos": búsqueda, filtro y tabla.
@@ -289,12 +290,6 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
   }
 
   void _onAsignarEncargado(BuildContext context, ParaleloItem paralelo) {
-    // TODO: abrir diálogo o pantalla para elegir usuario y llamar PATCH /paralelos/{id}
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Asignar encargado: ${paralelo.nombre} (próximamente)'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAsignarEncargadoDialog(context, paralelo: paralelo);
   }
 }
