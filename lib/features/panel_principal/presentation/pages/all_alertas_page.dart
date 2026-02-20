@@ -15,6 +15,8 @@ const Color _kAvatarBackground = Color(0xFF212B36);
 const Color _kVerPerfilYellow = Color(0xFFFFEB3B);
 
 class AllAlertasPage extends StatelessWidget {
+  const AllAlertasPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final alertas = context.read<AlertasProvider>().alertasPrioritarias;
@@ -22,93 +24,89 @@ class AllAlertasPage extends StatelessWidget {
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 720),
-        decoration: BoxDecoration(
-          color: _kCardBackground,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: AppColors.accentYellow,
-                    size: 28,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Todas las Alertas',
-                    style: TextStyle(
-                      color: _kTitleColor,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+          decoration: BoxDecoration(
+            color: _kCardBackground,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                itemCount: alertas.length,
-                itemBuilder: (_, i) {
-                  final alerta = alertas[i];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _AlertaCard(
-                      alerta: alerta,
-                      onVerPerfil: () {
-                        GoRouter.of(context).push(
-                          AppRoutes.homeEstudiantePerfil(alerta.estudianteId),
-                        );
-                      },
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: AppColors.accentYellow,
+                      size: 28,
                     ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => context.pop(),
-                    child: Text(
-                      'Cerrar',
+                    const SizedBox(width: 12),
+                    Text(
+                      'Todas las Alertas',
                       style: TextStyle(
                         color: _kTitleColor,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                  itemCount: alertas.length,
+                  itemBuilder: (_, i) {
+                    final alerta = alertas[i];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _AlertaCard(
+                        alerta: alerta,
+                        onVerPerfil: () {
+                          GoRouter.of(context).push(
+                            AppRoutes.homeEstudiantePerfil(alerta.estudianteId),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => context.pop(),
+                      child: Text(
+                        'Cerrar',
+                        style: TextStyle(
+                          color: _kTitleColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }
 
 class _AlertaCard extends StatelessWidget {
-  const _AlertaCard({
-    required this.alerta,
-    required this.onVerPerfil,
-  });
+  const _AlertaCard({required this.alerta, required this.onVerPerfil});
 
   final AlertaItem alerta;
   final VoidCallback onVerPerfil;
@@ -157,7 +155,9 @@ class _AlertaCard extends StatelessWidget {
               width: 6,
               decoration: BoxDecoration(
                 color: _barColor,
-                borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
+                borderRadius: const BorderRadius.horizontal(
+                  left: Radius.circular(10),
+                ),
               ),
             ),
             Expanded(

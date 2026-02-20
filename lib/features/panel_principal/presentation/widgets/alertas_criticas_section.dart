@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -20,10 +22,7 @@ const Color _kBarAlto = Color(0xFFFF9800);
 const Color _kAvatarBackground = Color(0xFF212B36);
 const Color _kVerPerfilYellow = Color(0xFFFFEB3B);
 
-void _showTodasLasAlertasDialog(
-  BuildContext context,
-  List<AlertaItem> alertas,
-) {
+void showTodasLasAlertasDialog(BuildContext context, List<AlertaItem> alertas) {
   // Usar el router del shell (dashboard) para que el push mantenga el sidebar visible.
   final router = GoRouter.of(context);
   showDialog<void>(
@@ -85,7 +84,9 @@ void _showTodasLasAlertasDialog(
                       alerta: alerta,
                       onVerPerfil: () {
                         Navigator.of(dialogContext).pop();
-                        router.push(AppRoutes.homeEstudiantePerfil(alerta.estudianteId));
+                        router.push(
+                          AppRoutes.homeEstudiantePerfil(alerta.estudianteId),
+                        );
                       },
                     ),
                   );
@@ -119,10 +120,7 @@ void _showTodasLasAlertasDialog(
 
 /// Tarjeta de alerta para el panel "Todas las Alertas" (fondo blanco, barra lateral, Ver Perfil).
 class _AlertaCard extends StatelessWidget {
-  const _AlertaCard({
-    required this.alerta,
-    required this.onVerPerfil,
-  });
+  const _AlertaCard({required this.alerta, required this.onVerPerfil});
 
   final AlertaItem alerta;
   final VoidCallback onVerPerfil;
@@ -171,7 +169,9 @@ class _AlertaCard extends StatelessWidget {
               width: 6,
               decoration: BoxDecoration(
                 color: _barColor,
-                borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
+                borderRadius: const BorderRadius.horizontal(
+                  left: Radius.circular(10),
+                ),
               ),
             ),
             Expanded(
@@ -342,10 +342,7 @@ class AlertasCriticasSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text(
                     alertasProvider.errorMessage ?? 'Error al cargar alertas',
-                    style: TextStyle(
-                      color: Colors.red.shade300,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: Colors.red.shade300, fontSize: 13),
                   ),
                 )
               else if (visible.isEmpty)
@@ -377,8 +374,10 @@ class AlertasCriticasSection extends StatelessWidget {
                   onPressed: lista.isEmpty
                       ? null
                       : () {
-                        GoRouter.of(context).push(AppRoutes.homePanelAllAlertas);
-                      },
+                          GoRouter.of(
+                            context,
+                          ).push(AppRoutes.homePanelAllAlertas);
+                        },
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
                     foregroundColor: const Color.fromARGB(255, 0, 0, 0),
@@ -390,10 +389,7 @@ class AlertasCriticasSection extends StatelessWidget {
                   icon: const Icon(Icons.list_alt, size: 20),
                   label: const Text(
                     'Ver Todas las Alertas',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -406,12 +402,10 @@ class AlertasCriticasSection extends StatelessWidget {
 }
 
 class _AlertItemFromApi extends StatelessWidget {
-  const _AlertItemFromApi({
-    required this.alerta,
-    this.onVerPerfil,
-  });
+  const _AlertItemFromApi({required this.alerta, this.onVerPerfil});
 
   final AlertaItem alerta;
+
   /// Si no es null, se muestra el botón "Ver Perfil" (p. ej. en el diálogo).
   final VoidCallback? onVerPerfil;
 
@@ -431,7 +425,9 @@ class _AlertItemFromApi extends StatelessWidget {
 
   Color get _detailColor {
     final n = alerta.nivel.toLowerCase();
-    if (n.contains('critico') || n.contains('crítico')) return Colors.red.shade300;
+    if (n.contains('critico') || n.contains('crítico')) {
+      return Colors.red.shade300;
+    }
     if (n.contains('alto')) return Colors.orange;
     return AppColors.grayMedium;
   }
@@ -506,10 +502,7 @@ class _AlertItemFromApi extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     alerta.descripcion,
-                    style: TextStyle(
-                      color: _detailColor,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: _detailColor, fontSize: 12),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -518,10 +511,7 @@ class _AlertItemFromApi extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     _detail,
-                    style: TextStyle(
-                      color: _detailColor,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: _detailColor, fontSize: 12),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -553,7 +543,10 @@ class _AlertItemFromApi extends StatelessWidget {
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.accentYellow,
                 foregroundColor: AppColors.grayDark,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 minimumSize: const Size(0, 36),
               ),
               child: const Text('Ver Perfil'),

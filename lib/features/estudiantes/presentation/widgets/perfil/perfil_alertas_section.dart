@@ -43,7 +43,8 @@ class _PerfilAlertasSectionState extends State<PerfilAlertasSection> {
             if (historial.isNotEmpty) ...[
               const SizedBox(height: 12),
               GestureDetector(
-                onTap: () => setState(() => _mostrarHistorial = !_mostrarHistorial),
+                onTap: () =>
+                    setState(() => _mostrarHistorial = !_mostrarHistorial),
                 child: Row(
                   children: [
                     Text(
@@ -69,7 +70,9 @@ class _PerfilAlertasSectionState extends State<PerfilAlertasSection> {
               ),
               if (_mostrarHistorial) ...[
                 const SizedBox(height: 12),
-                ...historial.map((a) => _AlertaTile(alerta: a, esHistorial: true)),
+                ...historial.map(
+                  (a) => _AlertaTile(alerta: a, esHistorial: true),
+                ),
               ],
             ],
           ],
@@ -90,12 +93,9 @@ class _AlertaTile extends StatelessWidget {
     final isCritica = (alerta.nivel ?? alerta.estado ?? '')
         .toUpperCase()
         .contains('CRITIC');
-    final isAbandono = (alerta.titulo ?? '')
-        .toUpperCase()
-        .contains('ABANDONO');
+    final isAbandono = (alerta.titulo ?? '').toUpperCase().contains('ABANDONO');
 
-    final isasistencia = alerta.tipo == "temprana"?  "Por Asistencia":"" ;
-
+    final isasistencia = alerta.tipo == "temprana" ? "Por Asistencia" : "";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -112,13 +112,15 @@ class _AlertaTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
-                isCritica || isAbandono ? Icons.error : Icons.warning_amber_rounded,
+                isCritica || isAbandono
+                    ? Icons.error
+                    : Icons.warning_amber_rounded,
                 size: 22,
                 color: esHistorial
                     ? Colors.grey.shade500
                     : isCritica || isAbandono
-                        ? Colors.red.shade700
-                        : Colors.orange.shade700,
+                    ? Colors.red.shade700
+                    : Colors.orange.shade700,
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -126,13 +128,14 @@ class _AlertaTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${alerta.titulo} $isasistencia" ?? 'Alerta',
+                      "${alerta.titulo} $isasistencia",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
                     ),
-                    if (alerta.descripcion != null && alerta.descripcion!.isNotEmpty) ...[
+                    if (alerta.descripcion != null &&
+                        alerta.descripcion!.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
                         alerta.descripcion!,
@@ -158,7 +161,11 @@ class _AlertaTile extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
+                            color: Colors.grey.shade600,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             _relativeTime(alerta.fechaCreacion!),
@@ -179,22 +186,23 @@ class _AlertaTile extends StatelessWidget {
                   color: esHistorial
                       ? Colors.grey.shade200
                       : isCritica || isAbandono
-                          ? Colors.red.shade100
-                          : Colors.orange.shade100,
+                      ? Colors.red.shade100
+                      : Colors.orange.shade100,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   esHistorial
                       ? (alerta.estado ?? 'RESUELTA').toUpperCase()
-                      : (alerta.nivel ?? alerta.estado ?? 'ACTIVA').toUpperCase(),
+                      : (alerta.nivel ?? alerta.estado ?? 'ACTIVA')
+                            .toUpperCase(),
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                     color: esHistorial
                         ? Colors.grey.shade700
                         : isCritica || isAbandono
-                            ? Colors.red.shade800
-                            : Colors.orange.shade800,
+                        ? Colors.red.shade800
+                        : Colors.orange.shade800,
                   ),
                 ),
               ),

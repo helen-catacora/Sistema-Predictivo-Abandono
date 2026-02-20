@@ -53,7 +53,7 @@ class ReportsRecentTable extends StatelessWidget {
           final isLoading = provider.isLoading;
           final hasError = provider.hasError;
           final reportes = provider.reportes;
-          final total = provider.total;
+          // final total = provider.total;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

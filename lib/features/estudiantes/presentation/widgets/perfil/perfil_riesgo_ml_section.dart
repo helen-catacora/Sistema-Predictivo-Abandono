@@ -18,7 +18,7 @@ class PerfilRiesgoMlSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pred = riesgoYPrediccion?.prediccionActual;
-    final historial = riesgoYPrediccion?.historial ?? [];
+    // final historial = riesgoYPrediccion?.historial ?? [];
     final features = pred?.featuresUtilizadas ?? {};
 
     return PerfilSectionCard(
@@ -62,7 +62,9 @@ class PerfilRiesgoMlSection extends StatelessWidget {
                       value: (probabilidadPorcentaje / 100).clamp(0.0, 1.0),
                       minHeight: 8,
                       backgroundColor: Colors.grey.shade300,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade700),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.red.shade700,
+                      ),
                     ),
                   ),
                   if (pred?.fechaPrediccion != null) ...[
@@ -150,7 +152,7 @@ class PerfilRiesgoMlSection extends StatelessWidget {
     );
   }
 
-  Widget _historialChip(String label, String value) {
+  Widget historialChip(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -160,16 +162,13 @@ class PerfilRiesgoMlSection extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
         ),
       ],
     );
   }
 
-  Widget _buildChart(List<HistorialPrediccionPerfil> historial) {
+  Widget buildChart(List<HistorialPrediccionPerfil> historial) {
     if (historial.isEmpty) {
       return Center(
         child: Text(
@@ -179,13 +178,12 @@ class PerfilRiesgoMlSection extends StatelessWidget {
       );
     }
     final values = historial.map((e) => e.probabilidadAbandono * 100).toList();
-    final maxVal = values.isEmpty ? 100.0 : values.reduce((a, b) => a > b ? a : b).clamp(1.0, 100.0);
+    final maxVal = values.isEmpty
+        ? 100.0
+        : values.reduce((a, b) => a > b ? a : b).clamp(1.0, 100.0);
 
     return CustomPaint(
-      painter: _LineChartPainter(
-        values: values,
-        maxY: maxVal,
-      ),
+      painter: _LineChartPainter(values: values, maxY: maxVal),
       size: Size.infinite,
     );
   }
@@ -199,15 +197,19 @@ class PerfilRiesgoMlSection extends StatelessWidget {
       child: DataTable(
         headingRowColor: WidgetStateProperty.all(Colors.grey.shade200),
         columns: const [
-          DataColumn(label: Text('Factor', style: TextStyle(fontWeight: FontWeight.bold))),
-          DataColumn(label: Text('Valor', style: TextStyle(fontWeight: FontWeight.bold))),
+          DataColumn(
+            label: Text(
+              'Factor',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text('Valor', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
         ],
         rows: entries.map((e) {
           return DataRow(
-            cells: [
-              DataCell(Text(e.key)),
-              DataCell(Text(e.value.toString())),
-            ],
+            cells: [DataCell(Text(e.key)), DataCell(Text(e.value.toString()))],
           );
         }).toList(),
       ),
@@ -219,8 +221,18 @@ class PerfilRiesgoMlSection extends StatelessWidget {
       final d = DateTime.tryParse(iso);
       if (d == null) return iso;
       const months = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
       ];
       return '${d.day} de ${months[d.month - 1]}, ${d.year}';
     } catch (_) {
@@ -250,7 +262,10 @@ class _LineChartPainter extends CustomPainter {
     final path = Path();
     for (var i = 0; i < n; i++) {
       final x = padding + i * stepX;
-      final y = size.height - padding - (values[i] / maxY * (size.height - 2 * padding));
+      final y =
+          size.height -
+          padding -
+          (values[i] / maxY * (size.height - 2 * padding));
       if (i == 0) {
         path.moveTo(x, y);
       } else {
@@ -262,7 +277,10 @@ class _LineChartPainter extends CustomPainter {
     final dotPaint = Paint()..color = AppColors.navyMedium;
     for (var i = 0; i < n; i++) {
       final x = padding + i * stepX;
-      final y = size.height - padding - (values[i] / maxY * (size.height - 2 * padding));
+      final y =
+          size.height -
+          padding -
+          (values[i] / maxY * (size.height - 2 * padding));
       canvas.drawCircle(Offset(x, y), 4, dotPaint);
     }
   }

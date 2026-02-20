@@ -124,7 +124,7 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int?>(
-                        value: provider.paraleloFilter,
+                        initialValue: provider.paraleloFilter,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -212,7 +212,7 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
-                        value: provider.carreraFilter ?? 'todas',
+                        initialValue: provider.carreraFilter ?? 'todas',
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
