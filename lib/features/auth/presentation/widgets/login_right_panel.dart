@@ -171,49 +171,49 @@ class LoginRightPanel extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Checkbox(
-                          value: rememberSession,
-                          onChanged: onToggleRemember,
-                          fillColor: WidgetStateProperty.resolveWith((states) {
-                            if (states.contains(WidgetState.selected)) {
-                              return AppColors.navyMedium;
-                            }
-                            return null;
-                          }),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Recordar sesión',
-                        style: GoogleFonts.inter(
-                          color: Color(0xff475569),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 20 / 14,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Text(
-                          '¿Olvidó su contraseña?',
-                          style: GoogleFonts.inter(
-                            color: AppColors.gray002855,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            height: 20 / 14,
-                            letterSpacing: 0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 24,
+                  //       width: 24,
+                  //       child: Checkbox(
+                  //         value: rememberSession,
+                  //         onChanged: onToggleRemember,
+                  //         fillColor: WidgetStateProperty.resolveWith((states) {
+                  //           if (states.contains(WidgetState.selected)) {
+                  //             return AppColors.navyMedium;
+                  //           }
+                  //           return null;
+                  //         }),
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 8),
+                  //     Text(
+                  //       'Recordar sesión',
+                  //       style: GoogleFonts.inter(
+                  //         color: Color(0xff475569),
+                  //         fontSize: 14,
+                  //         fontWeight: FontWeight.w500,
+                  //         height: 20 / 14,
+                  //         letterSpacing: 0,
+                  //       ),
+                  //     ),
+                  //     const Spacer(),
+                  //     GestureDetector(
+                  //       onTap: () {},
+                  //       child: Text(
+                  //         '¿Olvidó su contraseña?',
+                  //         style: GoogleFonts.inter(
+                  //           color: AppColors.gray002855,
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w700,
+                  //           height: 20 / 14,
+                  //           letterSpacing: 0,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 28),
                   FilledButton(
                     onPressed: isLoading ? null : onLogin,
