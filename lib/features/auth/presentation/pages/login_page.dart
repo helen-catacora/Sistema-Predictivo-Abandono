@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/login_footer.dart';
-import '../widgets/login_left_panel.dart';
 import '../widgets/login_right_panel.dart';
 
 /// Pantalla de inicio de sesión del Sistema Predictivo de Abandono Estudiantil EMI.
@@ -54,63 +52,21 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width >= 900;
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: isWide
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(flex: 1, child: LoginLeftPanel()),
-                      Expanded(
-                        flex: 1,
-                        child: Consumer<AuthProvider>(
-                          builder: (_, auth, _) => LoginRightPanel(
-                            formKey: _formKey,
-                            emailController: _emailController,
-                            passwordController: _passwordController,
-                            obscurePassword: _obscurePassword,
-                            rememberSession: _rememberSession,
-                            isLoading: auth.isLoading,
-                            onTogglePassword: () => setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            ),
-                            onToggleRemember: (v) =>
-                                setState(() => _rememberSession = v ?? false),
-                            onLogin: _onLogin,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        LoginLeftPanel(compact: true),
-                        Consumer<AuthProvider>(
-                          builder: (_, auth, _) => LoginRightPanel(
-                            formKey: _formKey,
-                            emailController: _emailController,
-                            passwordController: _passwordController,
-                            obscurePassword: _obscurePassword,
-                            rememberSession: _rememberSession,
-                            isLoading: auth.isLoading,
-                            onTogglePassword: () => setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            ),
-                            onToggleRemember: (v) =>
-                                setState(() => _rememberSession = v ?? false),
-                            onLogin: _onLogin,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-          ),
-          LoginFooter(),
-        ],
+      body: Consumer<AuthProvider>(
+        builder: (_, auth, _) => LoginRightPanel(
+          formKey: _formKey,
+          emailController: _emailController,
+          passwordController: _passwordController,
+          obscurePassword: _obscurePassword,
+          rememberSession: _rememberSession,
+          isLoading: auth.isLoading,
+          onTogglePassword: () =>
+              setState(() => _obscurePassword = !_obscurePassword),
+          onToggleRemember: (v) =>
+              setState(() => _rememberSession = v ?? false),
+          onLogin: _onLogin,
+        ),
       ),
     );
   }
