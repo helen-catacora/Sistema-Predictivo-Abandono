@@ -29,7 +29,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   final RiskLevel level;
 
-  static Color _colorFor(RiskLevel level) {
+  static Color colorFor(RiskLevel level) {
     switch (level) {
       case RiskLevel.critico:
       case RiskLevel.alto:
@@ -92,7 +92,7 @@ class RiskLevelIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _colorFor(level);
+    final color = colorFor(level);
     final label = _labelFor(level);
     final backGroundColor = _backGroundColor(level);
     final borderColor = _borderColor(level);
