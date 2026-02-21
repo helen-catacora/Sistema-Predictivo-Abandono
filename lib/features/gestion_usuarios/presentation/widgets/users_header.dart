@@ -20,7 +20,7 @@ class UsersHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Usuarios Registrados',
+              'Gestión de Usuarios',
               style: GoogleFonts.inter(
                 color: Color(0xff002855),
                 fontSize: 36,

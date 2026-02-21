@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/data/models/me_response.dart';
@@ -173,6 +175,23 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            'Mi Perfil',
+            style: GoogleFonts.inter(
+              color: AppColors.gray002855,
+              fontSize: 30,
+              fontWeight: FontWeight.w700,
+              height: 36 / 30,
+              letterSpacing: 0,
+            ),
+          ),
+          const SizedBox(height: 24),
+          const ScreenDescriptionCard(
+            description:
+                'Consulte y edite su información personal y configuración de cuenta. Puede cambiar su contraseña desde aquí.',
+            icon: Icons.person_outline,
+          ),
+          const SizedBox(height: 24),
           MiPerfilBanner(userData: userData),
           const SizedBox(height: 24),
           Container(

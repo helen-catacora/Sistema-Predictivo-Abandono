@@ -41,7 +41,7 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(vertical: 24.0),
         child: Consumer<DashboardProvider>(
           builder: (context, dashboard, _) {
             // final paralelos = [dashboard.distribucionPorParalelo[0]];
@@ -52,7 +52,7 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTitle(context),
+                  // _buildTitle(context),
                   const SizedBox(height: 16),
                   Text(
                     dashboard.errorMessage ?? 'Error al cargar',
@@ -66,7 +66,7 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTitle(context),
+                  // _buildTitle(context),
                   const SizedBox(height: 24),
                   const Center(
                     child: Padding(
@@ -81,8 +81,8 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTitle(context),
-                const SizedBox(height: 16),
+                // _buildTitle(context),
+                // const SizedBox(height: 16),
                 paralelos.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -115,14 +115,23 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
                                   //       ),
                                   //     )
                                   //     .toList(),
-                                  children: List.generate(paralelos.length, (index){
+                                  children: List.generate(paralelos.length, (
+                                    index,
+                                  ) {
                                     final paralelo = paralelos[index];
-                                    return Padding(
+                                    return Container(
                                       padding: const EdgeInsets.only(right: 12),
+                                      margin: EdgeInsets.only(
+                                        left: index == 0 ? 20 : 0,
+                                        right: (index == paralelos.length - 1)
+                                            ? 20
+                                            : 0,
+                                        bottom: 24,
+                                      ),
                                       child: _ParaleloCard(item: paralelo),
                                     );
                                   }),
-                                ),                         
+                                ),
                               ),
                             );
                           }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
+
 import '../widgets/alertas_criticas_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
@@ -32,8 +36,56 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const ScreenDescriptionCard(
+            description:
+                'Vista general del sistema predictivo de abandono estudiantil: estado académico, tendencia histórica, alertas críticas, resumen por paralelo y seguimiento de alumnos.',
+            icon: Icons.dashboard_rounded,
+          ),
+          const SizedBox(height: 24),
           const EstadoAcademicoSection(),
           const SizedBox(height: 24),
+          LayoutBuilder(
+            builder: (_, constraints) {
+              final isWide = constraints.maxWidth > 900;
+              if (isWide) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'Distribución de riesgo por nivel',
+                          style: GoogleFonts.inter(
+                            color: AppColors.gray002855,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            height: 36 / 30,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Expanded(
+                        child: Text(
+                          'Alertas Críticas',
+                          style: GoogleFonts.inter(
+                            color: AppColors.gray002855,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            height: 36 / 30,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                    ],
+                  ),
+                );
+              }
+              return SizedBox.shrink();
+            },
+          ),
           LayoutBuilder(
             builder: (context, constraints) {
               final isWide = constraints.maxWidth > 900;
@@ -47,24 +99,65 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                         child: const TendenciaHistoricaSection(),
                       ),
                       const SizedBox(width: 20),
-                      Expanded(
-                        child: const AlertasCriticasSection(),
-                      ),
+                      Expanded(child: const AlertasCriticasSection()),
                     ],
                   ),
                 );
               }
-              return const Column(
+              return Column(
                 children: [
+                  Text(
+                    'Distribución de riesgo por nivel',
+                    style: GoogleFonts.inter(
+                      color: AppColors.gray002855,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      height: 36 / 30,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  SizedBox(height: 24),
                   TendenciaHistoricaSection(),
                   SizedBox(height: 20),
+                  Text(
+                    'Alertas Críticas',
+                    style: GoogleFonts.inter(
+                      color: AppColors.gray002855,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      height: 36 / 30,
+                      letterSpacing: 0,
+                    ),
+                  ),
                   AlertasCriticasSection(),
                 ],
               );
             },
           ),
           const SizedBox(height: 24),
-           ResumenParaleloSection(),
+          Text(
+            'Resumen por Paralelo',
+            style: GoogleFonts.inter(
+              color: AppColors.gray002855,
+              fontSize: 30,
+              fontWeight: FontWeight.w700,
+              height: 36 / 30,
+              letterSpacing: 0,
+            ),
+          ),
+          SizedBox(height: 24),
+          ResumenParaleloSection(),
+          SizedBox(height: 24),
+          Text(
+            'Seguimiento de Alumnos',
+            style: GoogleFonts.inter(
+              color: AppColors.gray002855,
+              fontSize: 30,
+              fontWeight: FontWeight.w700,
+              height: 36 / 30,
+              letterSpacing: 0,
+            ),
+          ),
           const SizedBox(height: 24),
           const SeguimientoAlumnosSection(),
         ],

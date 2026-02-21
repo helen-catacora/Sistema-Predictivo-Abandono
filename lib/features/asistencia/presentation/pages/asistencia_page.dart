@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
+
 import '../widgets/attendance_filter_section.dart';
 import '../widgets/attendance_footer.dart';
 import '../widgets/attendance_header.dart';
@@ -30,6 +32,12 @@ class _AsistenciaPageState extends State<AsistenciaPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const AttendanceHeader(),
+          const SizedBox(height: 16),
+          const ScreenDescriptionCard(
+            description:
+                'Registro y consulta de asistencia por paralelo y materia. Visualice resúmenes y registre la asistencia de los estudiantes.',
+            icon: Icons.checklist_outlined,
+          ),
           const SizedBox(height: 24),
           const AttendanceFilterSection(),
           const SizedBox(height: 24),

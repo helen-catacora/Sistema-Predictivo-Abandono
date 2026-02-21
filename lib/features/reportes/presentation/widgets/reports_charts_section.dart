@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -62,10 +62,8 @@ class ReportsChartsSection extends StatelessWidget {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    getDrawingHorizontalLine: (value) => FlLine(
-                      color: Colors.grey.shade200,
-                      strokeWidth: 1,
-                    ),
+                    getDrawingHorizontalLine: (value) =>
+                        FlLine(color: Colors.grey.shade200, strokeWidth: 1),
                   ),
                   borderData: FlBorderData(show: false),
                   barGroups: [
@@ -177,11 +175,7 @@ BarChartGroupData _makeBarGroup(int x, double r, double a, double b) {
 }
 
 class _ChartCard extends StatelessWidget {
-  const _ChartCard({
-    required this.title,
-    required this.child,
-    this.onExport,
-  });
+  const _ChartCard({required this.title, required this.child, this.onExport});
 
   final String title;
   final Widget child;
