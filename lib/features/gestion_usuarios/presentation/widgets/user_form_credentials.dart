@@ -49,10 +49,10 @@ class _UserFormCredentialsState extends State<UserFormCredentials> {
               border: const OutlineInputBorder(),
             ),
             validator: (v) {
-              if (v == null || v.trim().isEmpty) return 'Requerido';
-              if (!RegExp(r'^[\w\-\.]+@emi\.edu\.bo$').hasMatch(v.trim())) {
-                return 'Debe ser correo institucional EMI';
-              }
+              // if (v == null || v.trim().isEmpty) return 'Requerido';
+              // if (!RegExp(r'^[\w\-\.]+@emi\.edu\.bo$').hasMatch(v.trim())) {
+              //   return 'Debe ser correo institucional EMI';
+              // }
               return null;
             },
           ),
