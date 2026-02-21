@@ -165,7 +165,7 @@ class StudentDataTable extends StatelessWidget {
                     ),
                     DataColumn(
                       label: Text(
-                        'NIVEL DE RIESGO',
+                        'PROBABILIDAD DE ABANDONO',
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
@@ -175,6 +175,18 @@ class StudentDataTable extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // DataColumn(
+                    //   label: Text(
+                    //     'NIVEL DE RIESGO',
+                    //     style: GoogleFonts.inter(
+                    //       color: Colors.white,
+                    //       fontSize: 12,
+                    //       fontWeight: FontWeight.w700,
+                    //       height: 16 / 12,
+                    //       letterSpacing: 0.6,
+                    //     ),
+                    //   ),
+                    // ),
                     DataColumn(
                       label: Text(
                         'CLASIFICACIÓN',
@@ -248,10 +260,49 @@ class StudentDataTable extends StatelessWidget {
                               ),
                             ),
                             DataCell(
-                              RiskLevelIndicator(
-                                level: RiskLevel.fromString(s.nivelRiesgo),
+                              Builder(
+                                builder: (context) {
+                                  final double? valorRaw =
+                                      s.probabilidadAbandono;
+                                  final String porcentaje = valorRaw != null
+                                      ? '${(valorRaw * 100).toStringAsFixed(0)}%'
+                                      : '-';
+                                  final riskLevel = RiskLevel.fromString(
+                                    s.nivelRiesgo,
+                                  );
+
+                                  return Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 24,
+                                      children: [
+                                        Text(
+                                          porcentaje,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: RiskLevelIndicator.colorFor(
+                                              riskLevel,
+                                            ),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        RiskLevelIndicator(
+                                          level: RiskLevel.fromString(
+                                            s.nivelRiesgo,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
                             ),
+                            // DataCell(
+                            //   RiskLevelIndicator(
+                            //     level: RiskLevel.fromString(s.nivelRiesgo),
+                            //   ),
+                            // ),
                             DataCell(
                               Text(
                                 s.clasificacion ?? '-',
@@ -267,7 +318,9 @@ class StudentDataTable extends StatelessWidget {
                             DataCell(
                               FilledButton(
                                 onPressed: () {
-                                  context.push(AppRoutes.homeEstudiantePerfil(s.id));
+                                  context.push(
+                                    AppRoutes.homeEstudiantePerfil(s.id),
+                                  );
                                 },
                                 style: FilledButton.styleFrom(
                                   backgroundColor: const Color(0xFFFACC15),
