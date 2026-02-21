@@ -18,17 +18,24 @@ class AuthRepository {
 
   final AuthApiService _apiService;
 
-  /// Inicia sesión y guarda el token en caché.
+  /// Inicia sesión. Si [saveToken] es true, guarda el token en caché.
+  /// [saveToken] en false: solo valida credenciales (para mostrar reCAPTCHA antes de persistir).
+  /// [recaptchaToken] token de reCAPTCHA v2 (Flutter web). El backend debe verificarlo con la SECRET KEY.
   Future<LoginResponse> login({
     required String email,
     required String password,
+    String? recaptchaToken,
+    bool saveToken = true,
   }) async {
     try {
       final response = await _apiService.login(
         email: email,
         password: password,
+        recaptchaToken: recaptchaToken,
       );
-      await TokenStorage.saveToken(response.accessToken, response.rolId);
+      if (saveToken) {
+        await TokenStorage.saveToken(response.accessToken, response.rolId);
+      }
       return response;
     } on DioException catch (e) {
       final statusCode = e.response?.statusCode;
@@ -49,6 +56,11 @@ class AuthRepository {
       }
       throw AuthException(msg ?? e.message ?? 'Error al iniciar sesión');
     }
+  }
+
+  /// Guarda el token a partir de una respuesta de login (tras validar reCAPTCHA).
+  Future<void> saveTokenFromResponse(LoginResponse response) async {
+    await TokenStorage.saveToken(response.accessToken, response.rolId);
   }
 
   /// Cierra sesión eliminando el token.
