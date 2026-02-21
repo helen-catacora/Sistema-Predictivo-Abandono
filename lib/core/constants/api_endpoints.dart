@@ -2,7 +2,9 @@
 abstract class ApiEndpoints {
   ApiEndpoints._();
 
-  static const String baseUrl = 'http://localhost:8001/api/v1';
+  // static const String baseUrl = 'http://localhost:8001/api/v1';
+  static const String baseUrl =
+      'https://moves-meant-specifications-charlie.trycloudflare.com/api/v1';
 
   /// Auth
   static const String authLogin = '/auth/login';
