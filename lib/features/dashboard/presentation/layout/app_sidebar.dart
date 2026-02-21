@@ -16,7 +16,8 @@ abstract class SidebarModulos {
   static const String visualizacionResultados = 'Visualización de Resultados';
   static const String gestionUsuarios = 'Gestión de Usuarios';
   static const String reportes = 'Reportes';
-  static const String gestionDatosEstudiantes = 'Gestión de Datos de Estudiantes';
+  static const String gestionDatosEstudiantes =
+      'Gestión de Datos de Estudiantes';
   static const String controlAsistencia = 'Control de Asistencia';
 }
 
@@ -89,12 +90,12 @@ class AppSidebar extends StatelessWidget {
       icon: Icons.admin_panel_settings_outlined,
       modulo: SidebarModulos.gestionUsuarios,
     ),
-    _SidebarEntry(
-      path: AppRoutes.homeMiPerfil,
-      label: 'Mi Perfil',
-      icon: Icons.person_outline,
-      modulo: null, // siempre visible
-    ),
+    // _SidebarEntry(
+    //   path: AppRoutes.homeMiPerfil,
+    //   label: 'Mi Perfil',
+    //   icon: Icons.person_outline,
+    //   modulo: null, // siempre visible
+    // ),
   ];
 
   static bool _tieneModulo(List<String> modulos, String? modulo) {
@@ -130,9 +131,11 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path ||
+                isSelected:
+                    selectedPath == e.path ||
                     (e.path == AppRoutes.homePanel &&
-                        (selectedPath == AppRoutes.home || selectedPath == '${AppRoutes.home}/')),
+                        (selectedPath == AppRoutes.home ||
+                            selectedPath == '${AppRoutes.home}/')),
               ),
             )
             .toList();
@@ -189,7 +192,10 @@ class AppSidebar extends StatelessWidget {
                 ),
               ),
               SidebarLogoutButton(
-                onPressed: () {
+                onPressedProfile: () {
+                  context.go(AppRoutes.homeMiPerfil);
+                },
+                onPressedLogout: () {
                   context.read<MeProvider>().clear();
                   context.read<AuthProvider>().logout().then((_) {
                     if (context.mounted) context.go(AppRoutes.login);
