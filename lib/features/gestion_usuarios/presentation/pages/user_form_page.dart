@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/features/gestion_usuarios/presentation/providers/usuarios_provider.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/usuario_item.dart';
@@ -236,6 +237,12 @@ class _UserFormPageState extends State<UserFormPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildHeader(),
+                      const SizedBox(height: 16),
+                      const ScreenDescriptionCard(
+                        description:
+                            'Complete los datos del usuario para registrar un nuevo acceso o editar uno existente. Incluye datos personales, credenciales, rol y módulos asignados.',
+                        icon: Icons.admin_panel_settings_outlined,
+                      ),
                       const SizedBox(height: 24),
                       UserFormPersonalInfo(
                         nombresController: _nombresController,

@@ -295,6 +295,7 @@ class AlertasCriticasSection extends StatelessWidget {
         final visible = lista.take(_maxAlertasVisibles).toList();
 
         return Container(
+          margin: EdgeInsets.symmetric(vertical: 4),
           height: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(

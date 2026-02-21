@@ -5,6 +5,7 @@ import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
 import 'package:sistemapredictivoabandono/core/router/app_router.dart';
 import 'package:sistemapredictivoabandono/features/panel_principal/data/models/alertas_response.dart';
 import 'package:sistemapredictivoabandono/features/panel_principal/presentation/providers/alertas_provider.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 const Color _kCardBackground = Color(0xFFFFFFFF);
 const Color _kTitleColor = Color(0xFF212B36);
@@ -38,6 +39,14 @@ class AllAlertasPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+                child: ScreenDescriptionCard(
+                  description:
+                      'Listado completo de alertas prioritarias del sistema. Acceda al perfil del estudiante para más detalles y seguimiento.',
+                  icon: Icons.warning_amber_rounded,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                 child: Row(

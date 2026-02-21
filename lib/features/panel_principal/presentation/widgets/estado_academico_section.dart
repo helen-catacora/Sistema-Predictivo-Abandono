@@ -39,7 +39,7 @@ class EstadoAcademicoSection extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Estado Académico',
+                  'Resumen de estado académico de los estudiantes',
                   style: GoogleFonts.inter(
                     color: AppColors.gray002855,
                     fontSize: 30,
@@ -83,71 +83,71 @@ class EstadoAcademicoSection extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     spacing: 20,
                     children: [
-                    Expanded(
-                      child: MetricCard(
-                        title: 'ESTUDIANTES EN RIESGO ALTO',
-                        value: valueOrPlaceholder(totalAlto),
-                        subtitle: totalEst > 0
-                            ? '${pctAlto.toStringAsFixed(1)}% del total de inscritos'
-                            : (isLoading && !hasError ? '—' : '0% del total'),
-                        trend: totalAlto > 0 ? null : null,
-                        trendIsPositive: true,
-                        topBorderColor: Colors.red,
-                        iconPath: 'assets/riesgo.png',
+                      Expanded(
+                        child: MetricCard(
+                          title: 'ESTUDIANTES EN RIESGO ALTO',
+                          value: valueOrPlaceholder(totalAlto),
+                          subtitle: totalEst > 0
+                              ? '${pctAlto.toStringAsFixed(1)}% del total de inscritos'
+                              : (isLoading && !hasError ? '—' : '0% del total'),
+                          trend: totalAlto > 0 ? null : null,
+                          trendIsPositive: true,
+                          topBorderColor: Colors.red,
+                          iconPath: 'assets/riesgo.png',
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: MetricCard(
-                        title: 'POBLACIÓN TOTAL',
-                        value: valueOrPlaceholderFormatted(totalEst),
-                        badge: 'ACTIVOS',
-                        detailsTitles: r != null && totalEst > 0
-                            ? [
-                                'Predicciones activas',
-                                'Bajo riesgo',
-                                'Medio riesgo',
-                              ]
-                            : null,
-                        detailsContent: r != null && totalEst > 0
-                            ? [
-                                '${r.totalPrediccionesActivas}',
-                                '${r.totalBajoRiesgo}',
-                                '${r.totalMedioRiesgo}',
-                              ]
-                            : null,
-                        topBorderColor: Colors.black,
-                        iconPath: 'assets/poblacion.png',
+                      Expanded(
+                        child: MetricCard(
+                          title: 'POBLACIÓN TOTAL',
+                          value: valueOrPlaceholderFormatted(totalEst),
+                          badge: 'ACTIVOS',
+                          detailsTitles: r != null && totalEst > 0
+                              ? [
+                                  'Predicciones activas',
+                                  'Bajo riesgo',
+                                  'Medio riesgo',
+                                ]
+                              : null,
+                          detailsContent: r != null && totalEst > 0
+                              ? [
+                                  '${r.totalPrediccionesActivas}',
+                                  '${r.totalBajoRiesgo}',
+                                  '${r.totalMedioRiesgo}',
+                                ]
+                              : null,
+                          topBorderColor: Colors.black,
+                          iconPath: 'assets/poblacion.png',
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: MetricCard(
-                        title: 'ALERTAS ACTIVAS',
-                        value: valueOrPlaceholder(alertasActivas),
-                        trend: alertasCriticas > 0 ? null : null,
-                        trendIsPositive: true,
-                        trendColor: AppColors.accentYellow,
-                        topBorderColor: AppColors.accentYellow,
-                        showAsColumn: false,
-                        detailsContent: alertasActivas > 0
-                            ? [
-                                '$alertasCriticas',
-                                '$altoRiesgo',
-                                '$medioRiesgo',
-                              ]
-                            : null,
-                        detailsTitles: alertasActivas > 0
-                            ? ['Críticas:', 'Altas:', 'Medias:']
-                            : null,
-                        detailColors: alertasActivas > 0
-                            ? [
-                                Color(0xffDC2626),
-                                Color(0xffCA8A04),
-                                Color(0xff2563EB),
-                              ]
-                            : null,
-                        iconPath: 'assets/alertas.png',
+                      Expanded(
+                        child: MetricCard(
+                          title: 'ALERTAS ACTIVAS',
+                          value: valueOrPlaceholder(alertasActivas),
+                          trend: alertasCriticas > 0 ? null : null,
+                          trendIsPositive: true,
+                          trendColor: AppColors.accentYellow,
+                          topBorderColor: AppColors.accentYellow,
+                          showAsColumn: false,
+                          detailsContent: alertasActivas > 0
+                              ? [
+                                  '$alertasCriticas',
+                                  '$altoRiesgo',
+                                  '$medioRiesgo',
+                                ]
+                              : null,
+                          detailsTitles: alertasActivas > 0
+                              ? ['Críticas:', 'Altas:', 'Medias:']
+                              : null,
+                          detailColors: alertasActivas > 0
+                              ? [
+                                  Color(0xffDC2626),
+                                  Color(0xffCA8A04),
+                                  Color(0xff2563EB),
+                                ]
+                              : null,
+                          iconPath: 'assets/alertas.png',
+                        ),
                       ),
-                    ),
                     ],
                   ),
                 );

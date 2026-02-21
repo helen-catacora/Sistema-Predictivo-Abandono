@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/estudiante_perfil_response.dart';
@@ -193,6 +194,12 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const ScreenDescriptionCard(
+                    description:
+                        'Vista detallada del perfil del estudiante: datos básicos, sociodemográficos, riesgo de abandono, desempeño académico, alertas y acciones de seguimiento.',
+                    icon: Icons.people_outline,
+                  ),
+                  const SizedBox(height: 24),
                   PerfilHeaderCard(
                     datosBasicos: p.datosBasicos,
                     nivelRiesgo: nivelRiesgo,

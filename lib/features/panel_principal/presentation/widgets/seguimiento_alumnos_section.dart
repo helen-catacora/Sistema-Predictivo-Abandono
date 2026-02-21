@@ -44,34 +44,39 @@ class _SeguimientoAlumnosSectionState extends State<SeguimientoAlumnosSection> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(
+          left: 20.0,
+          right: 20.0,
+          top: 4,
+          bottom: 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: AppColors.navyMedium,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Seguimiento de Alumnos',
-                      style: TextStyle(
-                        color: AppColors.navyMedium,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Container(
+                //       width: 16,
+                //       height: 16,
+                //       decoration: BoxDecoration(
+                //         color: AppColors.navyMedium,
+                //         borderRadius: BorderRadius.circular(4),
+                //       ),
+                //     ),
+                //     const SizedBox(width: 8),
+                //     Text(
+                //       'Seguimiento de Alumnos',
+                //       style: TextStyle(
+                //         color: AppColors.navyMedium,
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: [
                     // OutlinedButton.icon(
@@ -113,15 +118,23 @@ class _SeguimientoAlumnosSectionState extends State<SeguimientoAlumnosSection> {
             ),
             const SizedBox(height: 12),
             Center(
-              child: GestureDetector(
-                onTap: () => context.push(AppRoutes.homeEstudiantes),
+              child: ElevatedButton(
+                onPressed: () => context.push(AppRoutes.homeEstudiantes),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.accentYellow,
+                  foregroundColor: AppColors.navyMedium,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 child: const Text(
                   'Ver todos los estudiantes',
-                  style: TextStyle(
-                    color: AppColors.navyMedium,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

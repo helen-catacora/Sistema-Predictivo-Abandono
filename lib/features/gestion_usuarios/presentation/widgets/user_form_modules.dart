@@ -30,10 +30,7 @@ class UserFormModules extends StatelessWidget {
         children: [
           Text(
             'Seleccione los módulos del sistema a los que tendrá acceso este usuario',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.grayDark,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.grayDark),
           ),
           const SizedBox(height: 16),
           if (isLoading)
@@ -70,10 +67,7 @@ class UserFormModules extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Los módulos seleccionados determinan las secciones del sistema a las que el usuario podrá acceder.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.navyMedium,
-                    ),
+                    style: TextStyle(fontSize: 12, color: AppColors.navyMedium),
                   ),
                 ),
               ],
@@ -149,9 +143,7 @@ class _ModuleCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isSelected
-                    ? AppColors.navyMedium
-                    : Colors.grey.shade300,
+                color: isSelected ? AppColors.navyMedium : Colors.grey.shade300,
               ),
             ),
             child: Row(

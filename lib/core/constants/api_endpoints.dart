@@ -4,7 +4,7 @@ abstract class ApiEndpoints {
 
   // static const String baseUrl = 'http://localhost:8001/api/v1';
   static const String baseUrl =
-      'https://zm6w6tkz-8001.brs.devtunnels.ms/api/v1';
+      'https://moves-meant-specifications-charlie.trycloudflare.com/api/v1';
 
   /// Auth
   static const String authLogin = '/auth/login';

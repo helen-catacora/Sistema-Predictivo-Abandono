@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -85,179 +85,180 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
           child: Card(
             elevation: 0,
             color: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade200),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: AppColors.navyMedium,
-                            borderRadius: BorderRadius.circular(4),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Colors.grey.shade200),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: AppColors.navyMedium,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Distribución de Riesgo por Nivel',
-                          style: TextStyle(
-                            color: AppColors.navyMedium,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(width: 8),
+                          Text(
+                            'Gráfico de barras',
+                            style: TextStyle(
+                              color: AppColors.navyMedium,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                if (isLoading && barItems.every((e) => e.value == 0))
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else ...[
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    height: 260,
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
-                        maxY: maxY,
-                        barTouchData: BarTouchData(
-                          enabled: false,
-                          touchTooltipData: BarTouchTooltipData(
-                            getTooltipColor: (_) =>
-                                Colors.transparent, // Fondo transparente
-                            tooltipPadding: EdgeInsets.zero,
-                            tooltipMargin: 3,
-                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                              return BarTooltipItem(
-                                rod.toY.toInt().toString(),
-                                TextStyle(
-                                  color: AppColors
-                                      .darkBlue1E293B, // Color del texto
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        titlesData: FlTitlesData(
-                          show: true,
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                final i = value.toInt();
-                                if (i >= 0 && i < barItems.length) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: Text(
-                                      barItems[i].label,
-                                      style: TextStyle(
-                                        color: AppColors.grayDark,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (isLoading && barItems.every((e) => e.value == 0))
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  else ...[
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 260,
+                      child: BarChart(
+                        BarChartData(
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: maxY,
+                          barTouchData: BarTouchData(
+                            enabled: false,
+                            touchTooltipData: BarTouchTooltipData(
+                              getTooltipColor: (_) =>
+                                  Colors.transparent, // Fondo transparente
+                              tooltipPadding: EdgeInsets.zero,
+                              tooltipMargin: 3,
+                              getTooltipItem:
+                                  (group, groupIndex, rod, rodIndex) {
+                                    return BarTooltipItem(
+                                      rod.toY.toInt().toString(),
+                                      TextStyle(
+                                        color: AppColors
+                                            .darkBlue1E293B, // Color del texto
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                       ),
+                                    );
+                                  },
+                            ),
+                          ),
+                          titlesData: FlTitlesData(
+                            show: true,
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  final i = value.toInt();
+                                  if (i >= 0 && i < barItems.length) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        barItems[i].label,
+                                        style: TextStyle(
+                                          color: AppColors.grayDark,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox.shrink();
+                                },
+                                reservedSize: 28,
+                                interval: 1,
+                              ),
+                            ),
+                            leftTitles: AxisTitles(
+                              axisNameWidget: Text(
+                                'Número de Estudiantes',
+                                style: TextStyle(
+                                  color: AppColors.grayMedium,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  return Text(
+                                    value.toInt().toString(),
+                                    style: TextStyle(
+                                      color: AppColors.grayMedium,
+                                      fontSize: 11,
                                     ),
                                   );
-                                }
-                                return const SizedBox.shrink();
-                              },
-                              reservedSize: 28,
-                              interval: 1,
-                            ),
-                          ),
-                          leftTitles: AxisTitles(
-                            axisNameWidget: Text(
-                              'Número de Estudiantes',
-                              style: TextStyle(
-                                color: AppColors.grayMedium,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                },
+                                reservedSize: 32,
+                                interval: interval,
                               ),
                             ),
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Text(
-                                  value.toInt().toString(),
-                                  style: TextStyle(
-                                    color: AppColors.grayMedium,
-                                    fontSize: 11,
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                          ),
+                          gridData: FlGridData(
+                            show: true,
+                            drawVerticalLine: false,
+                            horizontalInterval: interval,
+                            getDrawingHorizontalLine: (value) => FlLine(
+                              color: Colors.grey.shade200,
+                              strokeWidth: 1,
+                            ),
+                          ),
+                          borderData: FlBorderData(show: false),
+                          barGroups: barItems.asMap().entries.map((e) {
+                            final i = e.key;
+                            final item = e.value;
+                            return BarChartGroupData(
+                              x: i,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: item.value,
+                                  color: item.color,
+                                  width: 150,
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(0),
                                   ),
-                                );
-                              },
-                              reservedSize: 32,
-                              interval: interval,
-                            ),
-                          ),
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                        ),
-                        gridData: FlGridData(
-                          show: true,
-                          drawVerticalLine: false,
-                          horizontalInterval: interval,
-                          getDrawingHorizontalLine: (value) => FlLine(
-                            color: Colors.grey.shade200,
-                            strokeWidth: 1,
-                          ),
-                        ),
-                        borderData: FlBorderData(show: false),
-                        barGroups: barItems.asMap().entries.map((e) {
-                          final i = e.key;
-                          final item = e.value;
-                          return BarChartGroupData(
-                            x: i,
-                            barRods: [
-                              BarChartRodData(
-                                toY: item.value,
-                                color: item.color,
-                                width: 150,
-                                borderSide: BorderSide(color: Colors.black),
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(0),
                                 ),
-                              ),
-                            ],
-                            showingTooltipIndicators: [0],
-                          );
-                        }).toList(),
-                      ),
-                      duration: const Duration(milliseconds: 250),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: Text(
-                      'Nivel de Riesgo',
-                      style: TextStyle(
-                        color: AppColors.grayMedium,
-                        fontSize: 11,
+                              ],
+                              showingTooltipIndicators: [0],
+                            );
+                          }).toList(),
+                        ),
+                        duration: const Duration(milliseconds: 250),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Text(
+                        'Nivel de Riesgo',
+                        style: TextStyle(
+                          color: AppColors.grayMedium,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
-        ),
         );
       },
     );
