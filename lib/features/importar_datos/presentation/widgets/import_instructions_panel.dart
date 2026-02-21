@@ -61,7 +61,7 @@ class ImportInstructionsPanel extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       height: 20 / 14,
                       letterSpacing: 0,
-                    ),
+                    ), 
                   ),
                 ],
               ),
@@ -71,7 +71,7 @@ class ImportInstructionsPanel extends StatelessWidget {
           _buildStep(
             '1',
             'Formato de Archivo:',
-            'Use archivos CSV, Excel (.xlsx) o JSON. Máximo 10MB por archivo.',
+            'Use archivos Excel (.xlsx). Máximo 10MB por archivo.',
           ),
           const SizedBox(height: 16),
           _buildStep(

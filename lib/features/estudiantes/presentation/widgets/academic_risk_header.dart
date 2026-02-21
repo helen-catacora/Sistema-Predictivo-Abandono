@@ -29,7 +29,7 @@ class AcademicRiskHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Monitoreo de indicadores críticos y casos de abandono estudiantil en Ciencias Básicas.',
+              'Monitoreo de casos de abandono estudiantil en Ciencias Básicas.',
               style: GoogleFonts.inter(
                 color: AppColors.grey64748B,
                 fontSize: 16,
