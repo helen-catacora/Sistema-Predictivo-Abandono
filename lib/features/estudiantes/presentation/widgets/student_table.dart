@@ -164,14 +164,18 @@ class StudentDataTable extends StatelessWidget {
                       ),
                     ),
                     DataColumn(
-                      label: Text(
-                        'PROBABILIDAD DE ABANDONO',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0.6,
+                      numeric: false,
+                      label: Expanded(
+                        child: Text(
+                          'PROBABILIDAD DE ABANDONO',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            height: 16 / 12,
+                            letterSpacing: 0.6,
+                          ),
                         ),
                       ),
                     ),

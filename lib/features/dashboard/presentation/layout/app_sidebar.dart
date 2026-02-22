@@ -156,6 +156,12 @@ class AppSidebar extends StatelessWidget {
       icon: Icons.file_upload_outlined,
       modulo: SidebarModulos.visualizacionResultados,
     ),
+    _SidebarEntry(
+      path: AppRoutes.homeParalelos,
+      label: 'Configuración de Paralelos',
+      icon: Icons.file_upload_outlined,
+      modulo: SidebarModulos.visualizacionResultados,
+    ),
   ];
 
   static const List<_SidebarEntry> _administracion = [
