@@ -22,11 +22,11 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const ScreenDescriptionCard(
-          description:
-              'Cargue archivos Excel con información estudiantil para predicción masiva o para la creación de estudiantes en el sistema.',
-          icon: Icons.file_download_outlined,
-        ),
+        // const ScreenDescriptionCard(
+        //   description:
+        //       'Cargue archivos Excel con información estudiantil para predicción masiva o para la creación de estudiantes en el sistema.',
+        //   icon: Icons.file_download_outlined,
+        // ),
         const SizedBox(height: 24),
         Expanded(
           child: SingleChildScrollView(
