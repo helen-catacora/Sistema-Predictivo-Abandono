@@ -56,20 +56,20 @@ class AppSidebar extends StatelessWidget {
     ),
   ];
 
-  static const List<_SidebarEntry> _gestionDeUsuarios = [
-    _SidebarEntry(
-      path: AppRoutes.homePanel,
-      label: 'Reportes Disponibles',
-      icon: Icons.dashboard_outlined,
-      modulo: SidebarModulos.reportes,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeEstudiantes,
-      label: 'Historial de Reportes',
-      icon: Icons.people_outline,
-      modulo: SidebarModulos.reportes,
-    ),
-  ];
+  // static const List<_SidebarEntry> _gestionDeUsuarios = [
+  //   _SidebarEntry(
+  //     path: AppRoutes.homePanel,
+  //     label: 'Reportes Disponibles',
+  //     icon: Icons.dashboard_outlined,
+  //     modulo: SidebarModulos.reportes,
+  //   ),
+  //   _SidebarEntry(
+  //     path: AppRoutes.homeEstudiantes,
+  //     label: 'Historial de Reportes',
+  //     icon: Icons.people_outline,
+  //     modulo: SidebarModulos.reportes,
+  //   ),
+  // ];
   //
   static const List<_SidebarEntry> _menuPrincipal = [
     _SidebarEntry(
@@ -223,21 +223,21 @@ class AppSidebar extends StatelessWidget {
               ),
             )
             .toList();
-        final menuPrincipalItems = _menuPrincipal
-            .where((e) => _tieneModulo(modulos, e.modulo))
-            .map(
-              (e) => MenuItem(
-                path: e.path,
-                label: e.label,
-                icon: e.icon,
-                isSelected:
-                    selectedPath == e.path ||
-                    (e.path == AppRoutes.homePanel &&
-                        (selectedPath == AppRoutes.home ||
-                            selectedPath == '${AppRoutes.home}/')),
-              ),
-            )
-            .toList();
+        // final menuPrincipalItems = _menuPrincipal
+        //     .where((e) => _tieneModulo(modulos, e.modulo))
+        //     .map(
+        //       (e) => MenuItem(
+        //         path: e.path,
+        //         label: e.label,
+        //         icon: e.icon,
+        //         isSelected:
+        //             selectedPath == e.path ||
+        //             (e.path == AppRoutes.homePanel &&
+        //                 (selectedPath == AppRoutes.home ||
+        //                     selectedPath == '${AppRoutes.home}/')),
+        //       ),
+        //     )
+        //     .toList();
         final gestionDatosDelEstudianteItems = _gestionDatosDelEstudiante
             .where((e) => _tieneModulo(modulos, e.modulo))
             .map(

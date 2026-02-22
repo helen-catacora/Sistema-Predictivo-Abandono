@@ -25,7 +25,8 @@ class _AsignarEncargadoDialog extends StatefulWidget {
   final ParaleloItem paralelo;
 
   @override
-  State<_AsignarEncargadoDialog> createState() => _AsignarEncargadoDialogState();
+  State<_AsignarEncargadoDialog> createState() =>
+      _AsignarEncargadoDialogState();
 }
 
 class _AsignarEncargadoDialogState extends State<_AsignarEncargadoDialog> {
@@ -97,8 +98,9 @@ class _AsignarEncargadoDialogState extends State<_AsignarEncargadoDialog> {
                 child: Consumer<UsuariosProvider>(
                   builder: (context, usuariosProvider, _) {
                     final usuarios = usuariosProvider.usuarios;
-                    final activos =
-                        usuarios.where((u) => u.estado.toLowerCase() == 'activo').toList();
+                    final activos = usuarios
+                        .where((u) => u.estado.toLowerCase() == 'activo')
+                        .toList();
 
                     if (usuariosProvider.isLoading && usuarios.isEmpty) {
                       return const Center(
@@ -127,7 +129,7 @@ class _AsignarEncargadoDialogState extends State<_AsignarEncargadoDialog> {
 
                     return ListView.separated(
                       itemCount: activos.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      separatorBuilder: (_, _) => const Divider(height: 1),
                       itemBuilder: (context, i) {
                         final u = activos[i];
                         final selected = _selectedUsuario?.id == u.id;

@@ -5,10 +5,12 @@
       "name": "Flutter (Chrome, port 80)",
       "request": "launch",
       "type": "dart",
+      "flutterMode": "profile",
       "args": [
         "-d",
         "chrome",
-        "--web-port=80"
+        "--web-port=80",
+        "--wasm"
       ]
     }
   ]
