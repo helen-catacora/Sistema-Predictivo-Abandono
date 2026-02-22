@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/malla_curricular/malla_curricular_file_selector.dart';
@@ -38,16 +39,21 @@ class ImportarDatosMallaCurricularPage extends StatelessWidget {
             letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          'CARGUE ARCHIVOS EXCEL CON LA MALLA CURRICULAR (MATERIAS, ÁREAS, SEMESTRES)',
-          style: GoogleFonts.inter(
-            color: AppColors.grey64748B,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            height: 20 / 14,
-            letterSpacing: 0.7,
-          ),
+        const SizedBox(height: 20),
+        // Text(
+        //   'CARGUE ARCHIVOS EXCEL CON LA MALLA CURRICULAR (MATERIAS, ÁREAS, SEMESTRES)',
+        //   style: GoogleFonts.inter(
+        //     color: AppColors.grey64748B,
+        //     fontSize: 14,
+        //     fontWeight: FontWeight.w400,
+        //     height: 20 / 14,
+        //     letterSpacing: 0.7,
+        //   ),
+        // ),
+        const ScreenDescriptionCard(
+          description:
+              'Cargue archivos Excel con la malla curricular (materias, áreas, semestres).',
+          icon: Icons.file_download_outlined,
         ),
       ],
     );

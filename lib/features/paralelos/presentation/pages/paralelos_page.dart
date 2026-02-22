@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
+import '../../../../core/constants/app_colors.dart';
 import '../../../asistencia/presentation/providers/paralelos_provider.dart';
+import '../widgets/paralelos_crear_dialog.dart';
 import '../widgets/paralelos_header.dart';
 import '../widgets/paralelos_list_section.dart';
 import '../widgets/paralelos_stats_cards.dart';
@@ -44,6 +47,30 @@ class _ParalelosPageState extends State<ParalelosPage> {
                   icon: Icons.groups_outlined,
                 ),
                 const SizedBox(height: 24),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     FilledButton.icon(
+                //       onPressed: () => showCrearParaleloDialog(context),
+                //       icon: const Icon(Icons.add, size: 20),
+                //       label: Text(
+                //         'Crear paralelo',
+                //         style: GoogleFonts.inter(
+                //           fontSize: 14,
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //       style: FilledButton.styleFrom(
+                //         backgroundColor: AppColors.green16A34A,
+                //         padding: const EdgeInsets.symmetric(
+                //           horizontal: 20,
+                //           vertical: 14,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 24),
                 const ParalelosStatsCards(),
                 const SizedBox(height: 24),
                 const ParalelosListSection(),

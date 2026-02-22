@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../widgets/attendance_filter_section.dart';
@@ -39,8 +41,30 @@ class _AsistenciaPageState extends State<AsistenciaPage> {
             icon: Icons.checklist_outlined,
           ),
           const SizedBox(height: 24),
+          Text(
+              'Seleccionar Curso',
+              style: GoogleFonts.inter(
+                color: AppColors.black334155,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                letterSpacing: 0,
+              ),
+            ),
+          const SizedBox(height: 20),
           const AttendanceFilterSection(),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+          Text(
+              'Resumen de Asistencia',
+              style: GoogleFonts.inter(
+                color: AppColors.black334155,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                letterSpacing: 0,
+              ),
+            ),
+          const SizedBox(height: 20),
           const AttendanceSummaryCards(),
           const SizedBox(height: 24),
           const AttendanceStudentTable(),

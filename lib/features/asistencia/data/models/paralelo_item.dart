@@ -15,7 +15,7 @@ class ParaleloItem {
       nombre: json['nombre'] as String,
       areaId: json['area_id'] as int,
       areaNombre: json['area_nombre'] as String?,
-      semestreId: json['semestre_id'] as int,
+      semestreId: (json['semestre_id'] as num?)?.toInt() ?? 0,
       nombreEncargado: json['nombre_encargado'] as String,
     );
   }

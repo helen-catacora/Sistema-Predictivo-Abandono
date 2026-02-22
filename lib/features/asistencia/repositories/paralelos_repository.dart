@@ -18,4 +18,19 @@ class ParalelosRepository {
   Future<void> updateParaleloEncargado(int paraleloId, int encargadoId) async {
     await _apiService.updateParaleloEncargado(paraleloId, encargadoId);
   }
+
+  /// Crea un nuevo paralelo. POST /paralelos
+  Future<ParaleloItem> createParalelo({
+    required String nombre,
+    required int areaId,
+    required int semestreId,
+    required int encargadoId,
+  }) async {
+    return _apiService.createParalelo(
+      nombre: nombre,
+      areaId: areaId,
+      semestreId: semestreId,
+      encargadoId: encargadoId,
+    );
+  }
 }

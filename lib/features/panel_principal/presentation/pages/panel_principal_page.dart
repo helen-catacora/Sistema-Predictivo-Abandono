@@ -20,13 +20,26 @@ class PanelPrincipalPage extends StatefulWidget {
 }
 
 class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
+  final GlobalKey _keyEstadoAcademico = GlobalKey();
+  final GlobalKey _keyTendencia = GlobalKey();
+  final GlobalKey _keyAlertas = GlobalKey();
+  final GlobalKey _keyResumenParalelo = GlobalKey();
+
+  void _scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        alignment: 0.1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   context.read<DashboardProvider>().loadDashboard();
-    //   context.read<AlertasProvider>().loadAlertas();
-    // });
   }
 
   @override
@@ -40,8 +53,10 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                 'Vista general del sistema predictivo de abandono estudiantil: estado académico, tendencia histórica, alertas críticas, resumen por paralelo y seguimiento de alumnos.',
             icon: Icons.dashboard_rounded,
           ),
+          const SizedBox(height: 16),
+          _buildSectionSubmenu(),
           const SizedBox(height: 24),
-          const EstadoAcademicoSection(),
+          _sectionAnchor(key: _keyEstadoAcademico, child: const EstadoAcademicoSection()),
           const SizedBox(height: 24),
           LayoutBuilder(
             builder: (_, constraints) {
@@ -95,57 +110,89 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: const TendenciaHistoricaSection(),
+                        child: _sectionAnchor(
+                          key: _keyTendencia,
+                          child: const TendenciaHistoricaSection(),
+                        ),
                       ),
                       const SizedBox(width: 20),
-                      Expanded(child: const AlertasCriticasSection()),
+                      Expanded(
+                        child: _sectionAnchor(
+                          key: _keyAlertas,
+                          child: const AlertasCriticasSection(),
+                        ),
+                      ),
                     ],
                   ),
                 );
               }
               return Column(
                 children: [
-                  Text(
-                    'Distribución de riesgo por nivel',
-                    style: GoogleFonts.inter(
-                      color: AppColors.gray002855,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      height: 36 / 30,
-                      letterSpacing: 0,
+                  _sectionAnchor(
+                    key: _keyTendencia,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Distribución de riesgo por nivel',
+                          style: GoogleFonts.inter(
+                            color: AppColors.gray002855,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            height: 36 / 30,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        const TendenciaHistoricaSection(),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 24),
-                  TendenciaHistoricaSection(),
-                  SizedBox(height: 20),
-                  Text(
-                    'Alertas Críticas',
-                    style: GoogleFonts.inter(
-                      color: AppColors.gray002855,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      height: 36 / 30,
-                      letterSpacing: 0,
+                  const SizedBox(height: 20),
+                  _sectionAnchor(
+                    key: _keyAlertas,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Alertas Críticas',
+                          style: GoogleFonts.inter(
+                            color: AppColors.gray002855,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            height: 36 / 30,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                        const AlertasCriticasSection(),
+                      ],
                     ),
                   ),
-                  AlertasCriticasSection(),
                 ],
               );
             },
           ),
           const SizedBox(height: 24),
-          Text(
-            'Resumen por Paralelo',
-            style: GoogleFonts.inter(
-              color: AppColors.gray002855,
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              height: 36 / 30,
-              letterSpacing: 0,
+          _sectionAnchor(
+            key: _keyResumenParalelo,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Resumen por Paralelo',
+                  style: GoogleFonts.inter(
+                    color: AppColors.gray002855,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    height: 36 / 30,
+                    letterSpacing: 0,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ResumenParaleloSection(),
+              ],
             ),
           ),
-          SizedBox(height: 24),
-          ResumenParaleloSection(),
           // SizedBox(height: 24),
           // Text(
           //   'Seguimiento de Alumnos',
@@ -162,5 +209,60 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
         ],
       ),
     );
+  }
+
+  /// Submenú horizontal scrolleable para saltar a cada sección.
+  Widget _buildSectionSubmenu() {
+    const items = [
+      ('Estado Académico', Icons.school_outlined),
+      ('Distribución de riesgo', Icons.show_chart),
+      ('Alertas Críticas', Icons.warning_amber_rounded),
+      ('Resumen por Paralelo', Icons.groups_outlined),
+    ];
+    final keys = [_keyEstadoAcademico, _keyTendencia, _keyAlertas, _keyResumenParalelo];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(items.length, (i) {
+          final (label, icon) = items[i];
+          return Padding(
+            padding: EdgeInsets.only(right: i < items.length - 1 ? 12 : 0),
+            child: Material(
+              color: AppColors.gray002855.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(8),
+              child: InkWell(
+                onTap: () => _scrollToSection(keys[i]),
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icon, size: 18, color: AppColors.gray002855),
+                      const SizedBox(width: 8),
+                      Text(
+                        label,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.gray002855,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _sectionAnchor({required GlobalKey key, required Widget child}) {
+    return KeyedSubtree(key: key, child: child);
   }
 }

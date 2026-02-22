@@ -16,17 +16,17 @@ class AttendanceHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'EMI Ciencias Básicas > Control de Asistencia',
-          style: GoogleFonts.inter(
-            color: AppColors.grey64748B,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            height: 16 / 12,
-            letterSpacing: 0,
-          ),
-        ),
-        const SizedBox(height: 4),
+        // Text(
+        //   'EMI Ciencias Básicas > Control de Asistencia',
+        //   style: GoogleFonts.inter(
+        //     color: AppColors.grey64748B,
+        //     fontSize: 12,
+        //     fontWeight: FontWeight.w500,
+        //     height: 16 / 12,
+        //     letterSpacing: 0,
+        //   ),
+        // ),
+        // const SizedBox(height: 4),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

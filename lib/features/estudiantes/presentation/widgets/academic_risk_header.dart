@@ -18,7 +18,7 @@ class AcademicRiskHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Estudiantes en Riesgo de Abandono Estudiantil',
+              'Prediccion de Abandono Estudiantil',
               style: GoogleFonts.inter(
                 color: AppColors.gray002855,
                 fontSize: 30,
@@ -28,16 +28,16 @@ class AcademicRiskHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              'Monitoreo de casos de abandono estudiantil en Ciencias Básicas.',
-              style: GoogleFonts.inter(
-                color: AppColors.grey64748B,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                height: 24 / 16,
-                letterSpacing: 0.7,
-              ),
-            ),
+            // Text(
+            //   'Monitoreo de casos de abandono estudiantil en Ciencias Básicas.',
+            //   style: GoogleFonts.inter(
+            //     color: AppColors.grey64748B,
+            //     fontSize: 16,
+            //     fontWeight: FontWeight.w500,
+            //     height: 24 / 16,
+            //     letterSpacing: 0.7,
+            //   ),
+            // ),
           ],
         ),
         Spacer(),

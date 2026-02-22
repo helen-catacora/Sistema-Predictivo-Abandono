@@ -22,17 +22,17 @@ class ParalelosHeader extends StatelessWidget {
             letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          'ADMINISTRACIÓN DE CURSOS Y ASIGNACIÓN DE ENCARGADOS',
-          style: GoogleFonts.inter(
-            color: AppColors.grey64748B,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            height: 20 / 14,
-            letterSpacing: 0.7,
-          ),
-        ),
+        // const SizedBox(height: 4),
+        // Text(
+        //   'ADMINISTRACIÓN DE CURSOS Y ASIGNACIÓN DE ENCARGADOS',
+        //   style: GoogleFonts.inter(
+        //     color: AppColors.grey64748B,
+        //     fontSize: 14,
+        //     fontWeight: FontWeight.w400,
+        //     height: 20 / 14,
+        //     letterSpacing: 0.7,
+        //   ),
+        // ),
       ],
     );
   }
