@@ -35,13 +35,13 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
       builder: (context, provider, paralelosProvider, _) {
         final paralelos = paralelosProvider.paralelos;
         final carreraFilter = provider.carreraFilter;
-        final paralelosVisibles = carreraFilter == null ||
+        final paralelosVisibles =
+            carreraFilter == null ||
                 carreraFilter.isEmpty ||
                 carreraFilter == 'todas'
             ? paralelos
             : paralelos.where((p) {
-                final areaStr =
-                    p.areaNombre ?? _nombreArea(p.areaId);
+                final areaStr = p.areaNombre ?? _nombreArea(p.areaId);
                 return areaStr == carreraFilter;
               }).toList();
         return Card(
@@ -134,7 +134,10 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<int?>(
-                        value: paralelosVisibles.any((p) => p.id == provider.paraleloFilter)
+                        initialValue:
+                            paralelosVisibles.any(
+                              (p) => p.id == provider.paraleloFilter,
+                            )
                             ? provider.paraleloFilter
                             : null,
                         decoration: InputDecoration(
@@ -287,15 +290,24 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                         ],
                         onChanged: (value) {
                           provider.setCarreraFilter(value);
-                          final nuevaCarrera = (value == null || value == 'todas') ? null : value;
+                          final nuevaCarrera =
+                              (value == null || value == 'todas')
+                              ? null
+                              : value;
                           final listaPorCarrera = nuevaCarrera == null
                               ? paralelos
                               : paralelos
-                                  .where((p) =>
-                                      (p.areaNombre ?? _nombreArea(p.areaId)) == nuevaCarrera)
-                                  .toList();
+                                    .where(
+                                      (p) =>
+                                          (p.areaNombre ??
+                                              _nombreArea(p.areaId)) ==
+                                          nuevaCarrera,
+                                    )
+                                    .toList();
                           if (provider.paraleloFilter != null &&
-                              !listaPorCarrera.any((p) => p.id == provider.paraleloFilter)) {
+                              !listaPorCarrera.any(
+                                (p) => p.id == provider.paraleloFilter,
+                              )) {
                             provider.setParaleloFilter(null);
                             provider.loadEstudiantes();
                           }

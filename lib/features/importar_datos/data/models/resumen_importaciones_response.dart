@@ -10,9 +10,7 @@ class ResumenImportacionesResponse {
     return ResumenImportacionesResponse(
       totalImportaciones: (json['total_importaciones'] as num?)?.toInt() ?? 0,
       ultimaImportacion: ultima != null && ultima is Map
-          ? UltimaImportacionItem.fromJson(
-              Map<String, dynamic>.from(ultima as Map),
-            )
+          ? UltimaImportacionItem.fromJson(Map<String, dynamic>.from(ultima))
           : null,
     );
   }

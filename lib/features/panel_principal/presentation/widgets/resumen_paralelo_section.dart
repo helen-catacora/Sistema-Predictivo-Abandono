@@ -154,30 +154,6 @@ class _ResumenParaleloSectionState extends State<ResumenParaleloSection> {
       ),
     );
   }
-
-  Widget _buildTitle(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 16,
-          height: 16,
-          decoration: BoxDecoration(
-            color: AppColors.navyMedium,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          'Resumen por Paralelo',
-          style: TextStyle(
-            color: AppColors.navyMedium,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 class _ParaleloCard extends StatelessWidget {
