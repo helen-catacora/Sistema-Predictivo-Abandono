@@ -37,7 +37,7 @@ class PerfilSectionCard extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     color: AppColors.navyMedium,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

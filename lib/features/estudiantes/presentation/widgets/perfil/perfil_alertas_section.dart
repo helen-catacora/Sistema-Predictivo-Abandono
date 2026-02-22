@@ -131,7 +131,7 @@ class _AlertaTile extends StatelessWidget {
                       "${alerta.titulo} $isasistencia",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                     if (alerta.descripcion != null &&
@@ -140,7 +140,7 @@ class _AlertaTile extends StatelessWidget {
                       Text(
                         alerta.descripcion!,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 15,
                           color: Colors.grey.shade700,
                         ),
                       ),
@@ -151,7 +151,7 @@ class _AlertaTile extends StatelessWidget {
                       Text(
                         alerta.observacionResolucion!,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 15,
                           fontStyle: FontStyle.italic,
                           color: Colors.green.shade700,
                         ),
@@ -196,7 +196,7 @@ class _AlertaTile extends StatelessWidget {
                       : (alerta.nivel ?? alerta.estado ?? 'ACTIVA')
                             .toUpperCase(),
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: esHistorial
                         ? Colors.grey.shade700

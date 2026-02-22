@@ -6,9 +6,14 @@ import 'perfil_section_card.dart';
 
 /// Sección Desempeño Académico: asistencia general y por materia.
 class PerfilDesempenioSection extends StatelessWidget {
-  const PerfilDesempenioSection({super.key, this.desempenio});
+  const PerfilDesempenioSection({
+    super.key,
+    this.desempenio,
+    required this.mallaCurricular,
+  });
 
   final DesempenioAcademicoPerfil? desempenio;
+  final String mallaCurricular;
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +23,17 @@ class PerfilDesempenioSection extends StatelessWidget {
 
     return PerfilSectionCard(
       icon: Icons.bar_chart,
-      title: 'Desempeño Académico',
+      title: 'Asistencia General',
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'ASISTENCIA GENERAL',
+            Text(
+              'Malla Curricular: $mallaCurricular',
               style: TextStyle(
                 color: AppColors.navyMedium,
-                fontSize: 12,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -45,8 +50,11 @@ class PerfilDesempenioSection extends StatelessWidget {
               const SizedBox(height: 4),
               Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded,
-                      size: 18, color: Colors.orange.shade700),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    size: 18,
+                    color: Colors.orange.shade700,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     'Nivel crítico - Requiere intervención inmediata',
@@ -68,7 +76,11 @@ class PerfilDesempenioSection extends StatelessWidget {
                   value: (pct / 100).clamp(0.0, 1.0),
                   backgroundColor: Colors.grey.shade200,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    pct < 50 ? Colors.red : pct < 80 ? Colors.orange : Colors.green,
+                    pct < 50
+                        ? Colors.red
+                        : pct < 80
+                        ? Colors.orange
+                        : Colors.green,
                   ),
                 ),
               ),
@@ -78,7 +90,7 @@ class PerfilDesempenioSection extends StatelessWidget {
               'Asistencia por Materia',
               style: TextStyle(
                 color: AppColors.navyMedium,
-                fontSize: 14,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -92,58 +104,63 @@ class PerfilDesempenioSection extends StatelessWidget {
                 ),
               )
             else
-              ...materias.map((m) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            m.nombre,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
+              ...materias.map(
+                (m) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          m.nombre,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            '${m.porcentajeAsistencia.toStringAsFixed(1)}%',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: m.porcentajeAsistencia < 50
-                                  ? Colors.red
-                                  : m.porcentajeAsistencia < 80
-                                      ? Colors.orange
-                                      : Colors.green,
-                            ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          '${m.porcentajeAsistencia.toStringAsFixed(1)}%',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: m.porcentajeAsistencia < 50
+                                ? Colors.red
+                                : m.porcentajeAsistencia < 80
+                                ? Colors.orange
+                                : Colors.green,
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: SizedBox(
-                            height: 8,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                value: (m.porcentajeAsistencia / 100).clamp(0.0, 1.0),
-                                backgroundColor: Colors.grey.shade200,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  m.porcentajeAsistencia < 50
-                                      ? Colors.red
-                                      : m.porcentajeAsistencia < 80
-                                          ? Colors.orange
-                                          : Colors.green,
-                                ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: 8,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: (m.porcentajeAsistencia / 100).clamp(
+                                0.0,
+                                1.0,
+                              ),
+                              backgroundColor: Colors.grey.shade200,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                m.porcentajeAsistencia < 50
+                                    ? Colors.red
+                                    : m.porcentajeAsistencia < 80
+                                    ? Colors.orange
+                                    : Colors.green,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

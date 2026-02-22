@@ -144,8 +144,10 @@ class PerfilAccionesSection extends StatefulWidget {
   });
 
   final int estudianteId;
+
   /// Devuelve la lista de acciones (GET /acciones).
   final Future<List<AccionListItem>> Function() loadAcciones;
+
   /// Al crear una acción (descripcion, fecha). Si es null, el botón "Nueva Acción" no hace la petición.
   final Future<void> Function(String descripcion, String fecha)? onCreateAccion;
   final int limite;
@@ -231,7 +233,10 @@ class _PerfilAccionesSectionState extends State<PerfilAccionesSection> {
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.accentYellow,
                     foregroundColor: AppColors.grayDark,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                   ),
                 ),
               ],
@@ -258,7 +263,9 @@ class _PerfilAccionesSectionState extends State<PerfilAccionesSection> {
                 ),
               )
             else
-              ..._acciones.take(widget.limite).map((a) => _AccionListTile(accion: a)),
+              ..._acciones
+                  .take(widget.limite)
+                  .map((a) => _AccionListTile(accion: a)),
           ],
         ),
       ),
@@ -290,19 +297,13 @@ class _AccionListTile extends StatelessWidget {
         children: [
           Text(
             titulo.isEmpty ? 'Acción #${accion.id}' : titulo,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           if (desc.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
               desc,
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey.shade700,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
             ),
           ],
           const SizedBox(height: 6),
@@ -312,10 +313,7 @@ class _AccionListTile extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 _formatFecha(fecha),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               ),
             ],
           ),
@@ -331,10 +329,12 @@ class _AccionListTile extends StatelessWidget {
       if (d == null) return iso;
       final now = DateTime.now();
       final diff = now.difference(d);
-      if (diff.inDays == 0) return 'Hoy, ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+      if (diff.inDays == 0)
+        return 'Hoy, ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
       if (diff.inDays == 1) return 'Ayer';
       if (diff.inDays < 7) return 'Hace ${diff.inDays} días';
-      if (diff.inDays < 30) return 'Hace ${(diff.inDays / 7).floor()} semana(s)';
+      if (diff.inDays < 30)
+        return 'Hace ${(diff.inDays / 7).floor()} semana(s)';
       return '${d.day}/${d.month}/${d.year}';
     } catch (_) {
       return iso;
