@@ -110,13 +110,13 @@ class AppSidebar extends StatelessWidget {
   static const List<_SidebarEntry> _gestionDatosDelEstudiante = [
     _SidebarEntry(
       path: AppRoutes.homeImportarDatosEstudiantes,
-      label: 'Importar datos para el registro de estudiantes',
+      label: 'Importar Datos para el Registro de Estudiantes',
       icon: Icons.upload_file,
       modulo: SidebarModulos.gestionDatosEstudiantes,
     ),
     _SidebarEntry(
       path: AppRoutes.homeImportarDatos,
-      label: 'Importar datos para la prediccion',
+      label: 'Importar Datos para la Prediccion',
       icon: Icons.file_upload_outlined,
       modulo: SidebarModulos.gestionDatosEstudiantes,
     ),

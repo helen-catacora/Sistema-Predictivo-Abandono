@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 import '../widgets/academic_risk_header.dart';
 import '../widgets/student_filter_section.dart';
+import '../widgets/student_summary_cards.dart';
 import '../widgets/student_table.dart';
 
 /// Pantalla Estudiantes en Riesgo Académico.
@@ -37,6 +38,8 @@ class _EstudiantesPageState extends State<EstudiantesPage> {
           ),
           const SizedBox(height: 24),
           const StudentFilterSection(),
+          const SizedBox(height: 24),
+          const StudentSummaryCards(),
           const SizedBox(height: 24),
           const StudentTable(),
         ],
