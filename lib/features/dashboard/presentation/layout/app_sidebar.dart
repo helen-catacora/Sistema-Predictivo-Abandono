@@ -14,12 +14,13 @@ import '../widgets/sidebar_logout_button.dart';
 
 /// Nombres de módulos que devuelve GET /me (coincidir con el backend).
 abstract class SidebarModulos {
-  static const String visualizacionResultados = 'Visualización de Resultados';
+  static const String visualizacionResultados = 'Visualización de Predicciones';
   static const String gestionUsuarios = 'Gestión de Usuarios';
   static const String reportes = 'Reportes';
   static const String gestionDatosEstudiantes =
       'Gestión de Datos de Estudiantes';
-  static const String controlAsistencia = 'Control de Asistencia';
+  static const String controlAsistencia = 'Registro de Asistencia';
+  static const String configuracionAcademica = 'Configuracion Acadmica';
 }
 
 /// Entrada del menú con el módulo requerido (null = siempre visible).
