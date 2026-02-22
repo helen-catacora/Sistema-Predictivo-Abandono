@@ -170,7 +170,7 @@ class ReportsAvailableSection extends StatelessWidget {
                     const crossAxisSpacing = 24.0;
                     const mainAxisSpacing = 20.0;
                     const minCardWidth = 280.0;
-                    const cardAspectRatio = 330 / 250;
+                    const cardAspectRatio = 330 / 260;
                     final width = constraints.maxWidth;
                     final crossAxisCount =
                         (width / (minCardWidth + crossAxisSpacing)).floor();
@@ -242,8 +242,8 @@ class ReportsAvailableSection extends StatelessWidget {
       );
       if (paralelo == null) return;
       if (!context.mounted) return;
-      final estudiantesDelParalelo =
-          await estudiantesProvider.getEstudiantesPorParalelo(paralelo.id);
+      final estudiantesDelParalelo = await estudiantesProvider
+          .getEstudiantesPorParalelo(paralelo.id);
       if (!context.mounted) return;
       if (estudiantesDelParalelo.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(

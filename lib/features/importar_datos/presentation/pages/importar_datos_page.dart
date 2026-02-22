@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../widgets/creacion_estudiantes/importar_datos_creacion_estudiantes_content.dart';
 import '../widgets/import_file_selector.dart';
 import '../widgets/import_main_section.dart';
 import '../widgets/import_page_header.dart';
@@ -19,15 +17,11 @@ class ImportarDatosPage extends StatefulWidget {
 }
 
 class _ImportarDatosPageState extends State<ImportarDatosPage> {
-  ImportarDatosVista _vistaActual = ImportarDatosVista.prediccionMasiva;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildMenuFlotante(),
-        const SizedBox(height: 16),
         const ScreenDescriptionCard(
           description:
               'Cargue archivos Excel con información estudiantil para predicción masiva o para la creación de estudiantes en el sistema.',
@@ -36,88 +30,13 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
         const SizedBox(height: 24),
         Expanded(
           child: SingleChildScrollView(
-            child: _vistaActual == ImportarDatosVista.prediccionMasiva
-                ? _buildContenidoPrediccionMasiva()
-                : const ImportarDatosCreacionEstudiantesContent(),
+            child: _buildContenidoPrediccionMasiva(),
+            // child: _vistaActual == ImportarDatosVista.prediccionMasiva
+            //     ? _buildContenidoPrediccionMasiva()
+            //     : const ImportarDatosCreacionEstudiantesPage(),
           ),
         ),
       ],
-    );
-  }
-
-  /// Menú flotante en la parte superior para cambiar entre vistas.
-  Widget _buildMenuFlotante() {
-    return Material(
-      elevation: 2,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade200),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _menuItem(
-              label: 'Predicción masiva',
-              icon: Icons.analytics_outlined,
-              selected: _vistaActual == ImportarDatosVista.prediccionMasiva,
-              onTap: () => setState(
-                () => _vistaActual = ImportarDatosVista.prediccionMasiva,
-              ),
-            ),
-            const SizedBox(width: 8),
-            _menuItem(
-              label: 'Creación de estudiantes',
-              icon: Icons.person_add_outlined,
-              selected: _vistaActual == ImportarDatosVista.creacionEstudiantes,
-              onTap: () => setState(
-                () => _vistaActual = ImportarDatosVista.creacionEstudiantes,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _menuItem({
-    required String label,
-    required IconData icon,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    return Material(
-      color: selected ? AppColors.navyMedium : Colors.transparent,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: 20,
-                color: selected ? AppColors.white : AppColors.grayDark,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: selected ? AppColors.white : AppColors.grayDark,
-                  fontSize: 14,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

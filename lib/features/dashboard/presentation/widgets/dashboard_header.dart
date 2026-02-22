@@ -29,7 +29,8 @@ class DashboardHeader extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           const Text(
-            'PANEL DE CONTROL PREDICTIVO',
+            // 'PANEL DE CONTROL PREDICTIVO',
+            'SISTEMA PREDICTIVO DE ABANDONO ESTUDIANTIL DE CIENCIAS BASICAS',
             style: TextStyle(
               color: AppColors.white,
               fontSize: 20,

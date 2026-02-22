@@ -6,7 +6,6 @@ import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card
 import '../widgets/alertas_criticas_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
-import '../widgets/seguimiento_alumnos_section.dart';
 import '../widgets/tendencia_historica_section.dart';
 
 /// Pantalla Panel Principal del Sistema Predictivo de Abandono.
@@ -147,19 +146,19 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
           ),
           SizedBox(height: 24),
           ResumenParaleloSection(),
-          SizedBox(height: 24),
-          Text(
-            'Seguimiento de Alumnos',
-            style: GoogleFonts.inter(
-              color: AppColors.gray002855,
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              height: 36 / 30,
-              letterSpacing: 0,
-            ),
-          ),
-          const SizedBox(height: 24),
-          const SeguimientoAlumnosSection(),
+          // SizedBox(height: 24),
+          // Text(
+          //   'Seguimiento de Alumnos',
+          //   style: GoogleFonts.inter(
+          //     color: AppColors.gray002855,
+          //     fontSize: 30,
+          //     fontWeight: FontWeight.w700,
+          //     height: 36 / 30,
+          //     letterSpacing: 0,
+          //   ),
+          // ),
+          // const SizedBox(height: 24),
+          // const SeguimientoAlumnosSection(),
         ],
       ),
     );
