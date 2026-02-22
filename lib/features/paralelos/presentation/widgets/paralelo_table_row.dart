@@ -33,8 +33,9 @@ class ParaleloTableRow extends StatelessWidget {
     final color = _badgeColors[colorIndexForParalelo(index)];
     final areaName = nombreAreaParalelo(paralelo.areaId);
     final hasEncargado = paralelo.nombreEncargado.trim().isNotEmpty;
-    final estudiantesText =
-        cantidadEstudiantes != null ? '$cantidadEstudiantes estudiantes' : '— estudiantes';
+    final estudiantesText = cantidadEstudiantes != null
+        ? '$cantidadEstudiantes estudiantes'
+        : '— estudiantes';
 
     return Container(
       decoration: BoxDecoration(
@@ -47,7 +48,7 @@ class ParaleloTableRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 11,
+            // flex: 11,
             child: _cell(
               child: Row(
                 children: [
@@ -70,7 +71,7 @@ class ParaleloTableRow extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          paralelo.nombre.toUpperCase(),
+                          'Paralelo ${paralelo.nombre.toUpperCase()}',
                           style: GoogleFonts.inter(
                             color: AppColors.darkBlue1E293B,
                             fontSize: 14,
@@ -93,20 +94,25 @@ class ParaleloTableRow extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 7,
+            // flex: 7,
             child: _cell(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  areaName.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    color: color,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    areaName.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      color: color,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -114,10 +120,13 @@ class ParaleloTableRow extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 8,
+            // flex: 8,
             child: _cell(
               child: Text(
-                'Semestre ${paralelo.semestreId}',
+                paralelo.semestreId == 1
+                    ? 'Primer Semestre'
+                    : 'Segundo Semestre',
+                textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   color: AppColors.black334155,
                   fontSize: 13,
@@ -127,7 +136,7 @@ class ParaleloTableRow extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 11,
+            // flex: 11,
             child: _cell(
               child: hasEncargado
                   ? Row(
@@ -204,12 +213,12 @@ class ParaleloTableRow extends StatelessWidget {
                           ],
                         ),
                       ],
-              ),
+                    ),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 8,
+            // flex: 8,
             child: _cell(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -220,7 +229,10 @@ class ParaleloTableRow extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.green16A34A,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     textStyle: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,

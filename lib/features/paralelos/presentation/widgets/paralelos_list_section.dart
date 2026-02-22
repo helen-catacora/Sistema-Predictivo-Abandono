@@ -221,7 +221,7 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
       child: Row(
         children: [
           Expanded(
-            flex: 11,
+            // flex: 11,
             child: Text(
               'NOMBRE',
               style: GoogleFonts.inter(
@@ -234,9 +234,10 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 7,
+            // flex: 7,
             child: Text(
               'ÁREA',
+              textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 12,
@@ -247,9 +248,10 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 8,
+            // flex: 8,
             child: Text(
               'SEMESTRE',
+              textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 12,
@@ -260,7 +262,7 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 11,
+            // flex: 11,
             child: Text(
               'ENCARGADO ACTUAL',
               style: GoogleFonts.inter(
@@ -273,9 +275,10 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 8,
+            // flex: 8,
             child: Text(
               'ACCIÓN',
+              textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 12,
