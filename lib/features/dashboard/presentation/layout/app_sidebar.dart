@@ -149,6 +149,15 @@ class AppSidebar extends StatelessWidget {
     ),
   ];
 
+  static const List<_SidebarEntry> _configuracionAcademica = [
+    _SidebarEntry(
+      path: AppRoutes.homeImportarDatosMallaCurricular,
+      label: 'Importar Malla Curricular',
+      icon: Icons.file_upload_outlined,
+      modulo: SidebarModulos.visualizacionResultados,
+    ),
+  ];
+
   static const List<_SidebarEntry> _administracion = [
     _SidebarEntry(
       path: AppRoutes.homeGestionUsuarios,
@@ -190,6 +199,17 @@ class AppSidebar extends StatelessWidget {
     return Consumer<MeProvider>(
       builder: (context, meProvider, _) {
         final modulos = meProvider.modulos;
+        final configuracionAcademica = _configuracionAcademica
+            .where((e) => _tieneModulo(modulos, e.modulo))
+            .map(
+              (e) => MenuItem(
+                path: e.path,
+                label: e.label,
+                icon: e.icon,
+                isSelected: selectedPath == e.path,
+              ),
+            )
+            .toList();
         final asistencia = _asistencia
             .where((e) => _tieneModulo(modulos, e.modulo))
             .map(
@@ -304,6 +324,13 @@ class AppSidebar extends StatelessWidget {
                           title: 'Reportes',
                           icon: Icons.dashboard_outlined,
                           items: reportesItems,
+                        ),
+
+                      if (configuracionAcademica.isNotEmpty)
+                        SidebarSectionExpansionTile(
+                          title: 'Configuración Académica',
+                          icon: Icons.dashboard_outlined,
+                          items: configuracionAcademica,
                         ),
                       // if (gestionDatosItems.isNotEmpty)
                       //   MenuSection(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sistemapredictivoabandono/features/importar_datos/presentation/pages/importar_datos_creacion_estudiantes_content.dart';
+import 'package:sistemapredictivoabandono/features/importar_datos/presentation/pages/importar_datos_malla_curricular_page.dart';
 import 'package:sistemapredictivoabandono/features/panel_principal/presentation/pages/all_alertas_page.dart';
 import 'package:sistemapredictivoabandono/features/reportes/presentation/pages/historial_reportes_page.dart';
 
@@ -34,6 +35,8 @@ abstract class AppRoutes {
   static const String homeImportarDatos = '/home/importar-datos';
   static const String homeImportarDatosEstudiantes =
       '/home/importar-datos-estudiantes';
+  static const String homeImportarDatosMallaCurricular =
+      '/home/importar-datos-malla-curricular';
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
   static const String homeMiPerfil = '/home/mi-perfil';
   static const String userFormNuevo = '/home/gestion-usuarios/nuevo';
@@ -157,6 +160,13 @@ final List<RouteBase> _routes = [
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
               child: const ImportarDatosCreacionEstudiantesPage(),
+            ),
+          ),
+          GoRoute(
+            path: 'importar-datos-malla-curricular',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const ImportarDatosMallaCurricularPage(),
             ),
           ),
           GoRoute(
