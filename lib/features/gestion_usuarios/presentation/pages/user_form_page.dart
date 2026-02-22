@@ -82,6 +82,7 @@ class _UserFormPageState extends State<UserFormPage> {
       _cargoController.text = u.rol;
       _selectedRol = u.rol;
       _selectedRolId = u.rolId;
+      print('Usuario: ${u.nombre}, Rol: ${u.rol}, RolId: ${u.rolId}');
       _estadoActivo = u.estado.toLowerCase() == 'activo';
       _modulosSeleccionados.addAll(u.modulos);
       _cedulaController.text = u.carnetIdentidad;
@@ -135,7 +136,8 @@ class _UserFormPageState extends State<UserFormPage> {
           'telefono': _telefonoController.text.trim(),
           'cargo': _cargoController.text.trim(),
           'correo': _correoController.text.trim(),
-          'rol_id': _rolNombreToId[_selectedRol.toUpperCase()] ?? 3,
+          // 'rol_id': _rolNombreToId[_selectedRol.toUpperCase()],
+          'rol_id': _selectedRolId,
           'estado': _estadoActivo ? 'activo' : 'inactivo',
           'modulos': List<int>.from(_modulosSeleccionados),
         };

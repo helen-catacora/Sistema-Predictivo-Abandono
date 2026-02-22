@@ -20,7 +20,7 @@ abstract class SidebarModulos {
   static const String gestionDatosEstudiantes =
       'Gestión de Datos de Estudiantes';
   static const String controlAsistencia = 'Registro de Asistencia';
-  static const String configuracionAcademica = 'Configuracion Acadmica';
+  static const String configuracionAcademica = 'Configuracion Academica';
 }
 
 /// Entrada del menú con el módulo requerido (null = siempre visible).
@@ -155,13 +155,13 @@ class AppSidebar extends StatelessWidget {
       path: AppRoutes.homeImportarDatosMallaCurricular,
       label: 'Importar Malla Curricular',
       icon: Icons.file_upload_outlined,
-      modulo: SidebarModulos.visualizacionResultados,
+      modulo: SidebarModulos.configuracionAcademica,
     ),
     _SidebarEntry(
       path: AppRoutes.homeParalelos,
       label: 'Configuración de Paralelos',
       icon: Icons.file_upload_outlined,
-      modulo: SidebarModulos.visualizacionResultados,
+      modulo: SidebarModulos.configuracionAcademica,
     ),
   ];
 
