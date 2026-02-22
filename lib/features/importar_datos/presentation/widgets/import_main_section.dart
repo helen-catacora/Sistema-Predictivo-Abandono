@@ -19,7 +19,7 @@ class ImportMainSection extends StatelessWidget {
               children: [
                 Expanded(flex: 2, child: ImportInstructionsPanel()),
                 const SizedBox(width: 24),
-                Expanded(flex: 1, child: ImportSummaryCards()),
+                Expanded(flex: 1, child: RequiredFieldsCard()),
               ],
             ),
           );
@@ -28,7 +28,7 @@ class ImportMainSection extends StatelessWidget {
           children: [
             SizedBox(height: 380, child: ImportInstructionsPanel()),
             const SizedBox(height: 24),
-            ImportSummaryCards(),
+            RequiredFieldsCard(),
           ],
         );
       },

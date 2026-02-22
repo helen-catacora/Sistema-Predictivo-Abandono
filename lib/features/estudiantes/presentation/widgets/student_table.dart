@@ -152,14 +152,18 @@ class StudentDataTable extends StatelessWidget {
                       ),
                     ),
                     DataColumn(
-                      label: Text(
-                        'ASISTENCIA',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0.6,
+                      numeric: false,
+                      label: Expanded(
+                        child: Text(
+                          'ASISTENCIA',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            height: 16 / 12,
+                            letterSpacing: 0.6,
+                          ),
                         ),
                       ),
                     ),
@@ -256,8 +260,10 @@ class StudentDataTable extends StatelessWidget {
                               ),
                             ),
                             DataCell(
-                              SizedBox(
-                                width: 100,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                                 child: AttendanceBar(
                                   percentage: s.porcentajeAsistencia,
                                 ),
