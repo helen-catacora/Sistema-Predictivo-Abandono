@@ -22,20 +22,6 @@ class CreacionEstudiantesFileSelector extends StatefulWidget {
 
 class _CreacionEstudiantesFileSelectorState
     extends State<CreacionEstudiantesFileSelector> {
-  static const _requiredFields = [
-    'Codigo del Estudiante',
-    'Nombres',
-    'Apellidos',
-    'Semestre',
-    'Paralelo',
-    'Materias',
-    'Grado',
-  ];
-
-  static const _optionalFields = [
-    'Fecha de Nacimiento',
-  ];
-
   bool _isDragging = false;
   PlatformFile? _selectedFile;
 
@@ -282,13 +268,14 @@ class _CreacionEstudiantesFileSelectorState
                   ),
                 ),
                 SizedBox(width: 24),
-                Expanded(
-                  flex: 1,
-                  child: RequiredOptionalFieldsCard(
-                    requiredFields: _requiredFields,
-                    optionalFields: _optionalFields,
-                  ),
-                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: RequiredOptionalFieldsCard(
+                //     requiredFields: _requiredFields,
+                //     optionalFields: _optionalFields,
+                //   ),
+                // ),
+                Expanded(flex: 1, child: CreacionEstudiantesSidebar()),
               ],
             ),
           ],

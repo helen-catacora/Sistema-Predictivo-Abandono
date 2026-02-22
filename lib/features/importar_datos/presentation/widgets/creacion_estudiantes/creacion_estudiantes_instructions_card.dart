@@ -4,10 +4,22 @@ import 'package:sistemapredictivoabandono/features/importar_datos/presentation/w
 
 import '../../../../../core/constants/app_colors.dart';
 
-/// Card de instrucciones para importación de creación de estudiantes.
+/// Card de instrucciones para importa
+/// ción de creación de estudiantes.
+
 class CreacionEstudiantesInstructionsCard extends StatelessWidget {
   const CreacionEstudiantesInstructionsCard({super.key});
+  static const _requiredFields = [
+    'Codigo del Estudiante',
+    'Nombres',
+    'Apellidos',
+    'Semestre',
+    'Paralelo',
+    'Materias',
+    'Grado',
+  ];
 
+  static const _optionalFields = ['Fecha de Nacimiento'];
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -129,7 +141,14 @@ class CreacionEstudiantesInstructionsCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: 24),
-          Expanded(flex: 1, child: CreacionEstudiantesSidebar()),
+          // Expanded(flex: 1, child: CreacionEstudiantesSidebar()),
+          Expanded(
+            flex: 1,
+            child: RequiredOptionalFieldsCard(
+              requiredFields: _requiredFields,
+              optionalFields: _optionalFields,
+            ),
+          ),
         ],
       ),
     );
