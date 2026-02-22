@@ -4,7 +4,7 @@ abstract class ApiEndpoints {
 
   // static const String baseUrl = 'http://localhost:8001/api/v1';
   static const String baseUrl =
-      'https://colleagues-owners-clicks-provided.trycloudflare.com/api/v1';
+      'https://tigers-oem-sticky-aquarium.trycloudflare.com/api/v1';
 
   /// Auth
   static const String authLogin = '/auth/login';
@@ -71,4 +71,7 @@ abstract class ApiEndpoints {
 
   /// Acciones de seguimiento. POST /acciones (body: descripcion, fecha, estudiante_id)
   static const String acciones = '/acciones';
+
+  /// Malla curricular - importar desde Excel (POST multipart/form-data: archivo .xlsx, nombre_malla)
+  static const String mallaCurricularImportar = '/malla-curricular/importar';
 }
