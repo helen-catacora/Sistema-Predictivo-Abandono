@@ -3,7 +3,6 @@ import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card
 
 import '../widgets/reports_available_section.dart';
 import '../widgets/reports_header.dart';
-import '../widgets/reports_recent_table.dart';
 
 /// Pantalla Centro de Reportes.
 class ReportesPage extends StatefulWidget {
@@ -32,11 +31,11 @@ class _ReportesPageState extends State<ReportesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const ReportsHeader(),
+          ReportsHeader(title: 'Reportes Disponibles'),
           const SizedBox(height: 16),
           const ScreenDescriptionCard(
             description:
-                'Centro de reportes para análisis integral del abandono estudiantil. Descargue reportes disponibles y consulte el historial reciente.',
+                'Centro de reportes para análisis integral del abandono estudiantil. Descargue reportes disponibles.',
             icon: Icons.assessment_outlined,
           ),
           const SizedBox(height: 24),
@@ -47,8 +46,8 @@ class _ReportesPageState extends State<ReportesPage> {
           //  const ReportsChartsSection(),
           //  const SizedBox(height: 24),
           const ReportsAvailableSection(),
-          const SizedBox(height: 24),
-          const ReportsRecentTable(),
+          // const SizedBox(height: 24),
+          // const ReportsRecentTable(),
         ],
       ),
     );

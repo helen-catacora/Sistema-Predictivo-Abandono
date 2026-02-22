@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../core/constants/app_colors.dart';
-import 'creacion_estudiantes_file_selector.dart';
-import 'creacion_estudiantes_instructions_card.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../widgets/creacion_estudiantes/creacion_estudiantes_file_selector.dart';
+import '../widgets/creacion_estudiantes/creacion_estudiantes_instructions_card.dart';
 
 /// Contenido completo de la pantalla "Importar Datos para Creación de Estudiantes".
-class ImportarDatosCreacionEstudiantesContent extends StatelessWidget {
-  const ImportarDatosCreacionEstudiantesContent({super.key});
+class ImportarDatosCreacionEstudiantesPage extends StatelessWidget {
+  const ImportarDatosCreacionEstudiantesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

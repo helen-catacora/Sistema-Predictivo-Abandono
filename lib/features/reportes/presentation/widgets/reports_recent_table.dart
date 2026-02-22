@@ -36,9 +36,16 @@ Color _colorForTipo(String tipo) {
 }
 
 /// Tabla de reportes generados recientemente (datos de GET /reportes/historial).
-class ReportsRecentTable extends StatelessWidget {
+class ReportsRecentTable extends StatefulWidget {
   const ReportsRecentTable({super.key});
 
+  @override
+  State<ReportsRecentTable> createState() => _ReportsRecentTableState();
+}
+
+class _ReportsRecentTableState extends State<ReportsRecentTable> {
+  int _currentPage = 0;
+  static const int _rowsPerPage = 10;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +60,15 @@ class ReportsRecentTable extends StatelessWidget {
           final isLoading = provider.isLoading;
           final hasError = provider.hasError;
           final reportes = provider.reportes;
-          // final total = provider.total;
+
+          final totalPages = (reportes.length / _rowsPerPage).ceil();
+          final startIndex = _currentPage * _rowsPerPage;
+          final endIndex = (startIndex + _rowsPerPage > reportes.length)
+              ? reportes.length
+              : startIndex + _rowsPerPage;
+          final reportesPaginados = reportes.isEmpty
+              ? <ReporteHistorialItem>[]
+              : reportes.sublist(startIndex, endIndex);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +85,7 @@ class ReportsRecentTable extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Reportes Generados Recientemente',
+                    'Reportes Generados',
                     style: TextStyle(
                       color: AppColors.navyMedium,
                       fontSize: 16,
@@ -131,141 +146,142 @@ class ReportsRecentTable extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: constraints.maxWidth,
-                          ),
-                          child: DataTable(
-                            headingRowColor: WidgetStateProperty.all(
-                              const Color(0xffF8FAFC),
-                            ),
-                            columns: [
-                              DataColumn(
-                                label: Text(
-                                  'NOMBRE DEL REPORTE',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
-                                ),
+                    child: Column(
+                      children: [
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: constraints.maxWidth,
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'TIPO',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
+                              child: DataTable(
+                                headingRowColor: WidgetStateProperty.all(
+                                  const Color(0xffF8FAFC),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'GENERADO POR',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'FECHA',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'ESTADO',
-                                  style: GoogleFonts.inter(
-                                    color: Color(0xff475569),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    height: 16 / 12,
-                                    letterSpacing: 0.6,
-                                  ),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'ACCIONES',
-                              //     style: GoogleFonts.inter(
-                              //       color: Color(0xff475569),
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w600,
-                              //       height: 16 / 12,
-                              //       letterSpacing: 0.6,
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                            rows: reportes.isEmpty
-                                ? [
-                                    DataRow(
-                                      cells: [
-                                        const DataCell(
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 24,
-                                            ),
-                                            child: Text(
-                                              'No hay reportes en el historial',
-                                            ),
-                                          ),
-                                        ),
-                                        ...List.filled(
-                                          5,
-                                          const DataCell(SizedBox.shrink()),
-                                        ),
-                                      ],
+                                columns: [
+                                  DataColumn(
+                                    label: Text(
+                                      'NOMBRE DEL REPORTE',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xff475569),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        height: 16 / 12,
+                                        letterSpacing: 0.6,
+                                      ),
                                     ),
-                                  ]
-                                : reportes.map((r) => _buildRow(r)).toList(),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'TIPO',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xff475569),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        height: 16 / 12,
+                                        letterSpacing: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'GENERADO POR',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xff475569),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        height: 16 / 12,
+                                        letterSpacing: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'FECHA',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xff475569),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        height: 16 / 12,
+                                        letterSpacing: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'ESTADO',
+                                      style: GoogleFonts.inter(
+                                        color: Color(0xff475569),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        height: 16 / 12,
+                                        letterSpacing: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                rows: reportes.isEmpty
+                                    ? [
+                                        DataRow(
+                                          cells: [
+                                            const DataCell(
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 24,
+                                                ),
+                                                child: Text(
+                                                  'No hay reportes en el historial',
+                                                ),
+                                              ),
+                                            ),
+                                            ...List.filled(
+                                              5,
+                                              const DataCell(SizedBox.shrink()),
+                                            ),
+                                          ],
+                                        ),
+                                      ]
+                                    // : reportes.map((r) => _buildRow(r)).toList(),
+                                    : reportesPaginados
+                                          .map((r) => _buildRow(r))
+                                          .toList(),
+                              ),
+                            );
+                          },
+                        ),
+                        if (reportes.length > _rowsPerPage) ...[
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Página ${_currentPage + 1} de $totalPages',
+                                style: GoogleFonts.inter(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              IconButton(
+                                icon: const Icon(Icons.chevron_left),
+                                onPressed: _currentPage > 0
+                                    ? () => setState(() => _currentPage--)
+                                    : null,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.chevron_right),
+                                onPressed: _currentPage < totalPages - 1
+                                    ? () => setState(() => _currentPage++)
+                                    : null,
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ],
+                      ],
                     ),
                   ),
                 ),
               const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Text(
-                  //   reportes.isEmpty && !isLoading
-                  //       ? '0 reportes'
-                  //       : 'Mostrando ${reportes.length} de $total reportes',
-                  //   style: TextStyle(color: AppColors.grayMedium, fontSize: 12),
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: Text(
-                  //     'Ver historial completo',
-                  //     style: TextStyle(
-                  //       color: AppColors.navyMedium,
-                  //       fontSize: 13,
-                  //       fontWeight: FontWeight.w600,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
             ],
           );
         },
@@ -375,25 +391,6 @@ class ReportsRecentTable extends StatelessWidget {
             ),
           ),
         ),
-        // DataCell(
-        //   Row(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       IconButton(
-        //         onPressed: () {},
-        //         icon: const Icon(Icons.download, size: 20),
-        //       ),
-        //       IconButton(
-        //         onPressed: () {},
-        //         icon: const Icon(Icons.visibility_outlined, size: 20),
-        //       ),
-        //       IconButton(
-        //         onPressed: () {},
-        //         icon: const Icon(Icons.delete_outline, size: 20),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ],
     );
   }

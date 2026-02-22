@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
-
-import '../../../asistencia/presentation/providers/paralelos_provider.dart';
-import '../providers/estudiantes_provider.dart';
 import '../widgets/academic_risk_header.dart';
 import '../widgets/student_filter_section.dart';
 import '../widgets/student_table.dart';
@@ -20,10 +16,10 @@ class _EstudiantesPageState extends State<EstudiantesPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ParalelosProvider>().loadParalelos();
-      context.read<EstudiantesProvider>().loadEstudiantes();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<ParalelosProvider>().loadParalelos();
+    //   context.read<EstudiantesProvider>().loadEstudiantes();
+    // });
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sistemapredictivoabandono/features/dashboard/presentation/widgets/sidebar_tile.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_router.dart';
@@ -40,7 +41,36 @@ class AppSidebar extends StatelessWidget {
   const AppSidebar({super.key, required this.selectedPath});
 
   final String selectedPath;
+  static const List<_SidebarEntry> _reportes = [
+    _SidebarEntry(
+      path: AppRoutes.homeReportes,
+      label: 'Reportes Disponibles',
+      icon: Icons.dashboard_outlined,
+      modulo: SidebarModulos.reportes,
+    ),
+    _SidebarEntry(
+      path: AppRoutes.homeHistorialReportes,
+      label: 'Historial de Reportes',
+      icon: Icons.people_outline,
+      modulo: SidebarModulos.reportes,
+    ),
+  ];
 
+  static const List<_SidebarEntry> _gestionDeUsuarios = [
+    _SidebarEntry(
+      path: AppRoutes.homePanel,
+      label: 'Reportes Disponibles',
+      icon: Icons.dashboard_outlined,
+      modulo: SidebarModulos.reportes,
+    ),
+    _SidebarEntry(
+      path: AppRoutes.homeEstudiantes,
+      label: 'Historial de Reportes',
+      icon: Icons.people_outline,
+      modulo: SidebarModulos.reportes,
+    ),
+  ];
+  //
   static const List<_SidebarEntry> _menuPrincipal = [
     _SidebarEntry(
       path: AppRoutes.homePanel,
@@ -68,18 +98,54 @@ class AppSidebar extends StatelessWidget {
     ),
   ];
 
-  static const List<_SidebarEntry> _gestionDatos = [
+  static const List<_SidebarEntry> _asistencia = [
     _SidebarEntry(
-      path: AppRoutes.homeImportarDatos,
-      label: 'Importar Datos',
-      icon: Icons.file_download_outlined,
+      path: AppRoutes.homeAsistencia,
+      label: 'Registro de Asistencia',
+      icon: Icons.checklist_outlined,
+      modulo: SidebarModulos.controlAsistencia,
+    ),
+  ];
+
+  static const List<_SidebarEntry> _gestionDatosDelEstudiante = [
+    _SidebarEntry(
+      path: AppRoutes.homeImportarDatosEstudiantes,
+      label: 'Importar datos para el registro de estudiantes',
+      icon: Icons.upload_file,
       modulo: SidebarModulos.gestionDatosEstudiantes,
     ),
     _SidebarEntry(
-      path: AppRoutes.homeParalelos,
-      label: 'Paralelos',
-      icon: Icons.groups_outlined,
+      path: AppRoutes.homeImportarDatos,
+      label: 'Importar datos para la prediccion',
+      icon: Icons.file_upload_outlined,
       modulo: SidebarModulos.gestionDatosEstudiantes,
+    ),
+    // _SidebarEntry(
+    //   path: AppRoutes.homeImportarDatos,
+    //   label: 'Importar Datos',
+    //   icon: Icons.file_download_outlined,
+    //   modulo: SidebarModulos.gestionDatosEstudiantes,
+    // ),
+    // _SidebarEntry(
+    //   path: AppRoutes.homeParalelos,
+    //   label: 'Paralelos',
+    //   icon: Icons.groups_outlined,
+    //   modulo: SidebarModulos.gestionDatosEstudiantes,
+    // ),
+  ];
+
+  static const List<_SidebarEntry> _visualizacionDePredicciones = [
+    _SidebarEntry(
+      path: AppRoutes.homePanel,
+      label: 'Panel Predctivo',
+      icon: Icons.show_chart_outlined,
+      modulo: SidebarModulos.visualizacionResultados,
+    ),
+    _SidebarEntry(
+      path: AppRoutes.homeEstudiantes,
+      label: 'Prediccion por Estudiante',
+      icon: Icons.school_outlined,
+      modulo: SidebarModulos.visualizacionResultados,
     ),
   ];
 
@@ -110,7 +176,7 @@ class AppSidebar extends StatelessWidget {
     for (final e in _menuPrincipal) {
       if (_tieneModulo(modulos, e.modulo)) return e.path;
     }
-    for (final e in _gestionDatos) {
+    for (final e in _gestionDatosDelEstudiante) {
       if (_tieneModulo(modulos, e.modulo)) return e.path;
     }
     for (final e in _administracion) {
@@ -124,6 +190,39 @@ class AppSidebar extends StatelessWidget {
     return Consumer<MeProvider>(
       builder: (context, meProvider, _) {
         final modulos = meProvider.modulos;
+        final asistencia = _asistencia
+            .where((e) => _tieneModulo(modulos, e.modulo))
+            .map(
+              (e) => MenuItem(
+                path: e.path,
+                label: e.label,
+                icon: e.icon,
+                isSelected: selectedPath == e.path,
+              ),
+            )
+            .toList();
+        final visualizacionDePredicciones = _visualizacionDePredicciones
+            .where((e) => _tieneModulo(modulos, e.modulo))
+            .map(
+              (e) => MenuItem(
+                path: e.path,
+                label: e.label,
+                icon: e.icon,
+                isSelected: selectedPath == e.path,
+              ),
+            )
+            .toList();
+        final reportesItems = _reportes
+            .where((e) => _tieneModulo(modulos, e.modulo))
+            .map(
+              (e) => MenuItem(
+                path: e.path,
+                label: e.label,
+                icon: e.icon,
+                isSelected: selectedPath == e.path,
+              ),
+            )
+            .toList();
         final menuPrincipalItems = _menuPrincipal
             .where((e) => _tieneModulo(modulos, e.modulo))
             .map(
@@ -139,7 +238,7 @@ class AppSidebar extends StatelessWidget {
               ),
             )
             .toList();
-        final gestionDatosItems = _gestionDatos
+        final gestionDatosDelEstudianteItems = _gestionDatosDelEstudiante
             .where((e) => _tieneModulo(modulos, e.modulo))
             .map(
               (e) => MenuItem(
@@ -172,21 +271,50 @@ class AppSidebar extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      if (menuPrincipalItems.isNotEmpty)
-                        MenuSection(
-                          title: 'MENÚ PRINCIPAL',
-                          items: menuPrincipalItems,
-                        ),
-                      if (gestionDatosItems.isNotEmpty)
-                        MenuSection(
-                          title: 'GESTIÓN DE DATOS',
-                          items: gestionDatosItems,
-                        ),
+                      // if (menuPrincipalItems.isNotEmpty)
+                      //   MenuSection(
+                      //     title: 'MENÚ PRINCIPAL',
+                      //     items: menuPrincipalItems,
+                      //   ),
                       if (administracionItems.isNotEmpty)
-                        MenuSection(
-                          title: 'ADMINISTRACIÓN',
-                          items: administracionItems,
+                        SidebarTile(item: administracionItems.first),
+                      // MenuSection(
+                      //   title: 'Gestion',
+                      //   items: menuPrincipalItems,
+                      // ),
+                      if (gestionDatosDelEstudianteItems.isNotEmpty)
+                        SidebarSectionExpansionTile(
+                          // title: 'GESTIÓN DE DATOS DEL ESTUDIANTE',
+                          title: 'Gestion de Datos del Estudiante',
+                          icon: Icons.dashboard_outlined,
+                          items: gestionDatosDelEstudianteItems,
                         ),
+                      if (visualizacionDePredicciones.isNotEmpty)
+                        SidebarSectionExpansionTile(
+                          // title: 'VISUALIZACIÓN DE PREDICCIONES',
+                          title: 'Visualizacion de Predicciones',
+                          icon: Icons.dashboard_outlined,
+                          items: visualizacionDePredicciones,
+                        ),
+                      if (asistencia.isNotEmpty)
+                        SidebarTile(item: asistencia.first),
+                      if (reportesItems.isNotEmpty)
+                        SidebarSectionExpansionTile(
+                          // title: 'REPORTES',
+                          title: 'Reportes',
+                          icon: Icons.dashboard_outlined,
+                          items: reportesItems,
+                        ),
+                      // if (gestionDatosItems.isNotEmpty)
+                      //   MenuSection(
+                      //     title: 'GESTIÓN DE DATOS',
+                      //     items: gestionDatosItems,
+                      //   ),
+                      // if (administracionItems.isNotEmpty)
+                      //   MenuSection(
+                      //     title: 'ADMINISTRACIÓN',
+                      //     items: administracionItems,
+                      //   ),
                     ],
                   ),
                 ),
