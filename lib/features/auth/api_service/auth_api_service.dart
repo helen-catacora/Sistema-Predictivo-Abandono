@@ -38,16 +38,22 @@ class AuthApiService {
 
   /// Inicia sesión con email y contraseña.
   /// POST /api/v1/auth/login
+  /// Incluye [recaptchaToken] cuando se usa reCAPTCHA v2 en web; el backend debe verificarlo.
   Future<LoginResponse> login({
     required String email,
     required String password,
+    String? recaptchaToken,
   }) async {
+    final body = <String, dynamic>{
+      'email': email,
+      'password': password,
+    };
+    if (recaptchaToken != null && recaptchaToken.isNotEmpty) {
+      body['recaptcha_token'] = recaptchaToken;
+    }
     final response = await _dio.post<Map<String, dynamic>>(
       ApiEndpoints.authLogin,
-      data: {
-        'email': email,
-        'password': password,
-      },
+      data: body,
     );
 
     if (response.data == null) {

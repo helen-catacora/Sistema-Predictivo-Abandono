@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/app_colors.dart';
 
 /// Panel derecho del login con el formulario de inicio de sesión.
-class LoginRightPanel extends StatelessWidget {
+class LoginRightPanel extends StatefulWidget {
   const LoginRightPanel({
     super.key,
     required this.formKey,
@@ -29,6 +29,11 @@ class LoginRightPanel extends StatelessWidget {
   final ValueChanged<bool?> onToggleRemember;
   final VoidCallback onLogin;
 
+  @override
+  State<LoginRightPanel> createState() => _LoginRightPanelState();
+}
+
+class _LoginRightPanelState extends State<LoginRightPanel> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -60,7 +65,7 @@ class LoginRightPanel extends StatelessWidget {
           child: SingleChildScrollView(
             child: SizedBox(
               child: Form(
-                key: formKey,
+                key: widget.formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -182,7 +187,7 @@ class LoginRightPanel extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
-                      controller: emailController,
+                      controller: widget.emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: 'usuario@emi.edu.bo',
@@ -224,8 +229,8 @@ class LoginRightPanel extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
-                      controller: passwordController,
-                      obscureText: obscurePassword,
+                      controller: widget.passwordController,
+                      obscureText: widget.obscurePassword,
                       decoration: InputDecoration(
                         hintText: '**********',
                         border: OutlineInputBorder(
@@ -236,7 +241,7 @@ class LoginRightPanel extends StatelessWidget {
                           vertical: 14,
                         ),
                         suffixIcon: IconButton(
-                          onPressed: onTogglePassword,
+                          onPressed: widget.onTogglePassword,
                           icon: Icon(
                             FontAwesomeIcons.solidEye,
                             color: Color(0xff94A3B8),
@@ -253,7 +258,7 @@ class LoginRightPanel extends StatelessWidget {
                     ),
                     const SizedBox(height: 28),
                     FilledButton(
-                      onPressed: isLoading ? null : onLogin,
+                      onPressed: widget.isLoading ? null : widget.onLogin,
                       style: FilledButton.styleFrom(
                         backgroundColor: Color(0xff001233),
                         foregroundColor: AppColors.white,
@@ -266,7 +271,7 @@ class LoginRightPanel extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (isLoading)
+                            if (widget.isLoading)
                               SizedBox(
                                 width: 20,
                                 height: 20,
@@ -286,7 +291,7 @@ class LoginRightPanel extends StatelessWidget {
                                   letterSpacing: 0,
                                 ),
                               ),
-                            if (!isLoading) ...[
+                            if (!widget.isLoading) ...[
                               const SizedBox(width: 8),
                               Icon(
                                 Icons.arrow_forward_outlined,
