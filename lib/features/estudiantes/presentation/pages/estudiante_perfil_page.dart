@@ -238,6 +238,8 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                                 children: [
                                   PerfilDesempenioSection(
                                     desempenio: p.desempenioAcademico,
+                                    mallaCurricular:
+                                        p.datosBasicos.mallaCurricular,
                                   ),
                                   const SizedBox(height: 16),
                                   PerfilAccionesSection(
@@ -278,6 +280,7 @@ class _EstudiantePerfilPageState extends State<EstudiantePerfilPage> {
                           const SizedBox(height: 16),
                           PerfilDesempenioSection(
                             desempenio: p.desempenioAcademico,
+                            mallaCurricular: p.datosBasicos.mallaCurricular,
                           ),
                           const SizedBox(height: 16),
                           PerfilAccionesSection(

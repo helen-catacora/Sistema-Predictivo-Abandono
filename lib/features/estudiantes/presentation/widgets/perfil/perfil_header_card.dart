@@ -16,9 +16,9 @@ class PerfilHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final riesgoAlto = nivelRiesgo.toUpperCase().contains('ALTO') ||
+    final riesgoAlto =
+        nivelRiesgo.toUpperCase().contains('ALTO') ||
         nivelRiesgo.toUpperCase().contains('CRITICO');
-    
 
     return Container(
       width: double.infinity,
@@ -47,21 +47,25 @@ class PerfilHeaderCard extends StatelessWidget {
                 datosBasicos.codigoEstudiante,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
-                  fontSize: 14,
+                  fontSize: 18,
                 ),
               ),
-              if (datosBasicos.carrera != null && datosBasicos.carrera!.isNotEmpty) ...[
+              if (datosBasicos.carrera != null &&
+                  datosBasicos.carrera!.isNotEmpty) ...[
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.school_outlined,
-                        size: 18, color: Colors.white.withValues(alpha: 0.9)),
+                    Icon(
+                      Icons.school_outlined,
+                      size: 18,
+                      color: Colors.white.withValues(alpha: 0.9),
+                    ),
                     const SizedBox(width: 6),
                     Text(
                       datosBasicos.carrera!,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
-                        fontSize: 14,
+                        fontSize: 18,
                       ),
                     ),
                   ],
@@ -71,14 +75,17 @@ class PerfilHeaderCard extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.groups_outlined,
-                        size: 18, color: Colors.white.withValues(alpha: 0.9)),
+                    Icon(
+                      Icons.groups_outlined,
+                      size: 18,
+                      color: Colors.white.withValues(alpha: 0.9),
+                    ),
                     const SizedBox(width: 6),
                     Text(
                       'Paralelo: ${datosBasicos.paralelo!.nombre}',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.9),
-                        fontSize: 14,
+                        fontSize: 18,
                       ),
                     ),
                   ],
@@ -91,7 +98,9 @@ class PerfilHeaderCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: riesgoAlto ? Colors.red.shade700 : Colors.orange.shade700,
+                color: riesgoAlto
+                    ? Colors.red.shade700
+                    : Colors.orange.shade700,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

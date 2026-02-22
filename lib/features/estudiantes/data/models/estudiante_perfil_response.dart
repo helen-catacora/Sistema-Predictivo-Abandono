@@ -19,23 +19,28 @@ class EstudiantePerfilResponse {
   factory EstudiantePerfilResponse.fromJson(Map<String, dynamic> json) {
     return EstudiantePerfilResponse(
       datosBasicos: DatosBasicosPerfil.fromJson(
-          json['datos_basicos'] as Map<String, dynamic>? ?? {}),
+        json['datos_basicos'] as Map<String, dynamic>? ?? {},
+      ),
       datosSociodemograficos: json['datos_sociodemograficos'] != null
           ? DatosSociodemograficosPerfil.fromJson(
-              json['datos_sociodemograficos'] as Map<String, dynamic>)
+              json['datos_sociodemograficos'] as Map<String, dynamic>,
+            )
           : null,
       desempenioAcademico: json['desempenio_academico'] != null
           ? DesempenioAcademicoPerfil.fromJson(
-              json['desempenio_academico'] as Map<String, dynamic>)
+              json['desempenio_academico'] as Map<String, dynamic>,
+            )
           : null,
       riesgoYPrediccion: json['riesgo_y_prediccion'] != null
           ? RiesgoYPrediccionPerfil.fromJson(
-              json['riesgo_y_prediccion'] as Map<String, dynamic>)
+              json['riesgo_y_prediccion'] as Map<String, dynamic>,
+            )
           : null,
       alertas: json['alertas'] != null
           ? AlertasPerfil.fromJson(json['alertas'] as Map<String, dynamic>)
           : null,
-      acciones: (json['acciones'] as List<dynamic>?)
+      acciones:
+          (json['acciones'] as List<dynamic>?)
               ?.map((e) => AccionPerfil.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -48,6 +53,7 @@ class DatosBasicosPerfil {
     required this.id,
     required this.codigoEstudiante,
     required this.nombreCompleto,
+    required this.mallaCurricular,
     this.edad,
     this.genero,
     this.carrera,
@@ -61,6 +67,7 @@ class DatosBasicosPerfil {
   final String? genero;
   final String? carrera;
   final ParaleloPerfil? paralelo;
+  final String mallaCurricular;
 
   factory DatosBasicosPerfil.fromJson(Map<String, dynamic> json) {
     return DatosBasicosPerfil(
@@ -73,6 +80,8 @@ class DatosBasicosPerfil {
       paralelo: json['paralelo'] != null
           ? ParaleloPerfil.fromJson(json['paralelo'] as Map<String, dynamic>)
           : null,
+      mallaCurricular:
+          json['nombre_malla'] as String? ?? 'SIN MALLA CURRICULAR',
     );
   }
 }
@@ -166,11 +175,13 @@ class DesempenioAcademicoPerfil {
     return DesempenioAcademicoPerfil(
       porcentajeAsistenciaGeneral:
           (json['porcentaje_asistencia_general'] as num?)?.toDouble() ?? 0,
-      faltasConsecutivas:
-          (json['faltas_consecutivas'] as num?)?.toInt() ?? 0,
-      materias: (json['materias'] as List<dynamic>?)
-              ?.map((e) =>
-                  MateriaDesempenioPerfil.fromJson(e as Map<String, dynamic>))
+      faltasConsecutivas: (json['faltas_consecutivas'] as num?)?.toInt() ?? 0,
+      materias:
+          (json['materias'] as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    MateriaDesempenioPerfil.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
     );
@@ -201,7 +212,8 @@ class MateriaDesempenioPerfil {
           (json['porcentaje_asistencia'] as num?)?.toDouble() ?? 0,
       asistencias: json['asistencias'] != null
           ? AsistenciasCountPerfil.fromJson(
-              json['asistencias'] as Map<String, dynamic>)
+              json['asistencias'] as Map<String, dynamic>,
+            )
           : null,
     );
   }
@@ -228,10 +240,7 @@ class AsistenciasCountPerfil {
 }
 
 class RiesgoYPrediccionPerfil {
-  RiesgoYPrediccionPerfil({
-    this.prediccionActual,
-    this.historial = const [],
-  });
+  RiesgoYPrediccionPerfil({this.prediccionActual, this.historial = const []});
 
   final PrediccionActualPerfil? prediccionActual;
   final List<HistorialPrediccionPerfil> historial;
@@ -240,11 +249,16 @@ class RiesgoYPrediccionPerfil {
     return RiesgoYPrediccionPerfil(
       prediccionActual: json['prediccion_actual'] != null
           ? PrediccionActualPerfil.fromJson(
-              json['prediccion_actual'] as Map<String, dynamic>)
+              json['prediccion_actual'] as Map<String, dynamic>,
+            )
           : null,
-      historial: (json['historial'] as List<dynamic>?)
-              ?.map((e) => HistorialPrediccionPerfil.fromJson(
-                  e as Map<String, dynamic>))
+      historial:
+          (json['historial'] as List<dynamic>?)
+              ?.map(
+                (e) => HistorialPrediccionPerfil.fromJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
               .toList() ??
           [],
     );
@@ -315,24 +329,21 @@ class HistorialPrediccionPerfil {
 }
 
 class AlertasPerfil {
-  AlertasPerfil({
-    this.activas = const [],
-    this.historial = const [],
-  });
+  AlertasPerfil({this.activas = const [], this.historial = const []});
 
   final List<AlertaItemPerfil> activas;
   final List<AlertaItemPerfil> historial;
 
   factory AlertasPerfil.fromJson(Map<String, dynamic> json) {
     return AlertasPerfil(
-      activas: (json['activas'] as List<dynamic>?)
-              ?.map((e) =>
-                  AlertaItemPerfil.fromJson(e as Map<String, dynamic>))
+      activas:
+          (json['activas'] as List<dynamic>?)
+              ?.map((e) => AlertaItemPerfil.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      historial: (json['historial'] as List<dynamic>?)
-              ?.map((e) =>
-                  AlertaItemPerfil.fromJson(e as Map<String, dynamic>))
+      historial:
+          (json['historial'] as List<dynamic>?)
+              ?.map((e) => AlertaItemPerfil.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -375,8 +386,7 @@ class AlertaItemPerfil {
       estado: json['estado'] as String?,
       faltasConsecutivas: (json['faltas_consecutivas'] as num?)?.toInt(),
       fechaResolucion: json['fecha_resolucion'] as String?,
-      observacionResolucion:
-          json['observacion_resolucion'] as String?,
+      observacionResolucion: json['observacion_resolucion'] as String?,
     );
   }
 }

@@ -15,7 +15,8 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
   final DatosSociodemograficosPerfil? datos;
   final DatosBasicosPerfil datosBasicos;
 
-  static String _v(dynamic v) => v != null && v.toString().isNotEmpty ? v.toString() : '-';
+  static String _v(dynamic v) =>
+      v != null && v.toString().isNotEmpty ? v.toString() : '-';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,12 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _row('EDAD', datosBasicos.edad != null ? '${datosBasicos.edad} años' : _v(datos?.fechaNacimiento)),
+                  _row(
+                    'EDAD',
+                    datosBasicos.edad != null
+                        ? '${datosBasicos.edad} años'
+                        : _v(datos?.fechaNacimiento),
+                  ),
                   const SizedBox(height: 10),
                   _row('TIPO DE COLEGIO', _v(datos?.tipoColegio)),
                   const SizedBox(height: 10),
@@ -53,7 +59,10 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
                   const SizedBox(height: 10),
                   _row('CON QUIÉN VIVE', _v(datos?.conQuienVive)),
                   const SizedBox(height: 10),
-                  _row('ESTRATO SOCIOECONÓMICO', _v(datos?.estratoSocioeconomico)),
+                  _row(
+                    'ESTRATO SOCIOECONÓMICO',
+                    _v(datos?.estratoSocioeconomico),
+                  ),
                 ],
               ),
             ),
@@ -71,7 +80,7 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
           label,
           style: TextStyle(
             color: Colors.grey.shade600,
-            fontSize: 11,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -80,7 +89,7 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
           value,
           style: const TextStyle(
             color: AppColors.navyMedium,
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
