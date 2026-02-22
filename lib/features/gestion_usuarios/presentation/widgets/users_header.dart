@@ -29,17 +29,17 @@ class UsersHeader extends StatelessWidget {
                 letterSpacing: 0,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              'Control de accesos y roles institucionales para el sistema de predicción de abandono estudiantil.',
-              style: GoogleFonts.inter(
-                color: Color(0xff64748B),
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                height: 28 / 18,
-                letterSpacing: 0,
-              ),
-            ),
+            // const SizedBox(height: 4),
+            // Text(
+            //   'Control de accesos y roles institucionales para el sistema de predicción de abandono estudiantil.',
+            //   style: GoogleFonts.inter(
+            //     color: Color(0xff64748B),
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.w400,
+            //     height: 28 / 18,
+            //     letterSpacing: 0,
+            //   ),
+            // ),
           ],
         ),
         Spacer(),

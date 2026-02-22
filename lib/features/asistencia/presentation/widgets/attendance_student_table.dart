@@ -94,7 +94,7 @@ class AttendanceStudentTable extends StatelessWidget {
               'Lista de Estudiantes Detallada',
               style: GoogleFonts.inter(
                 color: AppColors.black334155,
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.w700,
                 height: 24 / 16,
                 letterSpacing: 0,
@@ -271,44 +271,11 @@ class AttendanceStudentTable extends StatelessWidget {
                               ),
                             ),
                             DataCell(
-                              e.observacion.isNotEmpty
-                                  ? Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.accentYellow
-                                            .withValues(alpha: 0.3),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.chat_bubble_outline,
-                                            size: 16,
-                                            color: Colors.grey.shade700,
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            e.observacion,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey.shade800,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.chat_bubble_outline,
-                                        size: 20,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                    ),
+                              _ObservacionCell(
+                                observacion: e.observacion,
+                                isJustificado: status == AttendanceStatus.justificado,
+                                onChanged: (v) => provider.updateObservacion(i, v),
+                              ),
                             ),
                           ],
                         );
@@ -321,6 +288,112 @@ class AttendanceStudentTable extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Celda de observación: cuando es justificado muestra TextField, si no icono o texto.
+class _ObservacionCell extends StatefulWidget {
+  const _ObservacionCell({
+    required this.observacion,
+    required this.isJustificado,
+    required this.onChanged,
+  });
+
+  final String observacion;
+  final bool isJustificado;
+  final ValueChanged<String> onChanged;
+
+  @override
+  State<_ObservacionCell> createState() => _ObservacionCellState();
+}
+
+class _ObservacionCellState extends State<_ObservacionCell> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.observacion);
+  }
+
+  @override
+  void didUpdateWidget(_ObservacionCell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.observacion != _controller.text) {
+      _controller.text = widget.observacion;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isJustificado) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.chat_bubble_outline,
+            size: 18,
+            color: Colors.grey.shade700,
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 180,
+            child: TextField(
+              controller: _controller,
+              onChanged: widget.onChanged,
+              decoration: InputDecoration(
+                hintText: 'Indique motivo...',
+                hintStyle: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade500,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
+                isDense: true,
+              ),
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+        ],
+      );
+    }
+    if (widget.observacion.isNotEmpty) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.accentYellow.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.chat_bubble_outline, size: 16, color: Colors.grey.shade700),
+            const SizedBox(width: 6),
+            Text(
+              widget.observacion,
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
+            ),
+          ],
+        ),
+      );
+    }
+    return Icon(
+      Icons.chat_bubble_outline,
+      size: 20,
+      color: Colors.grey.shade400,
     );
   }
 }

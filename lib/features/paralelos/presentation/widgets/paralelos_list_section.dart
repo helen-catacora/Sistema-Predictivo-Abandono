@@ -7,6 +7,7 @@ import '../../../asistencia/data/models/paralelo_item.dart';
 import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import 'paralelo_table_row.dart';
 import 'paralelos_asignar_encargado_dialog.dart';
+import 'paralelos_crear_dialog.dart';
 import 'paralelos_helpers.dart';
 
 /// Sección "Listado de Paralelos": búsqueda, filtro y tabla.
@@ -124,6 +125,23 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.darkBlue1E293B,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        FilledButton.icon(
+                          onPressed: () => showCrearParaleloDialog(context),
+                          icon: const Icon(Icons.add, size: 20),
+                          label: const Text('Nuevo paralelo'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.green16A34A,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            textStyle: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),

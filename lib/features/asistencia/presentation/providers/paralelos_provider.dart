@@ -30,6 +30,8 @@ class ParalelosProvider extends ChangeNotifier {
   bool get hasError => _status == ParalelosStatus.error;
   bool _isAssigning = false;
   bool get isAssigning => _isAssigning;
+  bool _isCreating = false;
+  bool get isCreating => _isCreating;
 
   /// Carga los paralelos desde el backend.
   Future<void> loadParalelos() async {
@@ -81,6 +83,45 @@ class ParalelosProvider extends ChangeNotifier {
         msg ??= e.message;
       }
       _errorMessage = msg ?? 'Error al asignar encargado';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Crea un nuevo paralelo y recarga la lista.
+  Future<bool> createParalelo({
+    required String nombre,
+    required int areaId,
+    required int semestreId,
+    required int encargadoId,
+  }) async {
+    _isCreating = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _repository.createParalelo(
+        nombre: nombre.trim(),
+        areaId: areaId,
+        semestreId: semestreId,
+        encargadoId: encargadoId,
+      );
+      await loadParalelos();
+      _isCreating = false;
+      notifyListeners();
+      return true;
+    } catch (e, st) {
+      debugPrint('ParalelosProvider.createParalelo error: $e\n$st');
+      _isCreating = false;
+      String? msg;
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map) {
+          msg = (data['detail'] ?? data['message'])?.toString();
+        }
+        msg ??= e.message;
+      }
+      _errorMessage = msg ?? 'Error al crear paralelo';
       notifyListeners();
       return false;
     }
