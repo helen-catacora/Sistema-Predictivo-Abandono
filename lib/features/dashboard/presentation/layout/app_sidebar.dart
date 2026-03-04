@@ -138,7 +138,7 @@ class AppSidebar extends StatelessWidget {
   static const List<_SidebarEntry> _visualizacionDePredicciones = [
     _SidebarEntry(
       path: AppRoutes.homePanel,
-      label: 'Panel Predctivo',
+      label: 'Panel Predictivo',
       icon: Icons.show_chart_outlined,
       modulo: SidebarModulos.visualizacionResultados,
     ),
@@ -312,7 +312,7 @@ class AppSidebar extends StatelessWidget {
                       if (gestionDatosDelEstudianteItems.isNotEmpty)
                         SidebarSectionExpansionTile(
                           // title: 'GESTIÓN DE DATOS DEL ESTUDIANTE',
-                          title: 'Gestion de Datos del Estudiante',
+                          title: 'Gestion de Datos de Estudiantes',
                           icon: Icons.dashboard_outlined,
                           items: gestionDatosDelEstudianteItems,
                         ),
@@ -335,7 +335,7 @@ class AppSidebar extends StatelessWidget {
 
                       if (configuracionAcademica.isNotEmpty)
                         SidebarSectionExpansionTile(
-                          title: 'Configuración Académica',
+                          title: 'Gestión Académica',
                           icon: Icons.dashboard_outlined,
                           items: configuracionAcademica,
                         ),
