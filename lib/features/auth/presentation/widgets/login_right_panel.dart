@@ -48,9 +48,9 @@ class _LoginRightPanelState extends State<LoginRightPanel> {
       ),
       child: Center(
         child: Container(
-          width: size.width * 0.4,
+          width: size.width * 0.35,
           height: size.height * 0.9,
-          padding: EdgeInsets.all(24),
+          //padding: EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(18),
@@ -70,101 +70,65 @@ class _LoginRightPanelState extends State<LoginRightPanel> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(
-                      child: Stack(
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xff001233),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                        ),
+                      padding: EdgeInsets.all(24),
+                      child: Column(
                         children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ClipRRect(
+                          ClipRRect(
                               borderRadius: BorderRadius.circular(999),
                               child: Image.network(
                                 'https://tse1.mm.bing.net/th/id/OIP.rWIa57aBTxT20Yxk3PFouAHaHa?cb=defcache2defcache=1&rs=1&pid=ImgDetMain&o=7&rm=3',
-                                width: 30,
-                                height: 30,
+                                width: 100,
+                                height: 100,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      // child: Container(
-                      //   width: 80,
-                      //   height: 80,
-                      //   decoration: BoxDecoration(
-                      //     color: AppColors.gray002855.withValues(alpha: 0.1),
-                      //     borderRadius: BorderRadius.circular(16),
-                      //   ),
-                      //   child: Icon(
-                      //     FontAwesomeIcons.lock,
-                      //     size: 30,
-                      //     color: AppColors.gray002855,
-                      //   ),
-                      // ),
-                    ),
-                    const SizedBox(height: 24),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text:
-                            'Bienvenido al Sistema Predictivo de Abandono Estudiantil de ',
-
-                        style: GoogleFonts.inter(
-                          color: AppColors.darkBlue1E293B,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800,
-                          height: 45 / 36,
-                          letterSpacing: 0,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Ciencias Basicas',
-
+                          SizedBox(height: 12,),
+                          Text('Bienvenido al Sistema Predictivo de Abandono Estudiantil',
                             style: GoogleFonts.inter(
-                              color: AppColors.yellowFFD60A,
-                              fontSize: 36,
-                              fontWeight: FontWeight.w800,
-                              height: 45 / 36,
-                              letterSpacing: 0,
-                              shadows: [
-                                // Estas sombras crean el efecto de borde azul
-                                Shadow(
-                                  offset: Offset(-1.5, -1.5),
-                                  color: Color(0xff214d99),
-                                ),
-                                Shadow(
-                                  offset: Offset(1.5, -1.5),
-                                  color: Color(0xff214d99),
-                                ),
-                                Shadow(
-                                  offset: Offset(1.5, 1.5),
-                                  color: Color(0xff214d99),
-                                ),
-                                Shadow(
-                                  offset: Offset(-1.5, 1.5),
-                                  color: Color(0xff214d99),
-                                ),
-                              ],
+                            color:Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            height: 45 / 36,
+                            letterSpacing: 0,
                             ),
+                            textAlign: TextAlign.center,
                           ),
+                          SizedBox(height: 12,),
+                          Text('Ciencias Basicas - UALP',
+                            style: GoogleFonts.inter(
+                            color:Color.fromARGB(255, 222, 230, 255),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            height: 45 / 36,
+                            letterSpacing: 0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 12,),
                         ],
+                        
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
+                                        
+                    Padding(padding: EdgeInsets.all(24), 
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                       'Ingrese sus credenciales para acceder al sistema',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         color: Color(0xff64748B),
-                        fontSize: 16,
+                        fontSize: 18,
                         height: 24 / 16,
                         letterSpacing: 0,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 20,),
                     Row(
                       children: [
                         Icon(
@@ -344,22 +308,8 @@ class _LoginRightPanelState extends State<LoginRightPanel> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    // Text.rich(
-                    //   TextSpan(
-                    //     text: '¿Necesita ayuda? ',
-                    //     style: TextStyle(color: AppColors.grayDark, fontSize: 14),
-                    //     children: [
-                    //       TextSpan(
-                    //         text: 'Contacte a Soporte Técnico',
-                    //         style: const TextStyle(
-                    //           color: AppColors.navyMedium,
-                    //           fontWeight: FontWeight.w600,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   textAlign: TextAlign.center,
-                    // ),
+                      ],
+                    ) ,)
                   ],
                 ),
               ),

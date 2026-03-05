@@ -29,14 +29,42 @@ class _RecaptchaDialogState extends State<RecaptchaDialog> {
   void initState() {
     super.initState();
 
-    ui.platformViewRegistry.registerViewFactory(_viewId, (int viewId) {
-      final iframe =
-          web.document.createElement('iframe') as web.HTMLIFrameElement;
-      iframe.style.height = '100%';
-      iframe.style.width = '100%';
+    // ui.platformViewRegistry.registerViewFactory(_viewId, (int viewId) {
+    //   final iframe =
+    //       web.document.createElement('iframe') as web.HTMLIFrameElement;
+    //   iframe.style.height = '100%';
+    //   iframe.style.width = '100%';
+    //   iframe.src = '/html/recaptcha.html';
+    //   iframe.style.border = 'none';
+    //   return iframe;
+    // });
+ui.platformViewRegistry.registerViewFactory(_viewId, (int viewId) {
+      // 1. Contenedor div
+      final container = web.document.createElement('div') as web.HTMLDivElement;
+      container.style.display = 'flex';
+      container.style.justifyContent = 'center';
+      // Cambiamos a flex-start para que el checkbox quede arriba y el desafío se despliegue hacia abajo
+      container.style.alignItems = 'flex-start'; 
+      container.style.height = '100%';
+      container.style.width = '100%';
+      container.style.overflow = 'hidden'; // Bloquea scroll en el contenedor
+
+      // 2. Iframe
+      final iframe = web.document.createElement('iframe') as web.HTMLIFrameElement;
+      
+      // Le damos 100% para que use los 500px de tu SizedBox y no corte el desafío de imágenes
+      iframe.style.height = '100%'; 
+      iframe.style.width = '100%'; 
       iframe.src = '/html/recaptcha.html';
       iframe.style.border = 'none';
-      return iframe;
+      
+      // 3. Ocultar scrollbars obligatoriamente
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('scrolling', 'no');
+
+      container.append(iframe);
+      
+      return container;
     });
 
     _messageSubscription = web.EventStreamProviders.messageEvent
@@ -131,14 +159,16 @@ class _RecaptchaDialogState extends State<RecaptchaDialog> {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey.shade200),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: SizedBox(
-                  height: 500,
-                  width: double.infinity,
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: HtmlElementView(viewType: _viewId),
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 500,
+                    width: double.infinity,
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: HtmlElementView(viewType: _viewId),
+                    ),
                   ),
                 ),
               ),

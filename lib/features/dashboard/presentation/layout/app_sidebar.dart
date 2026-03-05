@@ -325,19 +325,20 @@ class AppSidebar extends StatelessWidget {
                         ),
                       if (asistencia.isNotEmpty)
                         SidebarTile(item: asistencia.first),
-                      if (reportesItems.isNotEmpty)
-                        SidebarSectionExpansionTile(
-                          // title: 'REPORTES',
-                          title: 'Reportes',
-                          icon: Icons.dashboard_outlined,
-                          items: reportesItems,
-                        ),
+                      
 
                       if (configuracionAcademica.isNotEmpty)
                         SidebarSectionExpansionTile(
                           title: 'Gestión Académica',
                           icon: Icons.dashboard_outlined,
                           items: configuracionAcademica,
+                        ),
+                        if (reportesItems.isNotEmpty)
+                        SidebarSectionExpansionTile(
+                          // title: 'REPORTES',
+                          title: 'Reportes',
+                          icon: Icons.dashboard_outlined,
+                          items: reportesItems,
                         ),
                       // if (gestionDatosItems.isNotEmpty)
                       //   MenuSection(
