@@ -8,7 +8,7 @@ import '../../../../shared/widgets/refresh_button.dart';
 import '../../../../shared/widgets/screen_description_card.dart';
 import '../providers/entrenamiento_provider.dart';
 import '../widgets/entrenamiento_file_selector.dart';
-import '../widgets/entrenamiento_historial_table.dart';
+//import '../widgets/entrenamiento_historial_table.dart';
 import '../widgets/entrenamiento_instructions_panel.dart';
 import '../widgets/entrenamiento_progress_card.dart';
 import '../widgets/entrenamiento_summary_cards.dart';
