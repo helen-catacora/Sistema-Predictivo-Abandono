@@ -12,6 +12,150 @@ import '../widgets/menu_section.dart';
 import '../widgets/sidebar_brand.dart';
 import '../widgets/sidebar_logout_button.dart';
 
+const List<_SidebarEntry> _reportes = [
+  _SidebarEntry(
+    path: AppRoutes.homeReportes,
+    label: 'Reportes Disponibles',
+    icon: Icons.dashboard_outlined,
+    modulo: SidebarModulos.reportes,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeHistorialReportes,
+    label: 'Historial de Reportes',
+    icon: Icons.people_outline,
+    modulo: SidebarModulos.reportes,
+  ),
+];
+
+// static const List<_SidebarEntry> _gestionDeUsuarios = [
+//   _SidebarEntry(
+//     path: AppRoutes.homePanel,
+//     label: 'Reportes Disponibles',
+//     icon: Icons.dashboard_outlined,
+//     modulo: SidebarModulos.reportes,
+//   ),
+//   _SidebarEntry(
+//     path: AppRoutes.homeEstudiantes,
+//     label: 'Historial de Reportes',
+//     icon: Icons.people_outline,
+//     modulo: SidebarModulos.reportes,
+//   ),
+// ];
+//
+const List<_SidebarEntry> _menuPrincipal = [
+  _SidebarEntry(
+    path: AppRoutes.homePanel,
+    label: 'Panel Principal',
+    icon: Icons.dashboard_outlined,
+    modulo: SidebarModulos.visualizacionResultados,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeEstudiantes,
+    label: 'Estudiantes',
+    icon: Icons.people_outline,
+    modulo: SidebarModulos.visualizacionResultados,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeAsistencia,
+    label: 'Asistencia',
+    icon: Icons.checklist_outlined,
+    modulo: SidebarModulos.controlAsistencia,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeReportes,
+    label: 'Reportes',
+    icon: Icons.assessment_outlined,
+    modulo: SidebarModulos.reportes,
+  ),
+];
+
+const List<_SidebarEntry> _asistencia = [
+  _SidebarEntry(
+    path: AppRoutes.homeAsistencia,
+    label: 'Registro de Asistencia',
+    icon: Icons.checklist_outlined,
+    modulo: SidebarModulos.controlAsistencia,
+  ),
+];
+
+const List<_SidebarEntry> _gestionDatosDelEstudiante = [
+  _SidebarEntry(
+    path: AppRoutes.homeImportarDatosEstudiantes,
+    label: 'Importar Datos para el Registro de Estudiantes',
+    icon: Icons.upload_file,
+    modulo: SidebarModulos.gestionDatosEstudiantes,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeImportarDatos,
+    label: 'Importar Datos para la Prediccion',
+    icon: Icons.file_upload_outlined,
+    modulo: SidebarModulos.gestionDatosEstudiantes,
+  ),
+  // _SidebarEntry(
+  //   path: AppRoutes.homeImportarDatos,
+  //   label: 'Importar Datos',
+  //   icon: Icons.file_download_outlined,
+  //   modulo: SidebarModulos.gestionDatosEstudiantes,
+  // ),
+  // _SidebarEntry(
+  //   path: AppRoutes.homeParalelos,
+  //   label: 'Paralelos',
+  //   icon: Icons.groups_outlined,
+  //   modulo: SidebarModulos.gestionDatosEstudiantes,
+  // ),
+];
+
+const List<_SidebarEntry> _visualizacionDePredicciones = [
+  _SidebarEntry(
+    path: AppRoutes.homeEstudiantes,
+    label: 'Prediccion por Estudiante',
+    icon: Icons.school_outlined,
+    modulo: SidebarModulos.visualizacionResultados,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeEntrenamientoModelo,
+    label: 'Entrenamiento del Modelo',
+    icon: Icons.model_training,
+    modulo: SidebarModulos.visualizacionResultados,
+  ),
+];
+
+const List<_SidebarEntry> _configuracionAcademica = [
+  _SidebarEntry(
+    path: AppRoutes.homeImportarDatosMallaCurricular,
+    label: 'Importar Malla Curricular',
+    icon: Icons.file_upload_outlined,
+    modulo: SidebarModulos.configuracionAcademica,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homeParalelos,
+    label: 'Configuración de Paralelos',
+    icon: Icons.file_upload_outlined,
+    modulo: SidebarModulos.configuracionAcademica,
+  ),
+];
+
+const List<_SidebarEntry> _administracion = [
+  _SidebarEntry(
+    path: AppRoutes.homeGestionUsuarios,
+    label: 'Gestión de Usuarios',
+    icon: Icons.admin_panel_settings_outlined,
+    modulo: SidebarModulos.gestionUsuarios,
+  ),
+  // _SidebarEntry(
+  //   path: AppRoutes.homeMiPerfil,
+  //   label: 'Mi Perfil',
+  //   icon: Icons.person_outline,
+  //   modulo: null, // siempre visible
+  // ),
+];
+
+bool _tieneModulo(List<String> modulos, String? modulo) {
+  if (modulo == null || modulo.isEmpty) return true;
+  final m = modulo.trim().toLowerCase();
+  return modulos.any((e) => e.trim().toLowerCase() == m);
+}
+
 /// Nombres de módulos que devuelve GET /me (coincidir con el backend).
 abstract class SidebarModulos {
   static const String visualizacionResultados = 'Predicciones';
@@ -56,6 +200,18 @@ class AppSidebar extends StatefulWidget {
 
   @override
   State<AppSidebar> createState() => _AppSidebarState();
+  static String firstAvailablePath(List<String> modulos) {
+    for (final e in _menuPrincipal) {
+      if (_tieneModulo(modulos, e.modulo)) return e.path;
+    }
+    for (final e in _gestionDatosDelEstudiante) {
+      if (_tieneModulo(modulos, e.modulo)) return e.path;
+    }
+    for (final e in _administracion) {
+      if (_tieneModulo(modulos, e.modulo)) return e.path;
+    }
+    return AppRoutes.homeMiPerfil;
+  }
 }
 
 class _AppSidebarState extends State<AppSidebar> {
@@ -84,164 +240,8 @@ class _AppSidebarState extends State<AppSidebar> {
     }
   }
 
-  static const List<_SidebarEntry> _reportes = [
-    _SidebarEntry(
-      path: AppRoutes.homeReportes,
-      label: 'Reportes Disponibles',
-      icon: Icons.dashboard_outlined,
-      modulo: SidebarModulos.reportes,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeHistorialReportes,
-      label: 'Historial de Reportes',
-      icon: Icons.people_outline,
-      modulo: SidebarModulos.reportes,
-    ),
-  ];
-
-  // static const List<_SidebarEntry> _gestionDeUsuarios = [
-  //   _SidebarEntry(
-  //     path: AppRoutes.homePanel,
-  //     label: 'Reportes Disponibles',
-  //     icon: Icons.dashboard_outlined,
-  //     modulo: SidebarModulos.reportes,
-  //   ),
-  //   _SidebarEntry(
-  //     path: AppRoutes.homeEstudiantes,
-  //     label: 'Historial de Reportes',
-  //     icon: Icons.people_outline,
-  //     modulo: SidebarModulos.reportes,
-  //   ),
-  // ];
-  //
-  static const List<_SidebarEntry> _menuPrincipal = [
-    _SidebarEntry(
-      path: AppRoutes.homePanel,
-      label: 'Panel Principal',
-      icon: Icons.dashboard_outlined,
-      modulo: SidebarModulos.visualizacionResultados,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeEstudiantes,
-      label: 'Estudiantes',
-      icon: Icons.people_outline,
-      modulo: SidebarModulos.visualizacionResultados,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeAsistencia,
-      label: 'Asistencia',
-      icon: Icons.checklist_outlined,
-      modulo: SidebarModulos.controlAsistencia,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeReportes,
-      label: 'Reportes',
-      icon: Icons.assessment_outlined,
-      modulo: SidebarModulos.reportes,
-    ),
-  ];
-
-  static const List<_SidebarEntry> _asistencia = [
-    _SidebarEntry(
-      path: AppRoutes.homeAsistencia,
-      label: 'Registro de Asistencia',
-      icon: Icons.checklist_outlined,
-      modulo: SidebarModulos.controlAsistencia,
-    ),
-  ];
-
-  static const List<_SidebarEntry> _gestionDatosDelEstudiante = [
-    _SidebarEntry(
-      path: AppRoutes.homeImportarDatosEstudiantes,
-      label: 'Importar Datos para el Registro de Estudiantes',
-      icon: Icons.upload_file,
-      modulo: SidebarModulos.gestionDatosEstudiantes,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeImportarDatos,
-      label: 'Importar Datos para la Prediccion',
-      icon: Icons.file_upload_outlined,
-      modulo: SidebarModulos.gestionDatosEstudiantes,
-    ),
-    // _SidebarEntry(
-    //   path: AppRoutes.homeImportarDatos,
-    //   label: 'Importar Datos',
-    //   icon: Icons.file_download_outlined,
-    //   modulo: SidebarModulos.gestionDatosEstudiantes,
-    // ),
-    // _SidebarEntry(
-    //   path: AppRoutes.homeParalelos,
-    //   label: 'Paralelos',
-    //   icon: Icons.groups_outlined,
-    //   modulo: SidebarModulos.gestionDatosEstudiantes,
-    // ),
-  ];
-
-  static const List<_SidebarEntry> _visualizacionDePredicciones = [
-    _SidebarEntry(
-      path: AppRoutes.homeEstudiantes,
-      label: 'Prediccion por Estudiante',
-      icon: Icons.school_outlined,
-      modulo: SidebarModulos.visualizacionResultados,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeEntrenamientoModelo,
-      label: 'Entrenamiento del Modelo',
-      icon: Icons.model_training,
-      modulo: SidebarModulos.visualizacionResultados,
-    ),
-  ];
-
-  static const List<_SidebarEntry> _configuracionAcademica = [
-    _SidebarEntry(
-      path: AppRoutes.homeImportarDatosMallaCurricular,
-      label: 'Importar Malla Curricular',
-      icon: Icons.file_upload_outlined,
-      modulo: SidebarModulos.configuracionAcademica,
-    ),
-    _SidebarEntry(
-      path: AppRoutes.homeParalelos,
-      label: 'Configuración de Paralelos',
-      icon: Icons.file_upload_outlined,
-      modulo: SidebarModulos.configuracionAcademica,
-    ),
-  ];
-
-  static const List<_SidebarEntry> _administracion = [
-    _SidebarEntry(
-      path: AppRoutes.homeGestionUsuarios,
-      label: 'Gestión de Usuarios',
-      icon: Icons.admin_panel_settings_outlined,
-      modulo: SidebarModulos.gestionUsuarios,
-    ),
-    // _SidebarEntry(
-    //   path: AppRoutes.homeMiPerfil,
-    //   label: 'Mi Perfil',
-    //   icon: Icons.person_outline,
-    //   modulo: null, // siempre visible
-    // ),
-  ];
-
-  static bool _tieneModulo(List<String> modulos, String? modulo) {
-    if (modulo == null || modulo.isEmpty) return true;
-    final m = modulo.trim().toLowerCase();
-    return modulos.any((e) => e.trim().toLowerCase() == m);
-  }
-
   /// Primera ruta disponible para el usuario según sus módulos (mismo orden que el sidebar).
-  /// Si no tiene acceso a ningún módulo, devuelve [AppRoutes.homeMiPerfil].
-  static String firstAvailablePath(List<String> modulos) {
-    for (final e in _menuPrincipal) {
-      if (_tieneModulo(modulos, e.modulo)) return e.path;
-    }
-    for (final e in _gestionDatosDelEstudiante) {
-      if (_tieneModulo(modulos, e.modulo)) return e.path;
-    }
-    for (final e in _administracion) {
-      if (_tieneModulo(modulos, e.modulo)) return e.path;
-    }
-    return AppRoutes.homeMiPerfil;
-  }
+  /// Si no tiene acceso a ningún módulo, devuelve [AppRoutes.homeMiPerfil]
 
   @override
   Widget build(BuildContext context) {
