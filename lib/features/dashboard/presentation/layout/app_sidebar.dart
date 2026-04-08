@@ -53,6 +53,37 @@ class AppSidebar extends StatefulWidget {
   final VoidCallback? onToggle;
   final VoidCallback? onNavigated;
   final bool showToggle;
+
+  @override
+  State<AppSidebar> createState() => _AppSidebarState();
+}
+
+class _AppSidebarState extends State<AppSidebar> {
+  bool _showText = false;
+  static const _animDuration = Duration(milliseconds: 250);
+
+  @override
+  void initState() {
+    super.initState();
+    _showText = !widget.isCollapsed;
+  }
+
+  @override
+  void didUpdateWidget(AppSidebar old) {
+    super.didUpdateWidget(old);
+    if (old.isCollapsed == widget.isCollapsed) return;
+
+    if (widget.isCollapsed) {
+      // Colapsando: ocultar textos inmediatamente
+      setState(() => _showText = false);
+    } else {
+      // Expandiendo: esperar a que el AnimatedContainer termine
+      Future.delayed(_animDuration, () {
+        if (mounted) setState(() => _showText = true);
+      });
+    }
+  }
+
   static const List<_SidebarEntry> _reportes = [
     _SidebarEntry(
       path: AppRoutes.homeReportes,
@@ -191,9 +222,6 @@ class AppSidebar extends StatefulWidget {
     // ),
   ];
 
-  @override
-  State<AppSidebar> createState() => _AppSidebarState();
-
   static bool _tieneModulo(List<String> modulos, String? modulo) {
     if (modulo == null || modulo.isEmpty) return true;
     final m = modulo.trim().toLowerCase();
@@ -213,36 +241,6 @@ class AppSidebar extends StatefulWidget {
       if (_tieneModulo(modulos, e.modulo)) return e.path;
     }
     return AppRoutes.homeMiPerfil;
-  }
-
-}
-
-class _AppSidebarState extends State<AppSidebar> {
-  /// true cuando el sidebar ya terminó de expandirse y los textos pueden mostrarse.
-  bool _showText = false;
-
-  static const _animDuration = Duration(milliseconds: 250);
-
-  @override
-  void initState() {
-    super.initState();
-    _showText = !widget.isCollapsed;
-  }
-
-  @override
-  void didUpdateWidget(AppSidebar old) {
-    super.didUpdateWidget(old);
-    if (old.isCollapsed == widget.isCollapsed) return;
-
-    if (widget.isCollapsed) {
-      // Colapsando: ocultar textos inmediatamente
-      setState(() => _showText = false);
-    } else {
-      // Expandiendo: esperar a que el AnimatedContainer termine
-      Future.delayed(_animDuration, () {
-        if (mounted) setState(() => _showText = true);
-      });
-    }
   }
 
   @override
