@@ -22,14 +22,36 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
   int? _selectedParaleloId;
   int? _selectedMateriaId;
   late final TextEditingController _fechaController;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    final fechaStr =
-        '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
-    _fechaController = TextEditingController(text: fechaStr);
+    _fechaController = TextEditingController(text: _formatDate(_selectedDate));
+  }
+
+  String _formatDate(DateTime dt) {
+    return '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
+  }
+
+  String _formatDateApi(DateTime dt) {
+    return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now(),
+      locale: const Locale('es', 'ES'),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _fechaController.text = _formatDate(picked);
+      });
+    }
   }
 
   @override
@@ -100,195 +122,197 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'PARALELO',
-                            style: GoogleFonts.inter(
-                              color: AppColors.grey64748B,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              height: 16 / 12,
-                              letterSpacing: 0.6,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isNarrow = constraints.maxWidth < 600;
+
+                    final paraleloField = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PARALELO',
+                          style: GoogleFonts.inter(
+                            color: AppColors.grey64748B,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            height: 16 / 12,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<int>(
+                          initialValue: paralelos.isEmpty
+                              ? null
+                              : (_selectedParaleloId ?? paralelos.first.id),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            fillColor: Color(0xffF8FAFC),
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            isDense: true,
+                          ),
+                          items: _buildParaleloItems(
+                            paralelos,
+                            paralelosProvider.isLoading,
+                          ),
+                          onChanged: paralelosProvider.isLoading
+                              ? null
+                              : (value) => setState(() {
+                                  _selectedParaleloId = value;
+                                  _selectedMateriaId = null;
+                                }),
+                        ),
+                      ],
+                    );
+
+                    final materiaField = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'MATERIA',
+                          style: GoogleFonts.inter(
+                            color: AppColors.grey64748B,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            height: 16 / 12,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<int>(
+                          initialValue: materiasFiltradas.isEmpty
+                              ? null
+                              : (_selectedMateriaId ??
+                                    (materiasFiltradas.isNotEmpty
+                                        ? materiasFiltradas.first.id
+                                        : null)),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            fillColor: Color(0xffF8FAFC),
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            isDense: true,
+                          ),
+                          items: _buildMateriaItems(
+                            materiasFiltradas,
+                            materiasProvider.isLoading,
+                            paraleloSeleccionado != null,
+                          ),
+                          onChanged:
+                              materiasProvider.isLoading ||
+                                  paraleloSeleccionado == null
+                              ? null
+                              : (value) => setState(
+                                  () => _selectedMateriaId = value,
+                                ),
+                        ),
+                      ],
+                    );
+
+                    final fechaField = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'FECHA',
+                          style: GoogleFonts.inter(
+                            color: AppColors.grey64748B,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            height: 16 / 12,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _fechaController,
+                          readOnly: true,
+                          onTap: _pickDate,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: Color(0xffE2E8F0),
+                                width: 1,
+                              ),
+                            ),
+                            fillColor: Color(0xffF8FAFC),
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            isDense: true,
+                            suffixIcon: const Icon(
+                              Icons.calendar_today,
+                              size: 18,
+                              color: Color(0xff64748B),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          DropdownButtonFormField<int>(
-                            initialValue: paralelos.isEmpty
-                                ? null
-                                : (_selectedParaleloId ?? paralelos.first.id),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              fillColor: Color(0xffF8FAFC),
-                              filled: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              isDense: true,
-                            ),
-                            items: _buildParaleloItems(
-                              paralelos,
-                              paralelosProvider.isLoading,
-                            ),
-                            onChanged: paralelosProvider.isLoading
-                                ? null
-                                : (value) => setState(() {
-                                    _selectedParaleloId = value;
-                                    _selectedMateriaId = null;
-                                  }),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'MATERIA',
-                            style: GoogleFonts.inter(
-                              color: AppColors.grey64748B,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              height: 16 / 12,
-                              letterSpacing: 0.6,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          DropdownButtonFormField<int>(
-                            initialValue: materiasFiltradas.isEmpty
-                                ? null
-                                : (_selectedMateriaId ??
-                                      (materiasFiltradas.isNotEmpty
-                                          ? materiasFiltradas.first.id
-                                          : null)),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              fillColor: Color(0xffF8FAFC),
-                              filled: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              isDense: true,
-                            ),
-                            items: _buildMateriaItems(
-                              materiasFiltradas,
-                              materiasProvider.isLoading,
-                              paraleloSeleccionado != null,
-                            ),
-                            onChanged:
-                                materiasProvider.isLoading ||
-                                    paraleloSeleccionado == null
-                                ? null
-                                : (value) => setState(
-                                    () => _selectedMateriaId = value,
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'FECHA',
-                            style: GoogleFonts.inter(
-                              color: AppColors.grey64748B,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              height: 16 / 12,
-                              letterSpacing: 0.6,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          TextField(
-                            controller: _fechaController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  color: Color(0xffE2E8F0),
-                                  width: 1,
-                                ),
-                              ),
-                              fillColor: Color(0xffF8FAFC),
-                              filled: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              isDense: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    FilledButton.icon(
+                        ),
+                      ],
+                    );
+
+                    final applyButton = FilledButton.icon(
                       onPressed:
                           _selectedMateriaId != null &&
                               _selectedParaleloId != null
@@ -296,6 +320,7 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
                               asistenciasProvider.loadAsistenciasDia(
                                 materiaId: _selectedMateriaId!,
                                 paraleloId: _selectedParaleloId!,
+                                fecha: _formatDateApi(_selectedDate),
                               );
                             }
                           : null,
@@ -321,8 +346,35 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
                           vertical: 16,
                         ),
                       ),
-                    ),
-                  ],
+                    );
+
+                    if (isNarrow) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          paraleloField,
+                          const SizedBox(height: 12),
+                          materiaField,
+                          const SizedBox(height: 12),
+                          fechaField,
+                          const SizedBox(height: 12),
+                          applyButton,
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Expanded(child: paraleloField),
+                        const SizedBox(width: 20),
+                        Expanded(child: materiaField),
+                        const SizedBox(width: 20),
+                        Expanded(child: fechaField),
+                        const SizedBox(width: 20),
+                        applyButton,
+                      ],
+                    );
+                  },
                 ),
               ),
             );

@@ -4,9 +4,10 @@ import 'package:sistemapredictivoabandono/features/dashboard/presentation/widget
 import 'package:sistemapredictivoabandono/features/dashboard/presentation/widgets/sidebar_tile.dart';
 
 class SidebarExpansionTile extends StatefulWidget {
-  const SidebarExpansionTile({super.key, required this.item});
+  const SidebarExpansionTile({super.key, required this.item, this.onNavigated});
 
   final MenuItem item;
+  final VoidCallback? onNavigated;
 
   @override
   State<SidebarExpansionTile> createState() => _SidebarExpansionTileState();
@@ -18,7 +19,7 @@ class _SidebarExpansionTileState extends State<SidebarExpansionTile> {
   @override
   void initState() {
     super.initState();
-    _isExpanded = widget.item.children.any((c) => c.isSelected);
+    _isExpanded = widget.item.isSelected || widget.item.children.any((c) => c.isSelected);
   }
 
   @override
@@ -51,7 +52,7 @@ class _SidebarExpansionTileState extends State<SidebarExpansionTile> {
           iconColor: AppColors.white,
           collapsedIconColor: AppColors.white.withValues(alpha: 0.6),
           children: widget.item.children
-              .map((child) => SidebarTile(item: child))
+              .map((child) => SidebarTile(item: child, onNavigated: widget.onNavigated))
               .toList(),
         ),
       ),

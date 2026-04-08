@@ -3,8 +3,6 @@ abstract class ApiEndpoints {
   ApiEndpoints._();
 
   static const String baseUrl = 'http://localhost:8001/api/v1';
- // static const String baseUrl =
-  //    'https://pst-tap-serves-metabolism.trycloudflare.com/api/v1';
 
   /// Auth
   static const String authLogin = '/auth/login';
@@ -24,6 +22,9 @@ abstract class ApiEndpoints {
   /// Estudiantes - resumen de importaciones. GET /estudiantes/resumen-importaciones
   static const String estudiantesResumenImportaciones =
       '/estudiantes/resumen-importaciones';
+
+  /// Estudiantes - plantilla Excel. GET /estudiantes/plantilla
+  static const String estudiantesPlantilla = '/estudiantes/plantilla';
 
   /// Estudiantes - perfil por id. GET /estudiantes/:id/perfil
   static String estudiantePerfil(int id) => '/estudiantes/$id/perfil';
@@ -57,6 +58,9 @@ abstract class ApiEndpoints {
   static const String prediccionesResumenImportaciones =
       '/predicciones/resumen-importaciones';
 
+  /// Predicciones - plantilla Excel. GET /predicciones/plantilla
+  static const String prediccionesPlantilla = '/predicciones/plantilla';
+
   /// Alertas (listado con total, activas, críticas)
   static const String alertas = '/alertas';
 
@@ -74,4 +78,13 @@ abstract class ApiEndpoints {
 
   /// Malla curricular - importar desde Excel (POST multipart/form-data: archivo .xlsx, nombre_malla)
   static const String mallaCurricularImportar = '/malla-curricular/importar';
+
+  /// Entrenamiento del modelo ML
+  static const String entrenamientoIniciar = '/entrenamiento/iniciar';
+  static String entrenamientoEstado(int id) => '/entrenamiento/$id/estado';
+  static String entrenamientoAceptar(int id) => '/entrenamiento/$id/aceptar';
+  static String entrenamientoRechazar(int id) => '/entrenamiento/$id/rechazar';
+  static const String entrenamientoHistorial = '/entrenamiento/historial';
+  static const String entrenamientoPlantilla = '/entrenamiento/plantilla';
+  static const String entrenamientoModeloActual = '/entrenamiento/modelo-actual';
 }

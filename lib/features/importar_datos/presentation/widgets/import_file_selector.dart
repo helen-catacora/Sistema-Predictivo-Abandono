@@ -71,12 +71,10 @@ class _ImportFileSelectorState extends State<ImportFileSelector> {
                 ),
               ),
             ],
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isNarrow = constraints.maxWidth < 900;
+                final filePanel = Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
@@ -300,12 +298,27 @@ class _ImportFileSelectorState extends State<ImportFileSelector> {
                         ),
                       ],
                     ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Expanded(flex: 1, child: const RequiredFieldsCard()),
-                Expanded(flex: 1, child: const ImportSummaryCards()),
-              ],
+                  );
+                final sidePanel = const ImportSummaryCards();
+                if (isNarrow) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      filePanel,
+                      const SizedBox(height: 16),
+                      sidePanel,
+                    ],
+                  );
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 2, child: filePanel),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 1, child: sidePanel),
+                  ],
+                );
+              },
             ),
           ],
         );

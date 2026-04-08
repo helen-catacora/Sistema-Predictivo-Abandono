@@ -53,271 +53,266 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'BUSCAR ESTUDIANTE',
-                        style: GoogleFonts.inter(
-                          color: AppColors.grey64748B,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0.6,
-                        ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isNarrow = constraints.maxWidth < 600;
+
+                final searchField = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'BUSCAR ESTUDIANTE',
+                      style: GoogleFonts.inter(
+                        color: AppColors.grey64748B,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        height: 16 / 12,
+                        letterSpacing: 0.6,
                       ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Nombre, ID o correo electrónico...',
-                          hintStyle: GoogleFonts.inter(
-                            color: AppColors.gray9CA3AF,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1,
-                            letterSpacing: 0,
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Nombre, ID o correo electrónico...',
+                        hintStyle: GoogleFonts.inter(
+                          color: AppColors.gray9CA3AF,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 1,
+                          letterSpacing: 0,
+                        ),
+                        prefixIcon: const Icon(Icons.search, size: 20),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
                           ),
-                          prefixIcon: const Icon(Icons.search, size: 20),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        fillColor: Color(0xffF8FAFC),
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        isDense: true,
+                      ),
+                      onChanged: (value) => provider.setSearchQuery(value),
+                    ),
+                  ],
+                );
+
+                final paraleloField = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PARALELO',
+                      style: GoogleFonts.inter(
+                        color: AppColors.grey64748B,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        height: 16 / 12,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<int?>(
+                      initialValue:
+                          paralelosVisibles.any(
+                            (p) => p.id == provider.paraleloFilter,
+                          )
+                          ? provider.paraleloFilter
+                          : null,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        fillColor: Color(0xffF8FAFC),
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        isDense: true,
+                      ),
+                      items: [
+                        DropdownMenuItem<int?>(
+                          value: null,
+                          child: Text(
+                            paralelosProvider.isLoading && paralelos.isEmpty
+                                ? 'Cargando paralelos...'
+                                : 'Todos los paralelos',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.darkBlue1E293B,
+                              height: 20 / 14,
+                              letterSpacing: 0,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
+                        ),
+                        ...paralelosVisibles.map(
+                          (p) => DropdownMenuItem<int?>(
+                            value: p.id,
+                            child: Text(
+                              '${p.nombre}-${p.areaNombre ?? _nombreArea(p.areaId)}',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.darkBlue1E293B,
+                                height: 20 / 14,
+                                letterSpacing: 0,
+                              ),
                             ),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
+                        ),
+                      ],
+                      onChanged: (value) {
+                        provider.setParaleloFilter(value);
+                        provider.loadEstudiantes();
+                      },
+                    ),
+                  ],
+                );
+
+                final carreraField = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'CARRERA',
+                      style: GoogleFonts.inter(
+                        color: AppColors.grey64748B,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        height: 16 / 12,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      initialValue: provider.carreraFilter ?? 'todas',
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Color(0xffE2E8F0),
+                            width: 1,
+                          ),
+                        ),
+                        fillColor: Color(0xffF8FAFC),
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        isDense: true,
+                      ),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'todas',
+                          child: Text(
+                            'Todas las Carreras',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.darkBlue1E293B,
+                              height: 20 / 14,
+                              letterSpacing: 0,
                             ),
                           ),
-                          fillColor: Color(0xffF8FAFC),
-                          filled: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                        ),
+                        ...provider.carreras.map(
+                          (c) => DropdownMenuItem(
+                            value: c,
+                            child: Text(
+                              c,
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.darkBlue1E293B,
+                                height: 20 / 14,
+                                letterSpacing: 0,
+                              ),
+                            ),
                           ),
-                          isDense: true,
                         ),
-                        onChanged: (value) => provider.setSearchQuery(value),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'PARALELO',
-                        style: GoogleFonts.inter(
-                          color: AppColors.grey64748B,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<int?>(
-                        initialValue:
-                            paralelosVisibles.any(
+                      ],
+                      onChanged: (value) {
+                        provider.setCarreraFilter(value);
+                        final nuevaCarrera =
+                            (value == null || value == 'todas')
+                            ? null
+                            : value;
+                        final listaPorCarrera = nuevaCarrera == null
+                            ? paralelos
+                            : paralelos
+                                  .where(
+                                    (p) =>
+                                        (p.areaNombre ??
+                                            _nombreArea(p.areaId)) ==
+                                        nuevaCarrera,
+                                  )
+                                  .toList();
+                        if (provider.paraleloFilter != null &&
+                            !listaPorCarrera.any(
                               (p) => p.id == provider.paraleloFilter,
-                            )
-                            ? provider.paraleloFilter
-                            : null,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          fillColor: Color(0xffF8FAFC),
-                          filled: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          isDense: true,
-                        ),
-                        items: [
-                          DropdownMenuItem<int?>(
-                            value: null,
-                            child: Text(
-                              paralelosProvider.isLoading && paralelos.isEmpty
-                                  ? 'Cargando paralelos...'
-                                  : 'Todos los paralelos',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.darkBlue1E293B,
-                                height: 20 / 14,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                          ),
-                          ...paralelosVisibles.map(
-                            (p) => DropdownMenuItem<int?>(
-                              value: p.id,
-                              child: Text(
-                                '${p.nombre}-${p.areaNombre ?? _nombreArea(p.areaId)}',
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.darkBlue1E293B,
-                                  height: 20 / 14,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          provider.setParaleloFilter(value);
+                            )) {
+                          provider.setParaleloFilter(null);
                           provider.loadEstudiantes();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'CARRERA',
-                        style: GoogleFonts.inter(
-                          color: AppColors.grey64748B,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        initialValue: provider.carreraFilter ?? 'todas',
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Color(0xffE2E8F0),
-                              width: 1,
-                            ),
-                          ),
-                          fillColor: Color(0xffF8FAFC),
-                          filled: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          isDense: true,
-                        ),
-                        items: [
-                          DropdownMenuItem(
-                            value: 'todas',
-                            child: Text(
-                              'Todas las Carreras',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.darkBlue1E293B,
-                                height: 20 / 14,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                          ),
-                          ...provider.carreras.map(
-                            (c) => DropdownMenuItem(
-                              value: c,
-                              child: Text(
-                                c,
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.darkBlue1E293B,
-                                  height: 20 / 14,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          provider.setCarreraFilter(value);
-                          final nuevaCarrera =
-                              (value == null || value == 'todas')
-                              ? null
-                              : value;
-                          final listaPorCarrera = nuevaCarrera == null
-                              ? paralelos
-                              : paralelos
-                                    .where(
-                                      (p) =>
-                                          (p.areaNombre ??
-                                              _nombreArea(p.areaId)) ==
-                                          nuevaCarrera,
-                                    )
-                                    .toList();
-                          if (provider.paraleloFilter != null &&
-                              !listaPorCarrera.any(
-                                (p) => p.id == provider.paraleloFilter,
-                              )) {
-                            provider.setParaleloFilter(null);
-                            provider.loadEstudiantes();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 24),
-                OutlinedButton.icon(
+                        }
+                      },
+                    ),
+                  ],
+                );
+
+                final clearButton = OutlinedButton.icon(
                   onPressed: () {
                     _searchController.clear();
                     provider.setSearchQuery('');
@@ -338,8 +333,35 @@ class _StudentFilterSectionState extends State<StudentFilterSection> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                ),
-              ],
+                );
+
+                if (isNarrow) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      searchField,
+                      const SizedBox(height: 12),
+                      paraleloField,
+                      const SizedBox(height: 12),
+                      carreraField,
+                      const SizedBox(height: 12),
+                      clearButton,
+                    ],
+                  );
+                }
+
+                return Row(
+                  children: [
+                    Expanded(flex: 2, child: searchField),
+                    const SizedBox(width: 24),
+                    Expanded(child: paraleloField),
+                    const SizedBox(width: 24),
+                    Expanded(child: carreraField),
+                    const SizedBox(width: 24),
+                    clearButton,
+                  ],
+                );
+              },
             ),
           ),
         );

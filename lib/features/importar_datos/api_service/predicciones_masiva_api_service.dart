@@ -44,6 +44,15 @@ class PrediccionesMasivaApiService {
     );
   }
 
+  /// GET /predicciones/plantilla — Descarga plantilla Excel como bytes.
+  Future<List<int>> descargarPlantilla() async {
+    final response = await _dio.get<List<int>>(
+      ApiEndpoints.prediccionesPlantilla,
+      options: Options(responseType: ResponseType.bytes),
+    );
+    return response.data!;
+  }
+
   /// Obtiene el resumen de importaciones.
   /// GET /api/v1/predicciones/resumen-importaciones
   Future<ResumenImportacionesResponse> getResumenImportaciones() async {

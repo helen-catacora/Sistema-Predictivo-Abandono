@@ -48,7 +48,11 @@ class _LoginRightPanelState extends State<LoginRightPanel> {
       ),
       child: Center(
         child: Container(
-          width: size.width * 0.35,
+          width: size.width < 600
+              ? size.width * 0.92
+              : size.width < 900
+                  ? size.width * 0.55
+                  : size.width * 0.35,
           height: size.height * 0.9,
           //padding: EdgeInsets.all(24),
           decoration: BoxDecoration(

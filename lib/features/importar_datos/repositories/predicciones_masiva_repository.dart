@@ -13,6 +13,8 @@ class PrediccionesMasivaRepository {
 
   Future<void> enviarArchivo(PlatformFile file) => _apiService.postMasiva(file);
 
+  Future<List<int>> descargarPlantilla() => _apiService.descargarPlantilla();
+
   Future<ResumenImportacionesResponse> getResumenImportaciones() =>
       _apiService.getResumenImportaciones();
 }

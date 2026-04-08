@@ -50,6 +50,15 @@ class EstudiantesImportarApiService {
     return ImportacionEstudiantesResponse.fromJson(data);
   }
 
+  /// GET /estudiantes/plantilla — Descarga plantilla Excel como bytes.
+  Future<List<int>> descargarPlantilla() async {
+    final response = await _dio.get<List<int>>(
+      ApiEndpoints.estudiantesPlantilla,
+      options: Options(responseType: ResponseType.bytes),
+    );
+    return response.data!;
+  }
+
   /// Obtiene el resumen de importaciones de estudiantes.
   /// GET /api/v1/estudiantes/resumen-importaciones
   Future<ResumenImportacionesResponse> getResumenImportaciones() async {

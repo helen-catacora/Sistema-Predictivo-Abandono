@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ import 'features/gestion_usuarios/presentation/providers/usuarios_provider.dart'
 import 'features/panel_principal/presentation/providers/alertas_provider.dart';
 import 'features/panel_principal/presentation/providers/dashboard_provider.dart';
 import 'features/reportes/presentation/providers/reportes_historial_provider.dart';
+import 'features/entrenamiento_modelo/presentation/providers/entrenamiento_provider.dart';
 import 'features/reportes/presentation/providers/reportes_tipos_provider.dart';
 
 void main() async {
@@ -65,10 +67,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ImportarEstudiantesProvider()),
         ChangeNotifierProvider(
             create: (_) => ImportarMallaCurricularProvider()),
+        ChangeNotifierProvider(create: (_) => EntrenamientoProvider()),
       ],
       child: MaterialApp.router(
         title: 'Sistema Predictivo de Abandono Estudiantil',
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('es', 'ES'),
+          Locale('en', 'US'),
+        ],
+        locale: const Locale('es', 'ES'),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xFF1B263B),

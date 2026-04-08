@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
 import '../widgets/malla_curricular/malla_curricular_file_selector.dart';
 import '../widgets/malla_curricular/malla_curricular_instructions_card.dart';
 
@@ -13,19 +14,24 @@ class ImportarDatosMallaCurricularPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildHeader(),
-          const SizedBox(height: 32),
-          _buildContent(),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fontSize = Responsive.pageTitleFontSize(constraints.maxWidth);
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeader(fontSize),
+              const SizedBox(height: 32),
+              _buildContent(),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(double fontSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,7 +39,7 @@ class ImportarDatosMallaCurricularPage extends StatelessWidget {
           'Importar Malla Curricular',
           style: GoogleFonts.inter(
             color: AppColors.gray002855,
-            fontSize: 30,
+            fontSize: fontSize,
             fontWeight: FontWeight.w700,
             height: 36 / 30,
             letterSpacing: 0,

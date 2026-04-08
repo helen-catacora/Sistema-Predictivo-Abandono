@@ -58,19 +58,12 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
               ),
             );
           }
-        } else if (!isLoading && !hasError) {
-          barItems.addAll([
-            _BarItem('Bajo', 0, Colors.green),
-            _BarItem('Medio', 0, Colors.blue),
-            _BarItem('Alto', 0, Colors.orange),
-            _BarItem('Crítico', 0, Colors.red),
-          ]);
         } else {
           barItems.addAll([
-            _BarItem('Bajo', 0, Colors.green),
-            _BarItem('Medio', 0, Colors.blue),
-            _BarItem('Alto', 0, Colors.orange),
-            _BarItem('Crítico', 0, Colors.red),
+            _BarItem('Bajo',    0, _coloresNivel[0]),
+            _BarItem('Medio',   0, _coloresNivel[1]),
+            _BarItem('Alto',    0, _coloresNivel[2]),
+            _BarItem('Crítico', 0, _coloresNivel[3]),
           ]);
         }
 
@@ -121,14 +114,12 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                     ],
                   ),
                   if (isLoading && barItems.every((e) => e.value == 0))
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40),
+                    const Expanded(
                       child: Center(child: CircularProgressIndicator()),
                     )
                   else ...[
                     const SizedBox(height: 24),
-                    SizedBox(
-                      height: 260,
+                    Expanded(
                       child: BarChart(
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,
@@ -136,22 +127,21 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                           barTouchData: BarTouchData(
                             enabled: false,
                             touchTooltipData: BarTouchTooltipData(
-                              getTooltipColor: (_) =>
-                                  Colors.transparent, // Fondo transparente
+                              getTooltipColor: (_) => Colors.transparent,
                               tooltipPadding: EdgeInsets.zero,
-                              tooltipMargin: 3,
-                              getTooltipItem:
-                                  (group, groupIndex, rod, rodIndex) {
-                                    return BarTooltipItem(
-                                      rod.toY.toInt().toString(),
-                                      TextStyle(
-                                        color: AppColors
-                                            .darkBlue1E293B, // Color del texto
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    );
-                                  },
+                              tooltipMargin: 6,
+                              getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                                final v = rod.toY.toInt();
+                                if (v == 0) return null;
+                                return BarTooltipItem(
+                                  '$v',
+                                  const TextStyle(
+                                    color: AppColors.darkBlue1E293B,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           titlesData: FlTitlesData(
@@ -168,8 +158,8 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                                         barItems[i].label,
                                         style: TextStyle(
                                           color: AppColors.grayDark,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     );
@@ -184,23 +174,24 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                               axisNameWidget: Text(
                                 'Número de Estudiantes',
                                 style: TextStyle(
-                                  color: AppColors.grayMedium,
-                                  fontSize: 12,
+                                  color: AppColors.grayDark,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              axisNameSize: 28,
                               sideTitles: SideTitles(
                                 showTitles: true,
                                 getTitlesWidget: (value, meta) {
                                   return Text(
                                     value.toInt().toString(),
                                     style: TextStyle(
-                                      color: AppColors.grayMedium,
-                                      fontSize: 11,
+                                      color: AppColors.grayDark,
+                                      fontSize: 13,
                                     ),
                                   );
                                 },
-                                reservedSize: 32,
+                                reservedSize: 40,
                                 interval: interval,
                               ),
                             ),
@@ -226,31 +217,31 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
                             final item = e.value;
                             return BarChartGroupData(
                               x: i,
+                              showingTooltipIndicators: [0],
                               barRods: [
                                 BarChartRodData(
                                   toY: item.value,
                                   color: item.color,
-                                  width: 150,
-                                  borderSide: BorderSide(color: Colors.black),
+                                  width: 50,
                                   borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(0),
+                                    top: Radius.circular(4),
                                   ),
                                 ),
                               ],
-                              showingTooltipIndicators: [0],
                             );
                           }).toList(),
                         ),
                         duration: const Duration(milliseconds: 250),
                       ),
-                    ),
+                    ),  // Expanded
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
                         'Nivel de Riesgo',
                         style: TextStyle(
-                          color: AppColors.grayMedium,
-                          fontSize: 11,
+                          color: AppColors.grayDark,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

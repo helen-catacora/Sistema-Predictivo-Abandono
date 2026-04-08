@@ -1,14 +1,28 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/features/importar_datos/presentation/widgets/creacion_estudiantes/creacion_estudiantes_sidebar.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../shared/utils/excel_download_web.dart'
+    if (dart.library.io) '../../../../../shared/utils/excel_download_stub.dart'
+    as excel_util;
+import '../../providers/importar_estudiantes_provider.dart';
 
-/// Card de instrucciones para importa
-/// ción de creación de estudiantes.
+/// Card de instrucciones para importación de creación de estudiantes.
 
-class CreacionEstudiantesInstructionsCard extends StatelessWidget {
+class CreacionEstudiantesInstructionsCard extends StatefulWidget {
   const CreacionEstudiantesInstructionsCard({super.key});
+
+  @override
+  State<CreacionEstudiantesInstructionsCard> createState() =>
+      _CreacionEstudiantesInstructionsCardState();
+}
+
+class _CreacionEstudiantesInstructionsCardState
+    extends State<CreacionEstudiantesInstructionsCard> {
   static const _requiredFields = [
     'Codigo del Estudiante',
     'Nombres',
@@ -20,6 +34,54 @@ class CreacionEstudiantesInstructionsCard extends StatelessWidget {
   ];
 
   static const _optionalFields = ['Fecha de Nacimiento'];
+
+  bool _isDownloading = false;
+
+  Future<void> _descargarPlantilla() async {
+    if (_isDownloading) return;
+    setState(() => _isDownloading = true);
+
+    try {
+      final provider = context.read<ImportarEstudiantesProvider>();
+      final bytes = await provider.descargarPlantilla();
+      if (bytes != null && mounted) {
+        final uint8 = Uint8List.fromList(bytes);
+        final savedPath =
+            excel_util.saveExcel(uint8, 'plantilla_estudiantes.xlsx');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                savedPath != null
+                    ? 'Plantilla guardada en: $savedPath'
+                    : 'Plantilla descargada correctamente',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al descargar la plantilla'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isDownloading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -107,14 +169,25 @@ class CreacionEstudiantesInstructionsCard extends StatelessWidget {
                   SizedBox(height: 50),
                   SizedBox(
                     child: FilledButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.download,
-                        size: 20,
-                        color: Color(0xff002855),
-                      ),
+                      onPressed: _isDownloading ? null : _descargarPlantilla,
+                      icon: _isDownloading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Color(0xff002855),
+                              ),
+                            )
+                          : const Icon(
+                              Icons.download,
+                              size: 20,
+                              color: Color(0xff002855),
+                            ),
                       label: Text(
-                        'DESCARGAR PLANTILLA',
+                        _isDownloading
+                            ? 'DESCARGANDO...'
+                            : 'DESCARGAR PLANTILLA',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: Color(0xff002855),

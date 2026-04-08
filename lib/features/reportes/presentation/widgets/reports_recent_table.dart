@@ -150,11 +150,13 @@ class _ReportsRecentTableState extends State<ReportsRecentTable> {
                       children: [
                         LayoutBuilder(
                           builder: (context, constraints) {
-                            return ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: constraints.maxWidth,
-                              ),
-                              child: DataTable(
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: constraints.maxWidth,
+                                ),
+                                child: DataTable(
                                 headingRowColor: WidgetStateProperty.all(
                                   const Color(0xffF8FAFC),
                                 ),
@@ -245,6 +247,7 @@ class _ReportsRecentTableState extends State<ReportsRecentTable> {
                                     : reportesPaginados
                                           .map((r) => _buildRow(r))
                                           .toList(),
+                                ),
                               ),
                             );
                           },

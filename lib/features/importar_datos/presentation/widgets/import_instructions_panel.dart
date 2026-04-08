@@ -1,11 +1,26 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../shared/utils/excel_download_web.dart'
+    if (dart.library.io) '../../../../shared/utils/excel_download_stub.dart'
+    as excel_util;
+import '../providers/importar_predicciones_provider.dart';
 
 /// Panel lateral con instrucciones de importación.
-class ImportInstructionsPanel extends StatelessWidget {
+class ImportInstructionsPanel extends StatefulWidget {
   const ImportInstructionsPanel({super.key});
+
+  @override
+  State<ImportInstructionsPanel> createState() =>
+      _ImportInstructionsPanelState();
+}
+
+class _ImportInstructionsPanelState extends State<ImportInstructionsPanel> {
+  bool _isDownloading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +28,7 @@ class ImportInstructionsPanel extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [Color(0xFF002855), Color(0xFF023E8A)],
@@ -29,7 +44,7 @@ class ImportInstructionsPanel extends StatelessWidget {
                 height: 48,
                 width: 48,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFD60A),
+                  color: const Color(0xffFFD60A),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -39,31 +54,33 @@ class ImportInstructionsPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Instrucciones de Importación',
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      height: 28 / 20,
-                      letterSpacing: 0,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Instrucciones de Importación',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        height: 28 / 20,
+                        letterSpacing: 0,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Siga estos pasos para asegurar una correcta importación de datos',
-                    style: GoogleFonts.inter(
-                      color: Color(0xffDBEAFE),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      height: 20 / 14,
-                      letterSpacing: 0,
-                    ), 
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Siga estos pasos para asegurar una correcta importación de datos',
+                      style: GoogleFonts.inter(
+                        color: const Color(0xffDBEAFE),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -85,20 +102,29 @@ class ImportInstructionsPanel extends StatelessWidget {
             'Validación Automática:',
             'El sistema validará los datos y mostrará errores antes de procesarlos.',
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           SizedBox(
             child: FilledButton.icon(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.download,
-                size: 20,
-                color: Color(0xff002855),
-              ),
+              onPressed: _isDownloading ? null : _descargarPlantilla,
+              icon: _isDownloading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Color(0xff002855),
+                      ),
+                    )
+                  : const Icon(
+                      Icons.download,
+                      size: 20,
+                      color: Color(0xff002855),
+                    ),
               label: Text(
                 'DESCARGAR PLANTILLA',
                 style: GoogleFonts.inter(
                   fontSize: 14,
-                  color: Color(0xff002855),
+                  color: const Color(0xff002855),
                   fontWeight: FontWeight.w700,
                   height: 20 / 14,
                   letterSpacing: 0,
@@ -127,7 +153,7 @@ class ImportInstructionsPanel extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.2),
             shape: BoxShape.circle,
@@ -136,7 +162,7 @@ class ImportInstructionsPanel extends StatelessWidget {
             child: Text(
               number,
               style: GoogleFonts.inter(
-                color: Color(0xffFFD60A),
+                color: const Color(0xffFFD60A),
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 height: 24 / 16,
@@ -146,33 +172,69 @@ class ImportInstructionsPanel extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.inter(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                height: 24 / 16,
-                letterSpacing: 0,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  height: 24 / 16,
+                  letterSpacing: 0,
+                ),
               ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              text,
-              style: GoogleFonts.inter(
-                color: Color(0xffDBEAFE),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                height: 20 / 14,
-                letterSpacing: 0,
+              const SizedBox(height: 4),
+              Text(
+                text,
+                style: GoogleFonts.inter(
+                  color: const Color(0xffDBEAFE),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 20 / 14,
+                  letterSpacing: 0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
+  }
+
+  Future<void> _descargarPlantilla() async {
+    setState(() => _isDownloading = true);
+    try {
+      final provider = context.read<ImportarPrediccionesProvider>();
+      final bytes = await provider.descargarPlantilla();
+      if (bytes != null) {
+        final path = excel_util.saveExcel(
+          Uint8List.fromList(bytes),
+          'plantilla_prediccion_masiva.xlsx',
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(path != null
+                  ? 'Plantilla guardada en: $path'
+                  : 'Plantilla descargada correctamente'),
+              backgroundColor: AppColors.green16A34A,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al descargar: $e'),
+            backgroundColor: AppColors.redDC2626,
+          ),
+        );
+      }
+    }
+    setState(() => _isDownloading = false);
   }
 }

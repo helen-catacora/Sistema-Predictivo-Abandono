@@ -14,17 +14,20 @@ class DashboardFooter extends StatelessWidget {
         color: AppColors.grayLight,
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '© ${DateTime.now().year} ESCUELA MILITAR DE INGENIERÍA - CIENCIAS BÁSICAS',
-            style: TextStyle(
-              color: AppColors.grayDark,
-              fontSize: 12,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final copyrightText = Flexible(
+            child: Text(
+              '© ${DateTime.now().year} ESCUELA MILITAR DE INGENIERÍA - CIENCIAS BÁSICAS',
+              style: TextStyle(
+                color: AppColors.grayDark,
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          Row(
+          );
+          final linksRow = Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(width: 16),
               Text(
@@ -45,8 +48,28 @@ class DashboardFooter extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ],
+          );
+
+          if (constraints.maxWidth < 600) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                copyrightText,
+                const SizedBox(height: 8),
+                linksRow,
+              ],
+            );
+          }
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              copyrightText,
+              linksRow,
+            ],
+          );
+        },
       ),
     );
   }

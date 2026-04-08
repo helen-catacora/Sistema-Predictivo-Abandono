@@ -35,33 +35,10 @@ class ReportsFilterSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _FilterField(
-                    label: 'PERÍODO',
-                    value: 'gestion2024',
-                    displayText: 'Gestión 2024',
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: _FilterField(
-                    label: 'NIVEL DE RIESGO',
-                    value: 'todos',
-                    displayText: 'Todos los niveles',
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: _FilterField(
-                    label: 'CARRERA/ÁREA',
-                    value: 'todas',
-                    displayText: 'Todas las carreras',
-                  ),
-                ),
-                const SizedBox(width: 20),
-                FilledButton.icon(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final w = constraints.maxWidth;
+                final applyButton = FilledButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.search, size: 18),
                   label: const Text('APLICAR FILTROS'),
@@ -72,8 +49,103 @@ class ReportsFilterSection extends StatelessWidget {
                       vertical: 16,
                     ),
                   ),
-                ),
-              ],
+                );
+                if (w < 600) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _FilterField(
+                        label: 'PERÍODO',
+                        value: 'gestion2024',
+                        displayText: 'Gestión 2024',
+                      ),
+                      const SizedBox(height: 12),
+                      _FilterField(
+                        label: 'NIVEL DE RIESGO',
+                        value: 'todos',
+                        displayText: 'Todos los niveles',
+                      ),
+                      const SizedBox(height: 12),
+                      _FilterField(
+                        label: 'CARRERA/ÁREA',
+                        value: 'todas',
+                        displayText: 'Todas las carreras',
+                      ),
+                      const SizedBox(height: 16),
+                      applyButton,
+                    ],
+                  );
+                }
+                if (w < 900) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _FilterField(
+                              label: 'PERÍODO',
+                              value: 'gestion2024',
+                              displayText: 'Gestión 2024',
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: _FilterField(
+                              label: 'NIVEL DE RIESGO',
+                              value: 'todos',
+                              displayText: 'Todos los niveles',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _FilterField(
+                              label: 'CARRERA/ÁREA',
+                              value: 'todas',
+                              displayText: 'Todas las carreras',
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          applyButton,
+                        ],
+                      ),
+                    ],
+                  );
+                }
+                return Row(
+                  children: [
+                    Expanded(
+                      child: _FilterField(
+                        label: 'PERÍODO',
+                        value: 'gestion2024',
+                        displayText: 'Gestión 2024',
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: _FilterField(
+                        label: 'NIVEL DE RIESGO',
+                        value: 'todos',
+                        displayText: 'Todos los niveles',
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: _FilterField(
+                        label: 'CARRERA/ÁREA',
+                        value: 'todas',
+                        displayText: 'Todas las carreras',
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    applyButton,
+                  ],
+                );
+              },
             ),
           ],
         ),

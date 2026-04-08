@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sistemapredictivoabandono/features/panel_principal/presentation/providers/alertas_provider.dart';
-import 'package:sistemapredictivoabandono/shared/widgets/refresh_button.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../providers/dashboard_provider.dart';
@@ -36,26 +34,15 @@ class EstadoAcademicoSection extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  'Resumen de estado académico de los estudiantes',
-                  style: GoogleFonts.inter(
-                    color: AppColors.gray002855,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    height: 36 / 30,
-                    letterSpacing: 0,
-                  ),
-                ),
-                Spacer(),
-                RefreshButton(
-                  onTap: () {
-                    context.read<DashboardProvider>().loadDashboard();
-                    context.read<AlertasProvider>().loadAlertas();
-                  },
-                ),
-              ],
+            Text(
+              'Resumen de Estado Académico de los Estudiantes',
+              style: GoogleFonts.inter(
+                color: AppColors.gray002855,
+                fontSize: 25,
+                fontWeight: FontWeight.w700,
+                height: 36 / 30,
+                letterSpacing: 0,
+              ),
             ),
             const SizedBox(height: 4),
             // Text(

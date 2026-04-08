@@ -13,10 +13,12 @@ class AsistenciasRepository {
   Future<AsistenciaDiaResponse> getAsistenciasDia({
     required int materiaId,
     required int paraleloId,
+    String? fecha,
   }) async {
     return _apiService.getAsistenciasDia(
       materiaId: materiaId,
       paraleloId: paraleloId,
+      fecha: fecha,
     );
   }
 
@@ -25,11 +27,13 @@ class AsistenciasRepository {
     required int materiaId,
     required int paraleloId,
     required AsistenciaSaveRequest body,
+    String? fecha,
   }) async {
     await _apiService.postAsistenciasDia(
       materiaId: materiaId,
       paraleloId: paraleloId,
       body: body,
+      fecha: fecha,
     );
   }
 }

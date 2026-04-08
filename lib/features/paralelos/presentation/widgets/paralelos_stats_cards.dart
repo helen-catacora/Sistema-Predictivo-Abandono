@@ -33,53 +33,67 @@ class ParalelosStatsCards extends StatelessWidget {
             final totalEstudiantes =
                 dashboardProvider.resumenGeneral?.totalEstudiantes ?? 0;
             final year = DateTime.now().year;
+            final statCards = [
+              _StatCard(
+                title: 'TOTAL PARALELOS',
+                value: total.toString(),
+                subtitle: 'Activos en gestión $year',
+                icon: Icons.layers_outlined,
+                color: const Color(0xFF0891B2),
+                imagePath: 'assets/total-paralelos.png',
+              ),
+              _StatCard(
+                title: 'CON ENCARGADO',
+                value: conEncargado.toString(),
+                subtitle: '$porcentaje% asignados',
+                icon: Icons.person_outline,
+                color: AppColors.green16A34A,
+                imagePath: 'assets/encargados.png',
+              ),
+              _StatCard(
+                title: 'SIN ENCARGADO',
+                value: sinEncargado.toString(),
+                subtitle: 'Requieren asignación',
+                icon: Icons.person_off_outlined,
+                color: const Color(0xFFEA580C),
+                imagePath: 'assets/sin-encargado.png',
+              ),
+              _StatCard(
+                title: 'TOTAL ESTUDIANTES',
+                value: totalEstudiantes.toString().replaceAllMapped(
+                  RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                  (m) => '${m[1]},',
+                ),
+                subtitle: 'Distribuidos en $total paralelos',
+                icon: Icons.school_outlined,
+                color: AppColors.blue1D4ED8,
+                imagePath: 'assets/total-estudiantes.png',
+              ),
+            ];
+            if (constraints.maxWidth < 600) {
+              return Column(
+                children: [
+                  Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(child: statCards[0]),
+                      Expanded(child: statCards[1]),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(child: statCards[2]),
+                      Expanded(child: statCards[3]),
+                    ],
+                  ),
+                ],
+              );
+            }
             return Row(
               spacing: 12,
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    title: 'TOTAL PARALELOS',
-                    value: total.toString(),
-                    subtitle: 'Activos en gestión $year',
-                    icon: Icons.layers_outlined,
-                    color: const Color(0xFF0891B2),
-                    imagePath: 'assets/total-paralelos.png',
-                  ),
-                ),
-                Expanded(
-                  child: _StatCard(
-                    title: 'CON ENCARGADO',
-                    value: conEncargado.toString(),
-                    subtitle: '$porcentaje% asignados',
-                    icon: Icons.person_outline,
-                    color: AppColors.green16A34A,
-                    imagePath: 'assets/encargados.png',
-                  ),
-                ),
-                Expanded(
-                  child: _StatCard(
-                    title: 'SIN ENCARGADO',
-                    value: sinEncargado.toString(),
-                    subtitle: 'Requieren asignación',
-                    icon: Icons.person_off_outlined,
-                    color: const Color(0xFFEA580C),
-                    imagePath: 'assets/sin-encargado.png',
-                  ),
-                ),
-                Expanded(
-                  child: _StatCard(
-                    title: 'TOTAL ESTUDIANTES',
-                    value: totalEstudiantes.toString().replaceAllMapped(
-                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                      (m) => '${m[1]},',
-                    ),
-                    subtitle: 'Distribuidos en $total paralelos',
-                    icon: Icons.school_outlined,
-                    color: AppColors.blue1D4ED8,
-                    imagePath: 'assets/total-estudiantes.png',
-                  ),
-                ),
-              ],
+              children: statCards.map((c) => Expanded(child: c)).toList(),
             );
             // return GridView.count(
             //   shrinkWrap: true,

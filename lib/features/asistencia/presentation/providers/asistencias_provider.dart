@@ -52,6 +52,7 @@ class AsistenciasProvider extends ChangeNotifier {
   bool _isSaving = false;
   int? _lastMateriaId;
   int? _lastParaleloId;
+  String? _lastFecha;
   List<EditableAsistencia> _editableAsistencias = [];
 
   AsistenciasStatus get status => _status;
@@ -81,6 +82,7 @@ class AsistenciasProvider extends ChangeNotifier {
   Future<void> loadAsistenciasDia({
     required int materiaId,
     required int paraleloId,
+    String? fecha,
   }) async {
     _status = AsistenciasStatus.loading;
     _errorMessage = null;
@@ -92,9 +94,11 @@ class AsistenciasProvider extends ChangeNotifier {
       _data = await _repository.getAsistenciasDia(
         materiaId: materiaId,
         paraleloId: paraleloId,
+        fecha: fecha,
       );
       _lastMateriaId = materiaId;
       _lastParaleloId = paraleloId;
+      _lastFecha = fecha;
       _editableAsistencias = _data!.asistencias
           .map(
             (a) => EditableAsistencia(
@@ -195,12 +199,14 @@ class AsistenciasProvider extends ChangeNotifier {
         materiaId: _lastMateriaId!,
         paraleloId: _lastParaleloId!,
         body: AsistenciaSaveRequest(asistencias: modified),
+        fecha: _lastFecha,
       );
       _isSaving = false;
       notifyListeners();
       await loadAsistenciasDia(
         materiaId: _lastMateriaId!,
         paraleloId: _lastParaleloId!,
+        fecha: _lastFecha,
       );
       return true;
     } catch (e, st) {

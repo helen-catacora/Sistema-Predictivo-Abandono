@@ -18,6 +18,7 @@ import '../../features/gestion_usuarios/presentation/pages/user_form_page.dart';
 import '../../features/importar_datos/presentation/pages/importar_datos_page.dart';
 import '../../features/panel_principal/presentation/pages/panel_principal_page.dart';
 import '../../features/paralelos/presentation/pages/paralelos_page.dart';
+import '../../features/entrenamiento_modelo/presentation/pages/entrenamiento_page.dart';
 import '../../features/reportes/presentation/pages/reportes_page.dart';
 
 /// Rutas de la aplicación.
@@ -39,6 +40,7 @@ abstract class AppRoutes {
       '/home/importar-datos-malla-curricular';
   static const String homeGestionUsuarios = '/home/gestion-usuarios';
   static const String homeMiPerfil = '/home/mi-perfil';
+  static const String homeEntrenamientoModelo = '/home/entrenamiento-modelo';
   static const String userFormNuevo = '/home/gestion-usuarios/nuevo';
   static const String userFormEditar = '/home/gestion-usuarios/editar';
 }
@@ -167,6 +169,13 @@ final List<RouteBase> _routes = [
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
               child: const ImportarDatosMallaCurricularPage(),
+            ),
+          ),
+          GoRoute(
+            path: 'entrenamiento-modelo',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const EntrenamientoPage(),
             ),
           ),
           GoRoute(

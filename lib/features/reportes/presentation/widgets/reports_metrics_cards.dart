@@ -8,48 +8,71 @@ class ReportsMetricsCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _MetricCard(
-            badge: 'TOTAL',
-            badgeColor: AppColors.navyMedium,
-            icon: Icons.description_outlined,
-            value: '247',
-            description: 'Reportes Generados',
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _MetricCard(
-            badge: 'RECIENTE',
-            badgeColor: AppColors.accentYellow,
-            icon: Icons.access_time,
-            value: '18',
-            description: 'Esta Semana',
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _MetricCard(
-            badge: 'ACTIVO',
-            badgeColor: const Color(0xFF22C55E),
-            icon: Icons.download,
-            value: '1,842',
-            description: 'Descargas Totales',
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _MetricCard(
-            badge: 'URGENTE',
-            badgeColor: const Color(0xFFEF4444),
-            icon: Icons.warning_amber_rounded,
-            value: '12',
-            description: 'Alertas Críticas',
-          ),
-        ),
-      ],
+    final cards = [
+      _MetricCard(
+        badge: 'TOTAL',
+        badgeColor: AppColors.navyMedium,
+        icon: Icons.description_outlined,
+        value: '247',
+        description: 'Reportes Generados',
+      ),
+      _MetricCard(
+        badge: 'RECIENTE',
+        badgeColor: AppColors.accentYellow,
+        icon: Icons.access_time,
+        value: '18',
+        description: 'Esta Semana',
+      ),
+      _MetricCard(
+        badge: 'ACTIVO',
+        badgeColor: const Color(0xFF22C55E),
+        icon: Icons.download,
+        value: '1,842',
+        description: 'Descargas Totales',
+      ),
+      _MetricCard(
+        badge: 'URGENTE',
+        badgeColor: const Color(0xFFEF4444),
+        icon: Icons.warning_amber_rounded,
+        value: '12',
+        description: 'Alertas Críticas',
+      ),
+    ];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 600) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: cards[0]),
+                  const SizedBox(width: 16),
+                  Expanded(child: cards[1]),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(child: cards[2]),
+                  const SizedBox(width: 16),
+                  Expanded(child: cards[3]),
+                ],
+              ),
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(child: cards[0]),
+            const SizedBox(width: 16),
+            Expanded(child: cards[1]),
+            const SizedBox(width: 16),
+            Expanded(child: cards[2]),
+            const SizedBox(width: 16),
+            Expanded(child: cards[3]),
+          ],
+        );
+      },
     );
   }
 }

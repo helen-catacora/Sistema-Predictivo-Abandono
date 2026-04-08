@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/core/constants/app_colors.dart';
+import 'package:sistemapredictivoabandono/shared/widgets/refresh_button.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
+import '../providers/alertas_provider.dart';
+import '../providers/dashboard_provider.dart';
 import '../widgets/alertas_criticas_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
@@ -37,9 +42,39 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
     }
   }
 
+  String? _lastSeccion;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final seccion = GoRouterState.of(context).uri.queryParameters['seccion'];
+    if (seccion != null && seccion != _lastSeccion) {
+      _lastSeccion = seccion;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _scrollToSectionByName(seccion);
+      });
+    } else if (seccion == null) {
+      _lastSeccion = null;
+    }
+  }
+
+  void _scrollToSectionByName(String seccion) {
+    switch (seccion) {
+      case 'estado_academico':
+        _scrollToSection(_keyEstadoAcademico);
+      case 'distribucion_riesgo':
+        _scrollToSection(_keyTendencia);
+      case 'alertas_criticas':
+        _scrollToSection(_keyAlertas);
+      case 'resumen_paralelo':
+        _scrollToSection(_keyResumenParalelo);
+    }
   }
 
   @override
@@ -48,13 +83,33 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Row(
+            children: [
+              Text(
+                'Panel Predictivo',
+                style: GoogleFonts.inter(
+                  color: AppColors.gray002855,
+                  fontSize: 36,
+                  fontWeight: FontWeight.w700,
+                  height: 36 / 30,
+                  letterSpacing: 0,
+                ),
+              ),
+              const Spacer(),
+              RefreshButton(
+                onTap: () {
+                  context.read<DashboardProvider>().loadDashboard();
+                  context.read<AlertasProvider>().loadAlertas();
+                },
+              ),
+            ],
+          ),
+        const SizedBox(height: 24),
           const ScreenDescriptionCard(
             description:
-                'Vista general del sistema predictivo de abandono estudiantil: estado académico, tendencia histórica, alertas críticas, resumen por paralelo y seguimiento de alumnos.',
+                'Vista general del sistema predictivo de abandono estudiantil: estado académico, tendencia histórica, alertas críticas y resumen por paralelo.',
             icon: Icons.dashboard_rounded,
           ),
-          const SizedBox(height: 16),
-          _buildSectionSubmenu(),
           const SizedBox(height: 24),
           _sectionAnchor(key: _keyEstadoAcademico, child: const EstadoAcademicoSection()),
           const SizedBox(height: 24),
@@ -69,10 +124,10 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          'Distribución de riesgo por nivel',
+                          'Distribución de Riesgo por Nivel',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
-                            fontSize: 30,
+                            fontSize: 25,
                             fontWeight: FontWeight.w700,
                             height: 36 / 30,
                             letterSpacing: 0,
@@ -85,7 +140,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                           'Alertas Críticas',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
-                            fontSize: 30,
+                            fontSize: 25,
                             fontWeight: FontWeight.w700,
                             height: 36 / 30,
                             letterSpacing: 0,
@@ -134,10 +189,10 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Distribución de riesgo por nivel',
+                          'Distribución de Riesgo por Nivel',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
-                            fontSize: 30,
+                            fontSize: 25,
                             fontWeight: FontWeight.w700,
                             height: 36 / 30,
                             letterSpacing: 0,
@@ -158,7 +213,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                           'Alertas Críticas',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
-                            fontSize: 30,
+                            fontSize: 25,
                             fontWeight: FontWeight.w700,
                             height: 36 / 30,
                             letterSpacing: 0,
@@ -172,7 +227,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
               );
             },
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           _sectionAnchor(
             key: _keyResumenParalelo,
             child: Column(
@@ -182,13 +237,13 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                   'Resumen por Paralelo',
                   style: GoogleFonts.inter(
                     color: AppColors.gray002855,
-                    fontSize: 30,
+                    fontSize: 25,
                     fontWeight: FontWeight.w700,
                     height: 36 / 30,
                     letterSpacing: 0,
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 ResumenParaleloSection(),
               ],
             ),
@@ -207,57 +262,6 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
           // const SizedBox(height: 24),
           // const SeguimientoAlumnosSection(),
         ],
-      ),
-    );
-  }
-
-  /// Submenú horizontal scrolleable para saltar a cada sección.
-  Widget _buildSectionSubmenu() {
-    const items = [
-      ('Estado Académico', Icons.school_outlined),
-      ('Distribución de riesgo', Icons.show_chart),
-      ('Alertas Críticas', Icons.warning_amber_rounded),
-      ('Resumen por Paralelo', Icons.groups_outlined),
-    ];
-    final keys = [_keyEstadoAcademico, _keyTendencia, _keyAlertas, _keyResumenParalelo];
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(items.length, (i) {
-          final (label, icon) = items[i];
-          return Padding(
-            padding: EdgeInsets.only(right: i < items.length - 1 ? 12 : 0),
-            child: Material(
-              color: AppColors.gray002855.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(8),
-              child: InkWell(
-                onTap: () => _scrollToSection(keys[i]),
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(icon, size: 18, color: AppColors.gray002855),
-                      const SizedBox(width: 8),
-                      Text(
-                        label,
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray002855,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
       ),
     );
   }

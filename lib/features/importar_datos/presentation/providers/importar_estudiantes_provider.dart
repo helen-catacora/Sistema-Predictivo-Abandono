@@ -72,6 +72,16 @@ class ImportarEstudiantesProvider extends ChangeNotifier {
     }
   }
 
+  /// Descarga la plantilla Excel.
+  Future<List<int>?> descargarPlantilla() async {
+    try {
+      return await _repository.descargarPlantilla();
+    } catch (e) {
+      print('[ImportarEstudiantesProvider] Error plantilla: $e');
+      return null;
+    }
+  }
+
   void clearError() {
     _errorMessage = null;
     notifyListeners();

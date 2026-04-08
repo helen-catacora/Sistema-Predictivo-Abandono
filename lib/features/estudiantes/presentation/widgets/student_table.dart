@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,10 +99,23 @@ class StudentTable extends StatelessWidget {
 
 /// Tabla de datos de estudiantes (misma estructura que en EstudiantesPage).
 /// Reutilizable para mostrar cualquier lista, p. ej. los primeros 3 en el panel principal.
-class StudentDataTable extends StatelessWidget {
+class StudentDataTable extends StatefulWidget {
   const StudentDataTable({super.key, required this.estudiantes});
 
   final List<EstudianteItem> estudiantes;
+
+  @override
+  State<StudentDataTable> createState() => _StudentDataTableState();
+}
+
+class _StudentDataTableState extends State<StudentDataTable> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +130,19 @@ class StudentDataTable extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                child: DataTable(
+            return ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+              ),
+              child: Scrollbar(
+                controller: _scrollController,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: _scrollController,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: DataTable(
                   columnSpacing: 24,
                   dataRowMaxHeight: 65,
                   headingRowColor: WidgetStateProperty.all(
@@ -153,7 +175,8 @@ class StudentDataTable extends StatelessWidget {
                     ),
                     DataColumn(
                       numeric: false,
-                      label: Expanded(
+                      label: SizedBox(
+                        width: 130,
                         child: Text(
                           'ASISTENCIA',
                           textAlign: TextAlign.center,
@@ -169,7 +192,8 @@ class StudentDataTable extends StatelessWidget {
                     ),
                     DataColumn(
                       numeric: false,
-                      label: Expanded(
+                      label: SizedBox(
+                        width: 190,
                         child: Text(
                           'PROBABILIDAD DE ABANDONO',
                           textAlign: TextAlign.center,
@@ -218,7 +242,7 @@ class StudentDataTable extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: estudiantes
+                  rows: widget.estudiantes
                       .map(
                         (s) => DataRow(
                           cells: [
@@ -260,52 +284,58 @@ class StudentDataTable extends StatelessWidget {
                               ),
                             ),
                             DataCell(
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                ),
-                                child: AttendanceBar(
-                                  percentage: s.porcentajeAsistencia,
+                              SizedBox(
+                                width: 130,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  child: AttendanceBar(
+                                    percentage: s.porcentajeAsistencia,
+                                  ),
                                 ),
                               ),
                             ),
                             DataCell(
-                              Builder(
-                                builder: (context) {
-                                  final double? valorRaw =
-                                      s.probabilidadAbandono;
-                                  final String porcentaje = valorRaw != null
-                                      ? '${(valorRaw * 100).toStringAsFixed(0)}%'
-                                      : '-';
-                                  final riskLevel = RiskLevel.fromString(
-                                    s.nivelRiesgo,
-                                  );
+                              SizedBox(
+                                width: 190,
+                                child: Builder(
+                                  builder: (context) {
+                                    final double? valorRaw =
+                                        s.probabilidadAbandono;
+                                    final String porcentaje = valorRaw != null
+                                        ? '${(valorRaw * 100).toStringAsFixed(0)}%'
+                                        : '-';
+                                    final riskLevel = RiskLevel.fromString(
+                                      s.nivelRiesgo,
+                                    );
 
-                                  return Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      spacing: 24,
-                                      children: [
-                                        Text(
-                                          porcentaje,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: RiskLevelIndicator.colorFor(
-                                              riskLevel,
+                                    return Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        spacing: 24,
+                                        children: [
+                                          Text(
+                                            porcentaje,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: RiskLevelIndicator.colorFor(
+                                                riskLevel,
+                                              ),
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                        RiskLevelIndicator(
-                                          level: RiskLevel.fromString(
-                                            s.nivelRiesgo,
-                                          ),
+                                          RiskLevelIndicator(
+                                            level: RiskLevel.fromString(
+                                              s.nivelRiesgo,
+                                            ),
                                         ),
                                       ],
                                     ),
                                   );
-                                },
+                                  },
+                                ),
                               ),
                             ),
                             // DataCell(
@@ -352,7 +382,9 @@ class StudentDataTable extends StatelessWidget {
                       .toList(),
                 ),
               ),
-            );
+            ),
+          ),
+        );
           },
         ),
       ),

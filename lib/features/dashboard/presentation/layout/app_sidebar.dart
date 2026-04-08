@@ -14,7 +14,7 @@ import '../widgets/sidebar_logout_button.dart';
 
 /// Nombres de módulos que devuelve GET /me (coincidir con el backend).
 abstract class SidebarModulos {
-  static const String visualizacionResultados = 'Visualización de Predicciones';
+  static const String visualizacionResultados = 'Predicciones';
   static const String gestionUsuarios = 'Gestión de Usuarios';
   static const String reportes = 'Reportes';
   static const String gestionDatosEstudiantes =
@@ -38,10 +38,21 @@ class _SidebarEntry {
 }
 
 /// Menú lateral: solo se muestran ítems cuyos módulos vienen en GET /me.
-class AppSidebar extends StatelessWidget {
-  const AppSidebar({super.key, required this.selectedPath});
+class AppSidebar extends StatefulWidget {
+  const AppSidebar({
+    super.key,
+    required this.selectedPath,
+    this.isCollapsed = false,
+    this.onToggle,
+    this.onNavigated,
+    this.showToggle = true,
+  });
 
   final String selectedPath;
+  final bool isCollapsed;
+  final VoidCallback? onToggle;
+  final VoidCallback? onNavigated;
+  final bool showToggle;
   static const List<_SidebarEntry> _reportes = [
     _SidebarEntry(
       path: AppRoutes.homeReportes,
@@ -137,15 +148,15 @@ class AppSidebar extends StatelessWidget {
 
   static const List<_SidebarEntry> _visualizacionDePredicciones = [
     _SidebarEntry(
-      path: AppRoutes.homePanel,
-      label: 'Panel Predictivo',
-      icon: Icons.show_chart_outlined,
-      modulo: SidebarModulos.visualizacionResultados,
-    ),
-    _SidebarEntry(
       path: AppRoutes.homeEstudiantes,
       label: 'Prediccion por Estudiante',
       icon: Icons.school_outlined,
+      modulo: SidebarModulos.visualizacionResultados,
+    ),
+    _SidebarEntry(
+      path: AppRoutes.homeEntrenamientoModelo,
+      label: 'Entrenamiento del Modelo',
+      icon: Icons.model_training,
       modulo: SidebarModulos.visualizacionResultados,
     ),
   ];
@@ -180,6 +191,9 @@ class AppSidebar extends StatelessWidget {
     // ),
   ];
 
+  @override
+  State<AppSidebar> createState() => _AppSidebarState();
+
   static bool _tieneModulo(List<String> modulos, String? modulo) {
     if (modulo == null || modulo.isEmpty) return true;
     final m = modulo.trim().toLowerCase();
@@ -201,8 +215,42 @@ class AppSidebar extends StatelessWidget {
     return AppRoutes.homeMiPerfil;
   }
 
+}
+
+class _AppSidebarState extends State<AppSidebar> {
+  /// true cuando el sidebar ya terminó de expandirse y los textos pueden mostrarse.
+  bool _showText = false;
+
+  static const _animDuration = Duration(milliseconds: 250);
+
+  @override
+  void initState() {
+    super.initState();
+    _showText = !widget.isCollapsed;
+  }
+
+  @override
+  void didUpdateWidget(AppSidebar old) {
+    super.didUpdateWidget(old);
+    if (old.isCollapsed == widget.isCollapsed) return;
+
+    if (widget.isCollapsed) {
+      // Colapsando: ocultar textos inmediatamente
+      setState(() => _showText = false);
+    } else {
+      // Expandiendo: esperar a que el AnimatedContainer termine
+      Future.delayed(_animDuration, () {
+        if (mounted) setState(() => _showText = true);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Los tiles usan effectiveCollapsed para no mostrar texto durante la animación.
+    // SidebarBrand maneja su propio delay internamente → recibe el isCollapsed real.
+    final effectiveCollapsed = widget.isCollapsed || !_showText;
+
     return Consumer<MeProvider>(
       builder: (context, meProvider, _) {
         final modulos = meProvider.modulos;
@@ -213,7 +261,7 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path,
+                isSelected: widget.selectedPath == e.path,
               ),
             )
             .toList();
@@ -224,21 +272,57 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path,
+                isSelected: widget.selectedPath == e.path,
               ),
             )
             .toList();
-        final visualizacionDePredicciones = _visualizacionDePredicciones
-            .where((e) => _tieneModulo(modulos, e.modulo))
-            .map(
-              (e) => MenuItem(
-                path: e.path,
-                label: e.label,
-                icon: e.icon,
-                isSelected: selectedPath == e.path,
+        final esPanelSeleccionado = widget.selectedPath == AppRoutes.homePanel;
+        final panelPrincipalItem = MenuItem(
+          path: AppRoutes.homePanel,
+          label: 'Panel Predictivo',
+          icon: Icons.show_chart_outlined,
+          isSelected: esPanelSeleccionado,
+          children: [
+            MenuItem(
+              path: '${AppRoutes.homePanel}?seccion=estado_academico',
+              label: 'Estado Académico',
+              icon: Icons.school_outlined,
+              isSelected: false,
+            ),
+            MenuItem(
+              path: '${AppRoutes.homePanel}?seccion=distribucion_riesgo',
+              label: 'Distribución de riesgo',
+              icon: Icons.show_chart,
+              isSelected: false,
+            ),
+            MenuItem(
+              path: '${AppRoutes.homePanel}?seccion=alertas_criticas',
+              label: 'Alertas Críticas',
+              icon: Icons.warning_amber_rounded,
+              isSelected: false,
+            ),
+            MenuItem(
+              path: '${AppRoutes.homePanel}?seccion=resumen_paralelo',
+              label: 'Resumen por Paralelo',
+              icon: Icons.groups_outlined,
+              isSelected: false,
+            ),
+          ],
+        );
+        final visualizacionDePredicciones = [
+          if (_tieneModulo(modulos, SidebarModulos.visualizacionResultados))
+            panelPrincipalItem,
+          ..._visualizacionDePredicciones
+              .where((e) => _tieneModulo(modulos, e.modulo))
+              .map(
+                (e) => MenuItem(
+                  path: e.path,
+                  label: e.label,
+                  icon: e.icon,
+                  isSelected: widget.selectedPath == e.path,
+                ),
               ),
-            )
-            .toList();
+        ];
         final reportesItems = _reportes
             .where((e) => _tieneModulo(modulos, e.modulo))
             .map(
@@ -246,7 +330,7 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path,
+                isSelected: widget.selectedPath == e.path,
               ),
             )
             .toList();
@@ -272,7 +356,7 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path,
+                isSelected: widget.selectedPath == e.path,
               ),
             )
             .toList();
@@ -283,80 +367,81 @@ class AppSidebar extends StatelessWidget {
                 path: e.path,
                 label: e.label,
                 icon: e.icon,
-                isSelected: selectedPath == e.path,
+                isSelected: widget.selectedPath == e.path,
               ),
             )
             .toList();
 
-        return Container(
-          width: 260,
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          width: widget.isCollapsed ? 70 : 260,
           color: AppColors.navyDark,
           child: Column(
             children: [
-              const SidebarBrand(),
+              SidebarBrand(
+                isCollapsed: widget.isCollapsed,
+                onToggle: widget.onToggle,
+                showToggle: widget.showToggle,
+              ),
+              const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // if (menuPrincipalItems.isNotEmpty)
-                      //   MenuSection(
-                      //     title: 'MENÚ PRINCIPAL',
-                      //     items: menuPrincipalItems,
-                      //   ),
                       if (administracionItems.isNotEmpty)
-                        SidebarTile(item: administracionItems.first),
-                      // MenuSection(
-                      //   title: 'Gestion',
-                      //   items: menuPrincipalItems,
-                      // ),
+                        SidebarTile(
+                          item: administracionItems.first,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
+                        ),
                       if (gestionDatosDelEstudianteItems.isNotEmpty)
                         SidebarSectionExpansionTile(
-                          // title: 'GESTIÓN DE DATOS DEL ESTUDIANTE',
                           title: 'Gestion de Datos de Estudiantes',
                           icon: Icons.dashboard_outlined,
                           items: gestionDatosDelEstudianteItems,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
                         ),
                       if (visualizacionDePredicciones.isNotEmpty)
                         SidebarSectionExpansionTile(
-                          // title: 'VISUALIZACIÓN DE PREDICCIONES',
-                          title: 'Visualizacion de Predicciones',
+                          title: 'Predicciones',
                           icon: Icons.dashboard_outlined,
                           items: visualizacionDePredicciones,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
                         ),
                       if (asistencia.isNotEmpty)
-                        SidebarTile(item: asistencia.first),
-                      
-
+                        SidebarTile(
+                          item: asistencia.first,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
+                        ),
                       if (configuracionAcademica.isNotEmpty)
                         SidebarSectionExpansionTile(
                           title: 'Gestión Académica',
                           icon: Icons.dashboard_outlined,
                           items: configuracionAcademica,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
                         ),
-                        if (reportesItems.isNotEmpty)
+                      if (reportesItems.isNotEmpty)
                         SidebarSectionExpansionTile(
-                          // title: 'REPORTES',
                           title: 'Reportes',
                           icon: Icons.dashboard_outlined,
                           items: reportesItems,
+                          isCollapsed: effectiveCollapsed,
+                          onNavigated: widget.onNavigated,
                         ),
-                      // if (gestionDatosItems.isNotEmpty)
-                      //   MenuSection(
-                      //     title: 'GESTIÓN DE DATOS',
-                      //     items: gestionDatosItems,
-                      //   ),
-                      // if (administracionItems.isNotEmpty)
-                      //   MenuSection(
-                      //     title: 'ADMINISTRACIÓN',
-                      //     items: administracionItems,
-                      //   ),
                     ],
                   ),
                 ),
               ),
               SidebarLogoutButton(
+                isCollapsed: effectiveCollapsed,
                 onPressedProfile: () {
                   context.go(AppRoutes.homeMiPerfil);
+                  widget.onNavigated?.call();
                 },
                 onPressedLogout: () {
                   context.read<MeProvider>().clear();

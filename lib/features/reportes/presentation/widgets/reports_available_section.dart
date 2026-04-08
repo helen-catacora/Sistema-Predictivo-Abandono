@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
 import '../../../asistencia/data/models/paralelo_item.dart';
 import '../../../asistencia/presentation/providers/paralelos_provider.dart';
 import '../../../estudiantes/data/models/estudiante_item.dart';
@@ -97,6 +98,7 @@ class ReportsAvailableSection extends StatelessWidget {
       ),
       child: Consumer<ReportesTiposProvider>(
         builder: (context, provider, _) {
+          final screenWidth = MediaQuery.of(context).size.width;
           final isLoading = provider.isLoading;
           final hasError = provider.hasError;
           final tipos = provider.tipos;
@@ -122,7 +124,7 @@ class ReportsAvailableSection extends StatelessWidget {
                         'Reportes Disponibles',
                         style: GoogleFonts.inter(
                           color: AppColors.darkBlue1E293B,
-                          fontSize: 18,
+                          fontSize: Responsive.titleFontSize(screenWidth),
                           fontWeight: FontWeight.w700,
                           height: 28 / 18,
                           letterSpacing: 0,
@@ -174,7 +176,7 @@ class ReportsAvailableSection extends StatelessWidget {
                     final width = constraints.maxWidth;
                     final crossAxisCount =
                         (width / (minCardWidth + crossAxisSpacing)).floor();
-                    final columnCount = max(3, crossAxisCount);
+                    final columnCount = max(1, crossAxisCount);
 
                     return GridView.builder(
                       shrinkWrap: true,
@@ -390,6 +392,7 @@ class _ReportTemplateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final icon = _iconForTipo(item.tipo);
     final iconBackGroundColor = _backGroundColorForTipo(item.tipo);
     final iconColor = _iconColorForTipo(item.tipo);
@@ -429,23 +432,23 @@ class _ReportTemplateCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffDCFCE7),
-                        borderRadius: BorderRadius.circular(9999),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Text(
-                        'ACTIVO',
-                        style: GoogleFonts.inter(
-                          color: AppColors.green15803D,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          height: 16 / 12,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     color: const Color(0xffDCFCE7),
+                    //     borderRadius: BorderRadius.circular(9999),
+                    //   ),
+                    //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      // child: Text(
+                      //   'ACTIVO',
+                      //   style: GoogleFonts.inter(
+                      //     color: AppColors.green15803D,
+                      //     fontSize: 12,
+                      //     fontWeight: FontWeight.w700,
+                      //     height: 16 / 12,
+                      //     letterSpacing: 0,
+                      //   ),
+                      // ),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -453,7 +456,7 @@ class _ReportTemplateCard extends StatelessWidget {
                   item.nombre,
                   style: GoogleFonts.inter(
                     color: AppColors.darkBlue1E293B,
-                    fontSize: 16,
+                    fontSize: Responsive.titleFontSize(screenWidth) - 2,
                     fontWeight: FontWeight.w700,
                     height: 24 / 16,
                     letterSpacing: 0,
@@ -464,7 +467,7 @@ class _ReportTemplateCard extends StatelessWidget {
                   item.descripcion,
                   style: GoogleFonts.inter(
                     color: AppColors.grey64748B,
-                    fontSize: 14,
+                    fontSize: Responsive.subtitleFontSize(screenWidth),
                     fontWeight: FontWeight.w400,
                     height: 20 / 14,
                     letterSpacing: 0,

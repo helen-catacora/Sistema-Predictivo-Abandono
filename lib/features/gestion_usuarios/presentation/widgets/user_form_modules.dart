@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
 import 'user_form_personal_info.dart';
 
 /// Sección Asignación de Módulos.
@@ -28,28 +29,25 @@ class UserFormModules extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Seleccione los módulos del sistema a los que tendrá acceso este usuario',
-            style: TextStyle(fontSize: 14, color: AppColors.grayDark),
+          Builder(
+            builder: (context) {
+              final w = MediaQuery.of(context).size.width;
+              return Text(
+                'Seleccione los módulos del sistema a los que tendrá acceso este usuario',
+                style: TextStyle(fontSize: Responsive.subtitleFontSize(w), color: AppColors.grayDark),
+              );
+            },
           ),
           const SizedBox(height: 16),
           if (isLoading)
             const Center(child: CircularProgressIndicator())
           else
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: modulos.map((m) {
-                final id = (m['id'] as num).toInt();
-                final nombre = m['nombre'] as String;
-                return _ModuleCard(
-                  title: nombre,
-                  description: _descripcionModulo(nombre),
-                  icon: _iconFromModulo(nombre),
-                  isSelected: selectedModules.contains(id),
-                  onTap: () => onToggle(id),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  children: _buildModuleRows(modulos, constraints.maxWidth),
                 );
-              }).toList(),
+              },
             ),
           const SizedBox(height: 16),
           Container(
@@ -84,15 +82,53 @@ class UserFormModules extends StatelessWidget {
         return 'Administración de usuarios del sistema';
       case 'Gestión de Datos de Estudiantes':
         return 'Gestión de estudiantes y sus datos';
-      case 'Visualización de Resultados':
+      case 'Predicciones':
         return 'Dashboard y predicciones de abandono';
-      case 'Control de Asistencia':
+      case 'Registro de Asistencia':
         return 'Registro y control de asistencia';
       case 'Reportes':
         return 'Generación y exportación de reportes';
+      case 'Configuracion Academica':
+        return 'Configuración de paralelos y malla curricular';
       default:
         return nombre;
     }
+  }
+
+  List<Widget> _buildModuleRows(List<Map<String, dynamic>> items, double availableWidth) {
+    final columnsPerRow = availableWidth < 500 ? 1 : (availableWidth < 900 ? 2 : 3);
+    final widgets = <Widget>[];
+    for (var i = 0; i < items.length; i += columnsPerRow) {
+      final rowItems = items.sublist(
+        i,
+        i + columnsPerRow > items.length ? items.length : i + columnsPerRow,
+      );
+      final rowChildren = <Widget>[];
+      for (var j = 0; j < columnsPerRow; j++) {
+        if (j > 0) rowChildren.add(const SizedBox(width: 12));
+        if (j < rowItems.length) {
+          final m = rowItems[j];
+          final id = (m['id'] as num).toInt();
+          final nombre = m['nombre'] as String;
+          rowChildren.add(
+            Expanded(
+              child: _ModuleCard(
+                title: nombre,
+                description: _descripcionModulo(nombre),
+                icon: _iconFromModulo(nombre),
+                isSelected: selectedModules.contains(id),
+                onTap: () => onToggle(id),
+              ),
+            ),
+          );
+        } else {
+          rowChildren.add(const Expanded(child: SizedBox()));
+        }
+      }
+      if (i > 0) widgets.add(const SizedBox(height: 12));
+      widgets.add(IntrinsicHeight(child: Row(children: rowChildren)));
+    }
+    return widgets;
   }
 
   IconData _iconFromModulo(String nombre) {
@@ -101,12 +137,14 @@ class UserFormModules extends StatelessWidget {
         return Icons.people_outline;
       case 'Gestión de Datos de Estudiantes':
         return Icons.school_outlined;
-      case 'Visualización de Resultados':
+      case 'Predicciones':
         return Icons.trending_up_outlined;
-      case 'Control de Asistencia':
+      case 'Registro de Asistencia':
         return Icons.event_available_outlined;
       case 'Reportes':
         return Icons.assessment_outlined;
+      case 'Configuracion Academica':
+        return Icons.account_balance_outlined;
       default:
         return Icons.apps_outlined;
     }
@@ -130,9 +168,8 @@ class _ModuleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: Material(
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Material(
         color: isSelected ? AppColors.blueLight : Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
@@ -166,9 +203,9 @@ class _ModuleCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                                fontSize: Responsive.bodyFontSize(screenWidth),
                               ),
                             ),
                           ),
@@ -178,7 +215,7 @@ class _ModuleCard extends StatelessWidget {
                       Text(
                         description,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: Responsive.bodyFontSize(screenWidth) - 1,
                           color: Colors.grey.shade700,
                         ),
                       ),
@@ -189,7 +226,6 @@ class _ModuleCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

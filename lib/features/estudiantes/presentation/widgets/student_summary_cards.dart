@@ -19,28 +19,40 @@ class StudentSummaryCards extends StatelessWidget {
             .where((e) => e.clasificacion == 'Abandona')
             .length;
 
-        return Row(
-          children: [
-            Expanded(
-              child: _SummaryCard(
-                title: 'TOTAL DE ESTUDIANTES',
-                value: total.toString(),
-                valueColor: AppColors.darkBlue1E293B,
-                borderColor: const Color(0xff002855),
-                backGroundColor: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _SummaryCard(
-                title: 'CANTIDAD DE ABANDONO',
-                value: abandono.toString(),
-                valueColor: const Color(0xFFEF4444),
-                borderColor: AppColors.redDC2626,
-                backGroundColor: Colors.white,
-              ),
-            ),
-          ],
+        final totalCard = _SummaryCard(
+          title: 'TOTAL DE ESTUDIANTES',
+          value: total.toString(),
+          valueColor: AppColors.darkBlue1E293B,
+          borderColor: const Color(0xff002855),
+          backGroundColor: Colors.white,
+        );
+        final abandonoCard = _SummaryCard(
+          title: 'CANTIDAD DE ABANDONO',
+          value: abandono.toString(),
+          valueColor: const Color(0xFFEF4444),
+          borderColor: AppColors.redDC2626,
+          backGroundColor: Colors.white,
+        );
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 600) {
+              return Column(
+                children: [
+                  totalCard,
+                  const SizedBox(height: 12),
+                  abandonoCard,
+                ],
+              );
+            }
+            return Row(
+              children: [
+                Expanded(child: totalCard),
+                const SizedBox(width: 16),
+                Expanded(child: abandonoCard),
+              ],
+            );
+          },
         );
       },
     );

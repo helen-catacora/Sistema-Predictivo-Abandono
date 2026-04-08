@@ -14,47 +14,70 @@ class AttendanceSummaryCards extends StatelessWidget {
     return Consumer<AsistenciasProvider>(
       builder: (context, provider, _) {
         final hasData = provider.hasData;
-        return Row(
-          children: [
-            Expanded(
-              child: _SummaryCard(
-                title: 'TOTAL ESTUDIANTES',
-                value: hasData ? provider.totalEstudiantes.toString() : '-',
-                valueColor: AppColors.darkBlue1E293B,
-                borderColor: Color(0xff002855),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _SummaryCard(
-                title: 'PRESENTES',
-                value: hasData ? provider.totalPresentes.toString() : '-',
-                valueColor: const Color(0xFF22C55E),
-                borderColor: AppColors.green16A34A,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _SummaryCard(
-                title: 'AUSENTES',
-                value: hasData ? provider.totalAusentes.toString() : '-',
-                valueColor: const Color(0xFFEF4444),
-                borderColor: AppColors.redDC2626,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _SummaryCard(
-                title: 'TASA DE ASISTENCIA',
-                value: hasData
-                    ? '${provider.porcentajeAsistenciaDia.toStringAsFixed(1)}%'
-                    : '-',
-                valueColor: AppColors.navyMedium,
-                borderColor: AppColors.gray002855,
-                backGroundColor: Color(0xffFEFCE8).withValues(alpha: 0.5),
-              ),
-            ),
-          ],
+        final cards = [
+          _SummaryCard(
+            title: 'TOTAL ESTUDIANTES',
+            value: hasData ? provider.totalEstudiantes.toString() : '-',
+            valueColor: AppColors.darkBlue1E293B,
+            borderColor: Color(0xff002855),
+          ),
+          _SummaryCard(
+            title: 'PRESENTES',
+            value: hasData ? provider.totalPresentes.toString() : '-',
+            valueColor: const Color(0xFF22C55E),
+            borderColor: AppColors.green16A34A,
+          ),
+          _SummaryCard(
+            title: 'AUSENTES',
+            value: hasData ? provider.totalAusentes.toString() : '-',
+            valueColor: const Color(0xFFEF4444),
+            borderColor: AppColors.redDC2626,
+          ),
+          _SummaryCard(
+            title: 'TASA DE ASISTENCIA',
+            value: hasData
+                ? '${provider.porcentajeAsistenciaDia.toStringAsFixed(1)}%'
+                : '-',
+            valueColor: AppColors.navyMedium,
+            borderColor: AppColors.gray002855,
+            backGroundColor: Color(0xffFEFCE8).withValues(alpha: 0.5),
+          ),
+        ];
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 600) {
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: cards[0]),
+                      const SizedBox(width: 16),
+                      Expanded(child: cards[1]),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(child: cards[2]),
+                      const SizedBox(width: 16),
+                      Expanded(child: cards[3]),
+                    ],
+                  ),
+                ],
+              );
+            }
+            return Row(
+              children: [
+                Expanded(child: cards[0]),
+                const SizedBox(width: 16),
+                Expanded(child: cards[1]),
+                const SizedBox(width: 16),
+                Expanded(child: cards[2]),
+                const SizedBox(width: 16),
+                Expanded(child: cards[3]),
+              ],
+            );
+          },
         );
       },
     );

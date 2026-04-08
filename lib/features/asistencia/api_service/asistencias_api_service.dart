@@ -16,13 +16,17 @@ class AsistenciasApiService {
   Future<AsistenciaDiaResponse> getAsistenciasDia({
     required int materiaId,
     required int paraleloId,
+    String? fecha,
   }) async {
+    final params = <String, dynamic>{
+      'materia_id': materiaId,
+      'paralelo_id': paraleloId,
+    };
+    if (fecha != null) params['fecha'] = fecha;
+
     final response = await _dio.get<Map<String, dynamic>>(
       ApiEndpoints.asistenciasDia,
-      queryParameters: {
-        'materia_id': materiaId,
-        'paralelo_id': paraleloId,
-      },
+      queryParameters: params,
     );
 
     if (response.data == null) {
@@ -41,13 +45,17 @@ class AsistenciasApiService {
     required int materiaId,
     required int paraleloId,
     required AsistenciaSaveRequest body,
+    String? fecha,
   }) async {
+    final params = <String, dynamic>{
+      'materia_id': materiaId,
+      'paralelo_id': paraleloId,
+    };
+    if (fecha != null) params['fecha'] = fecha;
+
     await _dio.post<void>(
       ApiEndpoints.asistenciasDia,
-      queryParameters: {
-        'materia_id': materiaId,
-        'paralelo_id': paraleloId,
-      },
+      queryParameters: params,
       data: body.toJson(),
     );
   }

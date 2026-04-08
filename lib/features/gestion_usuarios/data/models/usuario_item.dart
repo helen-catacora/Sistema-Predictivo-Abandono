@@ -11,6 +11,7 @@ class UsuarioItem {
     required this.cargo,
     required this.telefono,
     required this.carnetIdentidad,
+    this.motivoInactivacion = '',
   });
 
   factory UsuarioItem.fromJson(Map<String, dynamic> json) {
@@ -29,6 +30,7 @@ class UsuarioItem {
       cargo: json['cargo'] ?? '',
       telefono: json['telefono'] ?? '',
       carnetIdentidad: json['carnet_identidad'] ?? '',
+      motivoInactivacion: json['motivo_inactivacion'] as String? ?? '',
     );
   }
 
@@ -42,4 +44,5 @@ class UsuarioItem {
   final String cargo;
   final String telefono;
   final String carnetIdentidad;
+  final String motivoInactivacion;
 }

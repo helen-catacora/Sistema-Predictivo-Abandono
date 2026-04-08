@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -36,7 +37,7 @@ class UsersTable extends StatelessWidget {
             provider.loadUsuarios,
           );
         }
-        return _buildTable(context, provider.usuarios);
+        return _buildTable(context, provider.usuariosFiltrados);
       },
     );
   }
@@ -112,54 +113,64 @@ class UsersTable extends StatelessWidget {
                   headingRowColor: WidgetStateProperty.all(
                     const Color(0xff001233),
                   ),
-                  columns: const [
+                  columns: [
                     DataColumn(
                       label: Text(
                         'NOMBRE',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
                     DataColumn(
                       label: Text(
                         'CORREO INSTITUCIONAL',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
                     DataColumn(
                       label: Text(
                         'ROL',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
                     DataColumn(
                       label: Text(
                         'ESTADO',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
                     DataColumn(
                       label: Text(
                         'OPERACIONES',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          height: 16 / 12,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
@@ -196,9 +207,11 @@ class UsersTable extends StatelessWidget {
                                     children: [
                                       Text(
                                         u.nombre,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w700,
                                           fontSize: 14,
+                                          height: 20 / 14,
+                                          letterSpacing: 0,
                                         ),
                                       ),
                                       Text(

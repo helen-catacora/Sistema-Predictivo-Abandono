@@ -9,18 +9,62 @@ class SidebarLogoutButton extends StatelessWidget {
     super.key,
     required this.onPressedLogout,
     required this.onPressedProfile,
+    this.isCollapsed = false,
   });
 
   final Function() onPressedLogout;
   final Function() onPressedProfile;
+  final bool isCollapsed;
 
   @override
   Widget build(BuildContext context) {
     final profile = context.read<MeProvider>().me;
+
+    if (isCollapsed) {
+      return Container(
+        decoration: const BoxDecoration(color: Color(0xff002855)),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          children: [
+            Tooltip(
+              message: profile?.nombre ?? 'Mi Perfil',
+              child: GestureDetector(
+                onTap: onPressedProfile,
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    profile?.nombre.substring(0, 1) ?? '',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Tooltip(
+              message: 'Cerrar Sesión',
+              child: GestureDetector(
+                onTap: onPressedLogout,
+                child: const Icon(
+                  Icons.logout,
+                  color: Color(0xff9CA3AF),
+                  size: 22,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: onPressedProfile,
       child: Container(
-        decoration: BoxDecoration(color: Color(0xff002855)),
+        decoration: const BoxDecoration(color: Color(0xff002855)),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Row(
@@ -39,7 +83,7 @@ class SidebarLogoutButton extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +105,7 @@ class SidebarLogoutButton extends StatelessWidget {
                       'Sesión Activa',
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: Color(0xff9CA3AF),
+                        color: const Color(0xff9CA3AF),
                         fontWeight: FontWeight.w400,
                         height: 16 / 12,
                       ),
@@ -69,10 +113,14 @@ class SidebarLogoutButton extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               GestureDetector(
                 onTap: onPressedLogout,
-                child: Icon(Icons.logout, color: Color(0xff9CA3AF), size: 24),
+                child: const Icon(
+                  Icons.logout,
+                  color: Color(0xff9CA3AF),
+                  size: 24,
+                ),
               ),
             ],
           ),

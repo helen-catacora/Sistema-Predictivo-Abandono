@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
 import '../../../auth/data/models/me_response.dart';
 import '../../../auth/repositories/auth_repository.dart';
 import '../widgets/mi_perfil/cambiar_contrasena_dialog.dart';
@@ -179,7 +180,9 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
             'Mi Perfil',
             style: GoogleFonts.inter(
               color: AppColors.gray002855,
-              fontSize: 30,
+              fontSize: Responsive.pageTitleFontSize(
+                MediaQuery.of(context).size.width,
+              ),
               fontWeight: FontWeight.w700,
               height: 36 / 30,
               letterSpacing: 0,

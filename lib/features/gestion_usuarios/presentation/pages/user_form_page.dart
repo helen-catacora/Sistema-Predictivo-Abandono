@@ -16,12 +16,6 @@ import '../widgets/user_form_personal_info.dart';
 import '../widgets/user_form_quick_help.dart';
 import '../widgets/user_form_role.dart';
 
-/// Mapeo nombre de rol -> rol_id para PATCH /usuarios/:id (ajustar según backend).
-const Map<String, int> _rolNombreToId = {
-  'JEFE DE CARRERA': 1,
-  'DOCENTE A DEDICACIÓN EXCLUSIVA': 2,
-  'ENCARGADO DE CURSO': 3,
-};
 
 /// Página de registro/edición de usuario.
 class UserFormPage extends StatefulWidget {
@@ -52,6 +46,7 @@ class _UserFormPageState extends State<UserFormPage> {
   String _selectedRol = '';
   int _selectedRolId = 999;
   bool _estadoActivo = true;
+  String _motivoInactivacion = '';
   final Set<int> _modulosSeleccionados = {};
 
   bool get _isEditMode => widget.usuario != null;
@@ -79,11 +74,11 @@ class _UserFormPageState extends State<UserFormPage> {
           ? partes.sublist(1).join(' ')
           : '';
       _correoController.text = u.correo;
-      _cargoController.text = u.rol;
       _selectedRol = u.rol;
       _selectedRolId = u.rolId;
       print('Usuario: ${u.nombre}, Rol: ${u.rol}, RolId: ${u.rolId}');
       _estadoActivo = u.estado.toLowerCase() == 'activo';
+      _motivoInactivacion = u.motivoInactivacion;
       _modulosSeleccionados.addAll(u.modulos);
       _cedulaController.text = u.carnetIdentidad;
       _telefonoController.text = u.telefono;
@@ -114,8 +109,10 @@ class _UserFormPageState extends State<UserFormPage> {
       _correoController.clear();
       _passwordController.clear();
       _confirmPasswordController.clear();
-      _selectedRol = 'JEFE DE CARRERA';
+      _selectedRol = '';
+      _selectedRolId = 0;
       _estadoActivo = true;
+      _motivoInactivacion = '';
       _modulosSeleccionados.clear();
     });
   }
@@ -139,6 +136,8 @@ class _UserFormPageState extends State<UserFormPage> {
           // 'rol_id': _rolNombreToId[_selectedRol.toUpperCase()],
           'rol_id': _selectedRolId,
           'estado': _estadoActivo ? 'activo' : 'inactivo',
+          if (!_estadoActivo)
+            'motivo_inactivacion': _motivoInactivacion.trim(),
           'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.updateUsuario(widget.usuario!.id, body);
@@ -183,7 +182,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'cargo': _cargoController.text.trim(),
           'correo': _correoController.text.trim(),
           'contraseña': _passwordController.text,
-          'rol_id': _rolNombreToId[_selectedRol.toUpperCase()] ?? 3,
+          'rol_id': _selectedRolId,
           'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.createUsuario(body);
@@ -230,88 +229,104 @@ class _UserFormPageState extends State<UserFormPage> {
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Column(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final formContent = Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 16),
+                    const ScreenDescriptionCard(
+                      description:
+                          'Complete los datos del usuario para registrar un nuevo acceso o editar uno existente. Incluye datos personales, credenciales, rol y módulos asignados.',
+                      icon: Icons.admin_panel_settings_outlined,
+                    ),
+                    const SizedBox(height: 24),
+                    UserFormPersonalInfo(
+                      nombresController: _nombresController,
+                      apellidosController: _apellidosController,
+                      cedulaController: _cedulaController,
+                      telefonoController: _telefonoController,
+                      cargoController: _cargoController,
+                    ),
+                    const SizedBox(height: 24),
+                    UserFormCredentials(
+                      correoController: _correoController,
+                      passwordController: _passwordController,
+                      confirmPasswordController: _confirmPasswordController,
+                      isEditMode: _isEditMode,
+                    ),
+                    const SizedBox(height: 24),
+                    UserFormRole(
+                      selectedRol: _selectedRol.toUpperCase(),
+                      selectedRolId: _selectedRolId,
+                      estadoActivo: _estadoActivo,
+                      motivoInactivacion: _motivoInactivacion,
+                      onRolChanged: (r) => setState(() {
+                        _selectedRol = r.$1;
+                        _selectedRolId = r.$2;
+                      }),
+                      onEstadoChanged: (v) =>
+                          setState(() => _estadoActivo = v),
+                      onMotivoChanged: (v) =>
+                          setState(() => _motivoInactivacion = v),
+                    ),
+                    const SizedBox(height: 24),
+                    Consumer<ModulosProvider>(
+                      builder: (context, modulosProvider, _) {
+                        return UserFormModules(
+                          modulos: modulosProvider.modulos,
+                          selectedModules: _modulosSeleccionados,
+                          isLoading: modulosProvider.isLoading,
+                          onToggle: (m) {
+                            setState(() {
+                              if (_modulosSeleccionados.contains(m)) {
+                                _modulosSeleccionados.remove(m);
+                              } else {
+                                _modulosSeleccionados.add(m);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                );
+
+                final sidePanel = Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    UserFormActions(
+                      onGuardar: _guardar,
+                      onLimpiar: _limpiarFormulario,
+                      onCancelar: _cancelar,
+                      saving: _saving,
+                    ),
+                    const SizedBox(height: 24),
+                    const UserFormQuickHelp(),
+                  ],
+                );
+
+                if (constraints.maxWidth < 900) {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _buildHeader(),
-                      const SizedBox(height: 16),
-                      const ScreenDescriptionCard(
-                        description:
-                            'Complete los datos del usuario para registrar un nuevo acceso o editar uno existente. Incluye datos personales, credenciales, rol y módulos asignados.',
-                        icon: Icons.admin_panel_settings_outlined,
-                      ),
+                      formContent,
                       const SizedBox(height: 24),
-                      UserFormPersonalInfo(
-                        nombresController: _nombresController,
-                        apellidosController: _apellidosController,
-                        cedulaController: _cedulaController,
-                        telefonoController: _telefonoController,
-                        cargoController: _cargoController,
-                      ),
-                      const SizedBox(height: 24),
-                      UserFormCredentials(
-                        correoController: _correoController,
-                        passwordController: _passwordController,
-                        confirmPasswordController: _confirmPasswordController,
-                        isEditMode: _isEditMode,
-                      ),
-                      const SizedBox(height: 24),
-                      UserFormRole(
-                        selectedRol: _selectedRol.toUpperCase(),
-                        selectedRolId: _selectedRolId,
-                        estadoActivo: _estadoActivo,
-                        onRolChanged: (r) => setState(() {
-                          _selectedRol = r.$1;
-                          _selectedRolId = r.$2;
-                        }),
-                        onEstadoChanged: (v) =>
-                            setState(() => _estadoActivo = v),
-                      ),
-                      const SizedBox(height: 24),
-                      Consumer<ModulosProvider>(
-                        builder: (context, modulosProvider, _) {
-                          return UserFormModules(
-                            modulos: modulosProvider.modulos,
-                            selectedModules: _modulosSeleccionados,
-                            isLoading: modulosProvider.isLoading,
-                            onToggle: (m) {
-                              setState(() {
-                                if (_modulosSeleccionados.contains(m)) {
-                                  _modulosSeleccionados.remove(m);
-                                } else {
-                                  _modulosSeleccionados.add(m);
-                                }
-                              });
-                            },
-                          );
-                        },
-                      ),
+                      sidePanel,
                     ],
-                  ),
-                ),
-                const SizedBox(width: 32),
-                SizedBox(
-                  width: 280,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      UserFormActions(
-                        onGuardar: _guardar,
-                        onLimpiar: _limpiarFormulario,
-                        onCancelar: _cancelar,
-                        saving: _saving,
-                      ),
-                      const SizedBox(height: 24),
-                      const UserFormQuickHelp(),
-                    ],
-                  ),
-                ),
-              ],
+                  );
+                }
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 3, child: formContent),
+                    const SizedBox(width: 32),
+                    SizedBox(width: 280, child: sidePanel),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -355,7 +370,7 @@ class _UserFormPageState extends State<UserFormPage> {
                   _isEditMode ? 'Editar Usuario' : 'Registro de Nuevo Usuario',
                   style: TextStyle(
                     color: AppColors.navyMedium,
-                    fontSize: 28,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -13,6 +13,7 @@ import 'package:sistemapredictivoabandono/features/reportes/presentation/provide
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/utils/responsive_utils.dart';
 import '../../../gestion_usuarios/presentation/providers/modulos_provider.dart';
 import 'app_sidebar.dart';
 import '../widgets/dashboard_footer.dart';
@@ -31,6 +32,9 @@ class DashboardLayout extends StatefulWidget {
 
 class _DashboardLayoutState extends State<DashboardLayout> {
   bool _redirectToFirstAvailableDone = false;
+  bool _desktopSidebarCollapsed = false; // desktop empieza expandido
+  bool _tabletSidebarCollapsed = true;   // tablet empieza colapsado
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -76,29 +80,68 @@ class _DashboardLayoutState extends State<DashboardLayout> {
     }
 
     return ModulosLoader(
-      child: Scaffold(
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSidebar(selectedPath: location),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const DashboardHeader(),
-                  Expanded(
-                    child: Container(
-                      color: AppColors.grayLight,
-                      padding: const EdgeInsets.all(24),
-                      child: widget.child,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          final isMobile = Responsive.isMobile(width);
+          final isTablet = Responsive.isTablet(width);
+
+          final sidebarCollapsed = isMobile
+              ? false
+              : (isTablet ? _tabletSidebarCollapsed : _desktopSidebarCollapsed);
+
+          Widget sidebarWidget({VoidCallback? onNavigated}) => AppSidebar(
+            selectedPath: location,
+            isCollapsed: sidebarCollapsed,
+            onToggle: () => setState(() {
+              if (isTablet) {
+                _tabletSidebarCollapsed = !_tabletSidebarCollapsed;
+              } else {
+                _desktopSidebarCollapsed = !_desktopSidebarCollapsed;
+              }
+            }),
+            onNavigated: onNavigated,
+            showToggle: !isMobile,
+          );
+
+          return Scaffold(
+            key: _scaffoldKey,
+            drawer: isMobile
+                ? Drawer(
+                    child: sidebarWidget(
+                      onNavigated: () =>
+                          _scaffoldKey.currentState?.closeDrawer(),
                     ),
+                  )
+                : null,
+            body: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!isMobile) sidebarWidget(),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      DashboardHeader(
+                        showMenuButton: isMobile,
+                        onMenuPressed: () =>
+                            _scaffoldKey.currentState?.openDrawer(),
+                      ),
+                      Expanded(
+                        child: Container(
+                          color: AppColors.grayLight,
+                          padding: Responsive.contentPadding(width),
+                          child: widget.child,
+                        ),
+                      ),
+                      const DashboardFooter(),
+                    ],
                   ),
-                  const DashboardFooter(),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

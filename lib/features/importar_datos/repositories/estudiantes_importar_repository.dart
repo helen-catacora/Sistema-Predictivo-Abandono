@@ -15,6 +15,8 @@ class EstudiantesImportarRepository {
   Future<ImportacionEstudiantesResponse> enviarArchivo(PlatformFile file) =>
       _apiService.postImportar(file);
 
+  Future<List<int>> descargarPlantilla() => _apiService.descargarPlantilla();
+
   Future<ResumenImportacionesResponse> getResumenImportaciones() =>
       _apiService.getResumenImportaciones();
 }

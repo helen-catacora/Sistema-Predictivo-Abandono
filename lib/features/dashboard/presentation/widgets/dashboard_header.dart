@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/router/app_router.dart';
 
 /// Encabezado del panel de control con línea amarilla y acciones.
 class DashboardHeader extends StatelessWidget {
-  const DashboardHeader({super.key});
+  const DashboardHeader({
+    super.key,
+    this.showMenuButton = false,
+    this.onMenuPressed,
+  });
+
+  final bool showMenuButton;
+  final VoidCallback? onMenuPressed;
 
   @override
   Widget build(BuildContext context) {
-    final isPanel =
-        GoRouterState.of(context).matchedLocation == AppRoutes.homePanel ||
-        GoRouterState.of(context).matchedLocation == AppRoutes.home;
+    final width = MediaQuery.of(context).size.width;
+    final fontSize = width < 600 ? 14.0 : (width < 900 ? 16.0 : 20.0);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       color: AppColors.navyDark,
       child: Row(
         children: [
+          if (showMenuButton) ...[
+            IconButton(
+              icon: const Icon(Icons.menu, color: AppColors.white),
+              onPressed: onMenuPressed,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+            const SizedBox(width: 12),
+          ],
           Container(
             width: 4,
             height: 28,
@@ -28,36 +41,18 @@ class DashboardHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          const Text(
-            // 'PANEL DE CONTROL PREDICTIVO',
-            'SISTEMA PREDICTIVO DE ABANDONO ESTUDIANTIL DE CIENCIAS BASICAS',
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: Text(
+              'SISTEMA PREDICTIVO DE ABANDONO ESTUDIANTIL DE CIENCIAS BASICAS',
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
-          const Spacer(),
-          if (isPanel) ...[
-            // _HeaderButton(
-            //   icon: Icons.psychology_outlined,
-            //   label: 'NUEVA PREDICCIÓN',
-            //   onPressed: () {},
-            // ),
-            // const SizedBox(width: 12),
-            // _HeaderButton(
-            //   icon: Icons.history,
-            //   label: 'VER HISTORIAL',
-            //   onPressed: () {},
-            // ),
-            // const SizedBox(width: 12),
-            // _HeaderButton(
-            //   icon: Icons.description_outlined,
-            //   label: 'CARGAR EXCEL',
-            //   onPressed: () {},
-            // ),
-            const SizedBox(width: 16),
-          ],
         ],
       ),
     );

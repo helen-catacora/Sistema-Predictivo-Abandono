@@ -9,140 +9,152 @@ class ReportsChartsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 2,
-          child: _ChartCard(
-            title: 'Distribución de Riesgo por Semestre',
-            onExport: () {},
-            child: SizedBox(
-              height: 260,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  maxY: 40,
-                  barTouchData: BarTouchData(enabled: false),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) => Text(
-                          'Sem ${value.toInt()}',
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 11,
-                          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 900;
+        final barChart = _ChartCard(
+          title: 'Distribución de Riesgo por Semestre',
+          onExport: () {},
+          child: SizedBox(
+            height: 260,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: 40,
+                barTouchData: BarTouchData(enabled: false),
+                titlesData: FlTitlesData(
+                  show: true,
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) => Text(
+                        'Sem ${value.toInt()}',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 11,
                         ),
-                        reservedSize: 30,
                       ),
+                      reservedSize: 30,
                     ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30,
-                        getTitlesWidget: (value, meta) => Text(
-                          value.toInt().toString(),
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 11,
-                          ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      getTitlesWidget: (value, meta) => Text(
+                        value.toInt().toString(),
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 11,
                         ),
                       ),
                     ),
-                    topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
                   ),
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                    getDrawingHorizontalLine: (value) =>
-                        FlLine(color: Colors.grey.shade200, strokeWidth: 1),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
                   ),
-                  borderData: FlBorderData(show: false),
-                  barGroups: [
-                    _makeBarGroup(0, 12, 18, 8),
-                    _makeBarGroup(1, 10, 15, 12),
-                    _makeBarGroup(2, 14, 12, 10),
-                    _makeBarGroup(3, 8, 20, 14),
-                    _makeBarGroup(4, 15, 10, 12),
-                    _makeBarGroup(5, 11, 16, 9),
-                  ],
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
-                duration: const Duration(milliseconds: 250),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) =>
+                      FlLine(color: Colors.grey.shade200, strokeWidth: 1),
+                ),
+                borderData: FlBorderData(show: false),
+                barGroups: [
+                  _makeBarGroup(0, 12, 18, 8),
+                  _makeBarGroup(1, 10, 15, 12),
+                  _makeBarGroup(2, 14, 12, 10),
+                  _makeBarGroup(3, 8, 20, 14),
+                  _makeBarGroup(4, 15, 10, 12),
+                  _makeBarGroup(5, 11, 16, 9),
+                ],
               ),
+              duration: const Duration(milliseconds: 250),
             ),
           ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: _ChartCard(
-            title: 'Causas del Abandono Estudiantil',
-            child: SizedBox(
-              height: 260,
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 40,
-                  sections: [
-                    PieChartSectionData(
-                      value: 35,
-                      color: AppColors.navyMedium,
-                      title: '35%',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+        );
+        final pieChart = _ChartCard(
+          title: 'Causas del Abandono Estudiantil',
+          child: SizedBox(
+            height: 260,
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 2,
+                centerSpaceRadius: 40,
+                sections: [
+                  PieChartSectionData(
+                    value: 35,
+                    color: AppColors.navyMedium,
+                    title: '35%',
+                    radius: 50,
+                    titleStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    PieChartSectionData(
-                      value: 25,
-                      color: AppColors.accentYellow,
-                      title: '25%',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                  ),
+                  PieChartSectionData(
+                    value: 25,
+                    color: AppColors.accentYellow,
+                    title: '25%',
+                    radius: 50,
+                    titleStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
-                    PieChartSectionData(
-                      value: 22,
-                      color: const Color(0xFFEF4444),
-                      title: '22%',
-                      radius: 50,
-                      titleStyle: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                  ),
+                  PieChartSectionData(
+                    value: 22,
+                    color: const Color(0xFFEF4444),
+                    title: '22%',
+                    radius: 50,
+                    titleStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    PieChartSectionData(
-                      value: 18,
-                      color: Colors.grey.shade400,
-                      title: '18%',
-                      radius: 50,
-                      titleStyle: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade800,
-                      ),
+                  ),
+                  PieChartSectionData(
+                    value: 18,
+                    color: Colors.grey.shade400,
+                    title: '18%',
+                    radius: 50,
+                    titleStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade800,
                     ),
-                  ],
-                ),
-                duration: const Duration(milliseconds: 250),
+                  ),
+                ],
               ),
+              duration: const Duration(milliseconds: 250),
             ),
           ),
-        ),
-      ],
+        );
+
+        if (isNarrow) {
+          return Column(
+            children: [
+              barChart,
+              const SizedBox(height: 20),
+              pieChart,
+            ],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(flex: 2, child: barChart),
+            const SizedBox(width: 20),
+            Expanded(child: pieChart),
+          ],
+        );
+      },
     );
   }
 }

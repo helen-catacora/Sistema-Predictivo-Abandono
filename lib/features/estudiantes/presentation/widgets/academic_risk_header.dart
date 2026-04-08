@@ -5,6 +5,7 @@ import 'package:sistemapredictivoabandono/features/estudiantes/presentation/prov
 import 'package:sistemapredictivoabandono/shared/widgets/refresh_button.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
 
 /// Encabezado de la página Estudiantes en Riesgo Académico de Abandono Estudiantil.
 class AcademicRiskHeader extends StatelessWidget {
@@ -12,41 +13,48 @@ class AcademicRiskHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Prediccion de Abandono Estudiantil',
-              style: GoogleFonts.inter(
-                color: AppColors.gray002855,
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
-                height: 36 / 30,
-                letterSpacing: 0,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Text(
-            //   'Monitoreo de casos de abandono estudiantil en Ciencias Básicas.',
-            //   style: GoogleFonts.inter(
-            //     color: AppColors.grey64748B,
-            //     fontSize: 16,
-            //     fontWeight: FontWeight.w500,
-            //     height: 24 / 16,
-            //     letterSpacing: 0.7,
-            //   ),
-            // ),
-          ],
-        ),
-        Spacer(),
-        RefreshButton(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final isMobile = Responsive.isMobile(w);
+        final fontSize = Responsive.pageTitleFontSize(w);
+
+        final titleText = Text(
+          'Prediccion de Abandono Estudiantil',
+          style: GoogleFonts.inter(
+            color: AppColors.gray002855,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w800,
+            height: 36 / 30,
+            letterSpacing: 0,
+          ),
+        );
+
+        final refreshButton = RefreshButton(
           onTap: () {
             context.read<EstudiantesProvider>().loadEstudiantes();
           },
-        ),
-      ],
+        );
+
+        if (isMobile) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              titleText,
+              const SizedBox(height: 8),
+              Align(alignment: Alignment.centerRight, child: refreshButton),
+            ],
+          );
+        }
+
+        return Row(
+          children: [
+            titleText,
+            const Spacer(),
+            refreshButton,
+          ],
+        );
+      },
     );
   }
 }
