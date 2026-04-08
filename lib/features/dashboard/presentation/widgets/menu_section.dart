@@ -66,6 +66,7 @@ class SidebarSectionExpansionTile extends StatelessWidget {
     required this.icon,
     this.isCollapsed = false,
     this.onNavigated,
+    this.onExpand,
   });
 
   final String title;
@@ -73,6 +74,7 @@ class SidebarSectionExpansionTile extends StatelessWidget {
   final List<MenuItem> items;
   final bool isCollapsed;
   final VoidCallback? onNavigated;
+  final VoidCallback? onExpand;
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +91,7 @@ class SidebarSectionExpansionTile extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                // Navegar al primer item de la sección
-                if (items.isNotEmpty) {
-                  final router = GoRouter.of(context);
-                  router.go(items.first.path);
-                  onNavigated?.call();
-                }
+                onExpand?.call();
               },
               borderRadius: BorderRadius.circular(8),
               child: Container(

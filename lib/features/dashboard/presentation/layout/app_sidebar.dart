@@ -400,6 +400,7 @@ class _AppSidebarState extends State<AppSidebar> {
                           items: gestionDatosDelEstudianteItems,
                           isCollapsed: effectiveCollapsed,
                           onNavigated: widget.onNavigated,
+                          onExpand: widget.onToggle,
                         ),
                       if (visualizacionDePredicciones.isNotEmpty)
                         SidebarSectionExpansionTile(
@@ -408,6 +409,7 @@ class _AppSidebarState extends State<AppSidebar> {
                           items: visualizacionDePredicciones,
                           isCollapsed: effectiveCollapsed,
                           onNavigated: widget.onNavigated,
+                          onExpand: widget.onToggle,
                         ),
                       if (asistencia.isNotEmpty)
                         SidebarTile(
@@ -422,6 +424,7 @@ class _AppSidebarState extends State<AppSidebar> {
                           items: configuracionAcademica,
                           isCollapsed: effectiveCollapsed,
                           onNavigated: widget.onNavigated,
+                          onExpand: widget.onToggle,
                         ),
                       if (reportesItems.isNotEmpty)
                         SidebarSectionExpansionTile(
@@ -430,6 +433,7 @@ class _AppSidebarState extends State<AppSidebar> {
                           items: reportesItems,
                           isCollapsed: effectiveCollapsed,
                           onNavigated: widget.onNavigated,
+                          onExpand: widget.onToggle,
                         ),
                     ],
                   ),
