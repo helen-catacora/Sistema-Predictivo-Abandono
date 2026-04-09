@@ -23,6 +23,8 @@ class EntrenamientoPage extends StatefulWidget {
 }
 
 class _EntrenamientoPageState extends State<EntrenamientoPage> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,29 @@ class _EntrenamientoPageState extends State<EntrenamientoPage> {
       final provider = context.read<EntrenamientoProvider>();
       provider.loadModeloActual();
       provider.loadHistorial();
+      provider.addListener(_onProviderChange);
     });
+  }
+
+  void _onProviderChange() {
+    final estado = context.read<EntrenamientoProvider>().estado;
+    if (estado == EntrenamientoEstado.uploading ||
+        estado == EntrenamientoEstado.training) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOut,
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    context.read<EntrenamientoProvider>().removeListener(_onProviderChange);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,6 +67,7 @@ class _EntrenamientoPageState extends State<EntrenamientoPage> {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
