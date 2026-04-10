@@ -242,7 +242,7 @@ class AttendanceStudentTable extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    e.nombreEstudiante,
+                                    e.nombreEstudiante.toUpperCase(),
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.black0F172A,

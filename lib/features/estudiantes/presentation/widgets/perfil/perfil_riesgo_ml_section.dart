@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../data/models/estudiante_perfil_response.dart';
@@ -15,10 +16,29 @@ class PerfilRiesgoMlSection extends StatelessWidget {
   final RiesgoYPrediccionPerfil? riesgoYPrediccion;
   final double probabilidadPorcentaje;
 
+  static const _featureLabels = {
+    'Mat': 'Materias aprobadas',
+    'Rep': 'Materias reprobadas',
+    '2T': 'Materias en 2do turno',
+    'Prom': 'Promedio académico',
+    'edad': 'Edad',
+    'Grado': 'Grado',
+    'Genero': 'Género',
+    'Semestre': 'Semestre',
+    'Carrera': 'Carrera',
+    'estrato_socioeconomico': 'Estrato socioeconómico',
+    'ocupacion_laboral': 'Ocupación laboral',
+    'con_quien_vive': 'Con quién vive',
+    'apoyo_economico': 'Apoyo económico',
+    'modalidad_ingreso': 'Modalidad de ingreso',
+    'tipo_colegio': 'Tipo de colegio',
+  };
+
+  static const _numericKeys = {'Mat', 'Rep', '2T', 'Prom', 'edad'};
+
   @override
   Widget build(BuildContext context) {
     final pred = riesgoYPrediccion?.prediccionActual;
-    // final historial = riesgoYPrediccion?.historial ?? [];
     final features = pred?.featuresUtilizadas ?? {};
 
     return PerfilSectionCard(
@@ -29,125 +49,249 @@ class PerfilRiesgoMlSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                border: Border.all(color: Colors.red.shade200),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'PROBABILIDAD DE ABANDONO',
-                    style: TextStyle(
-                      color: Colors.red.shade800,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '${probabilidadPorcentaje.toStringAsFixed(0)}%',
-                    style: TextStyle(
-                      color: Colors.red.shade800,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: (probabilidadPorcentaje / 100).clamp(0.0, 1.0),
-                      minHeight: 8,
-                      backgroundColor: Colors.grey.shade300,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.red.shade700,
-                      ),
-                    ),
-                  ),
-                  if (pred?.fechaPrediccion != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      'Última Actualización ${_formatDate(pred!.fechaPrediccion!)}',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // const Text(
-            //   'CLASIFICACIÓN HISTÓRICA',
-            //   style: TextStyle(
-            //     color: AppColors.navyMedium,
-            //     fontSize: 12,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            // const SizedBox(height: 8),
-            // Row(
-            //   children: [
-            //     _historialChip('Semestre Actual', pred?.nivelRiesgo ?? '-'),
-            //     const SizedBox(width: 12),
-            //     _historialChip(
-            //       'Semestre Anterior',
-            //       historial.length >= 2
-            //           ? (historial[historial.length - 2].nivelRiesgo ?? '-')
-            //           : '-',
-            //     ),
-            //     const SizedBox(width: 12),
-            //     if (historial.length >= 2)
-            //       Row(
-            //         mainAxisSize: MainAxisSize.min,
-            //         children: [
-            //           Icon(Icons.trending_up, size: 18, color: Colors.orange.shade700),
-            //           const SizedBox(width: 4),
-            //           Text(
-            //             'Incremento',
-            //             style: TextStyle(
-            //               fontSize: 12,
-            //               color: Colors.orange.shade700,
-            //               fontWeight: FontWeight.w600,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //   ],
-            // ),
-            // const SizedBox(height: 20),
-            // const Text(
-            //   'Evolución Temporal del Riesgo',
-            //   style: TextStyle(
-            //     color: AppColors.navyMedium,
-            //     fontSize: 14,
-            //     fontWeight: FontWeight.w600,
-            //   ),
-            // ),
-            // const SizedBox(height: 8),
-            // SizedBox(
-            //   height: 160,
-            //   child: _buildChart(historial),
-            // ),
+            _buildProbabilidadCard(pred),
             if (features.isNotEmpty) ...[
               const SizedBox(height: 20),
-              const Text(
-                'Factores de Riesgo Identificados (Features ML)',
-                style: TextStyle(
-                  color: AppColors.navyMedium,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              _buildFeaturesLabel(),
               const SizedBox(height: 8),
               _buildFeaturesTable(features),
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildProbabilidadCard(PrediccionActualPerfil? pred) {
+    const bgColor = Color(0xFFFEF2F2);
+    const borderColor = Color(0xFFFECACA);
+    const textColor = AppColors.redDC2626;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border.all(color: borderColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'PROBABILIDAD DE ABANDONO',
+            style: GoogleFonts.inter(
+              color: textColor,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${probabilidadPorcentaje.toStringAsFixed(0)}%',
+            style: GoogleFonts.inter(
+              color: textColor,
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: (probabilidadPorcentaje / 100).clamp(0.0, 1.0),
+              minHeight: 8,
+              backgroundColor: AppColors.greyE2E8F0,
+              valueColor: const AlwaysStoppedAnimation<Color>(textColor),
+            ),
+          ),
+          if (pred?.fechaPrediccion != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Última actualización: ${_formatDate(pred!.fechaPrediccion!)}',
+              style: GoogleFonts.inter(
+                color: AppColors.grey64748B,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturesLabel() {
+    return Text(
+      'Factores de Riesgo Identificados (Features ML)',
+      style: GoogleFonts.inter(
+        color: AppColors.black334155,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildFeaturesTable(Map<String, dynamic> features) {
+    final numeric = features.entries
+        .where((e) => _numericKeys.contains(e.key))
+        .toList();
+    final categorical = features.entries
+        .where((e) => !_numericKeys.contains(e.key))
+        .toList();
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.greyE2E8F0),
+          color: AppColors.white,
+        ),
+        child: Column(
+          children: [
+            if (numeric.isNotEmpty) ...[
+              _buildSectionHeader(
+                icon: Icons.bar_chart_rounded,
+                label: 'VARIABLES NUMÉRICAS',
+              ),
+              ...numeric.asMap().entries.map(
+                (entry) => _buildRow(
+                  entry.key,
+                  entry.value.key,
+                  entry.value.value,
+                  isLast: entry.key == numeric.length - 1 &&
+                      categorical.isEmpty,
+                ),
+              ),
+            ],
+            if (categorical.isNotEmpty) ...[
+              _buildSectionHeader(
+                icon: Icons.label_outline_rounded,
+                label: 'VARIABLES CATEGÓRICAS',
+                topBorder: numeric.isNotEmpty,
+              ),
+              ...categorical.asMap().entries.map(
+                (entry) => _buildRow(
+                  entry.key,
+                  entry.value.key,
+                  entry.value.value,
+                  isLast: entry.key == categorical.length - 1,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader({
+    required IconData icon,
+    required String label,
+    bool topBorder = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.greyF1F5F9,
+        border: Border(
+          top: topBorder
+              ? const BorderSide(color: AppColors.greyE2E8F0)
+              : BorderSide.none,
+          bottom: const BorderSide(color: AppColors.greyE2E8F0),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 14, color: AppColors.grey64748B),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.grey64748B,
+              letterSpacing: 0.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow(
+    int index,
+    String key,
+    dynamic value, {
+    bool isLast = false,
+  }) {
+    final isEven = index % 2 == 0;
+    final isNumeric = _numericKeys.contains(key);
+    final label = _featureLabels[key] ?? key;
+    final valueStr = value?.toString() ?? '—';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+      decoration: BoxDecoration(
+        color: isEven ? AppColors.white : AppColors.greyF8FAFC,
+        border: isLast
+            ? null
+            : const Border(
+                bottom: BorderSide(color: AppColors.greyE2E8F0),
+              ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.black334155,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: isNumeric
+                  ? Text(
+                      valueStr,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.gray002855,
+                      ),
+                    )
+                  : _buildCategoricalChip(valueStr),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoricalChip(String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.greyF1F5F9,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: AppColors.greyE2E8F0),
+      ),
+      child: Text(
+        value,
+        style: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColors.grey64748B,
+        ),
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -158,11 +302,11 @@ class PerfilRiesgoMlSection extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+          style: GoogleFonts.inter(color: AppColors.grey64748B, fontSize: 11),
         ),
         Text(
           value,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
         ),
       ],
     );
@@ -173,7 +317,10 @@ class PerfilRiesgoMlSection extends StatelessWidget {
       return Center(
         child: Text(
           'Sin historial de predicciones',
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+          style: GoogleFonts.inter(
+            color: AppColors.grey64748B,
+            fontSize: 14,
+          ),
         ),
       );
     }
@@ -185,34 +332,6 @@ class PerfilRiesgoMlSection extends StatelessWidget {
     return CustomPaint(
       painter: _LineChartPainter(values: values, maxY: maxVal),
       size: Size.infinite,
-    );
-  }
-
-  Widget _buildFeaturesTable(Map<String, dynamic> features) {
-    final entries = features.entries.toList();
-    if (entries.isEmpty) return const SizedBox.shrink();
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        headingRowColor: WidgetStateProperty.all(Colors.grey.shade200),
-        columns: const [
-          DataColumn(
-            label: Text(
-              'Factor',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          DataColumn(
-            label: Text('Valor', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
-        rows: entries.map((e) {
-          return DataRow(
-            cells: [DataCell(Text(e.key)), DataCell(Text(e.value.toString()))],
-          );
-        }).toList(),
-      ),
     );
   }
 
@@ -252,7 +371,7 @@ class _LineChartPainter extends CustomPainter {
     if (values.isEmpty) return;
     final n = values.length;
     final stepX = n > 1 ? (size.width - 32) / (n - 1) : 0.0;
-    final padding = 16.0;
+    const padding = 16.0;
 
     final paint = Paint()
       ..color = AppColors.navyMedium

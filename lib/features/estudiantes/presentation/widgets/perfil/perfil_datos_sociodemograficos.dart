@@ -80,8 +80,8 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
           label,
           style: TextStyle(
             color: Colors.grey.shade600,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: 2),
@@ -89,8 +89,8 @@ class PerfilDatosSociodemograficos extends StatelessWidget {
           value,
           style: const TextStyle(
             color: AppColors.navyMedium,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sistemapredictivoabandono/features/asistencia/presentation/providers/paralelos_provider.dart';
 import 'package:sistemapredictivoabandono/features/estudiantes/presentation/providers/estudiantes_provider.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/refresh_button.dart';
 
@@ -33,6 +34,7 @@ class AcademicRiskHeader extends StatelessWidget {
         final refreshButton = RefreshButton(
           onTap: () {
             context.read<EstudiantesProvider>().loadEstudiantes();
+            context.read<ParalelosProvider>().loadParalelos();
           },
         );
 

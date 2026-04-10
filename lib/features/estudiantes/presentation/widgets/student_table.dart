@@ -252,7 +252,7 @@ class _StudentDataTableState extends State<StudentDataTable> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    s.nombreCompleto,
+                                    s.nombreCompleto.toUpperCase(),
                                     style: GoogleFonts.inter(
                                       color: AppColors.black0F172A,
                                       fontWeight: FontWeight.w700,
