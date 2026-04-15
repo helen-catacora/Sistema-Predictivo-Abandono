@@ -123,9 +123,11 @@ class ParaleloTableRow extends StatelessWidget {
             // flex: 8,
             child: _cell(
               child: Text(
-                paralelo.semestreId == 1
-                    ? 'Primer Semestre'
-                    : 'Segundo Semestre',
+                paralelo.semestreId == 0
+                    ? 'Sin semestre'
+                    : paralelo.semestreId == 1
+                        ? 'Primer Semestre'
+                        : 'Segundo Semestre',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   color: AppColors.black334155,

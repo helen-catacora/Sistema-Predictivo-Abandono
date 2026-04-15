@@ -9,6 +9,8 @@ import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card
 import '../providers/alertas_provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../widgets/alertas_criticas_section.dart';
+import '../widgets/distribucion_burbujas_section.dart';
+import '../widgets/estado_academico_oficial_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
 import '../widgets/tendencia_historica_section.dart';
@@ -29,6 +31,8 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
   final GlobalKey _keyTendencia = GlobalKey();
   final GlobalKey _keyAlertas = GlobalKey();
   final GlobalKey _keyResumenParalelo = GlobalKey();
+
+  bool _vistaOficial = false;
 
   void _scrollToSection(GlobalKey key) {
     final context = key.currentContext;
@@ -96,6 +100,8 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                 ),
               ),
               const Spacer(),
+              _buildVistaToggle(),
+              const SizedBox(width: 12),
               RefreshButton(
                 onTap: () {
                   context.read<DashboardProvider>().loadDashboard();
@@ -111,20 +117,27 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
             icon: Icons.dashboard_rounded,
           ),
           const SizedBox(height: 24),
-          _sectionAnchor(key: _keyEstadoAcademico, child: const EstadoAcademicoSection()),
+          _sectionAnchor(
+            key: _keyEstadoAcademico,
+            child: _vistaOficial
+                ? const EstadoAcademicoOficialSection()
+                : const EstadoAcademicoSection(),
+          ),
           const SizedBox(height: 24),
           LayoutBuilder(
             builder: (_, constraints) {
               final isWide = constraints.maxWidth > 900;
               if (isWide) {
                 return Container(
-                  margin: EdgeInsets.only(bottom: 24),
+                  margin: const EdgeInsets.only(bottom: 24),
                   child: Row(
                     children: [
                       Expanded(
                         flex: 2,
                         child: Text(
-                          'Distribución de Riesgo por Nivel',
+                          _vistaOficial
+                              ? 'Distribución de Riesgo por Burbuja'
+                              : 'Distribución de Riesgo por Nivel',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
                             fontSize: 25,
@@ -134,7 +147,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Expanded(
                         child: Text(
                           'Alertas Críticas',
@@ -147,12 +160,12 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                     ],
                   ),
                 );
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ),
           LayoutBuilder(
@@ -167,7 +180,9 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                         flex: 2,
                         child: _sectionAnchor(
                           key: _keyTendencia,
-                          child: const TendenciaHistoricaSection(),
+                          child: _vistaOficial
+                              ? const DistribucionBurbujasSection()
+                              : const TendenciaHistoricaSection(),
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -189,7 +204,9 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Distribución de Riesgo por Nivel',
+                          _vistaOficial
+                              ? 'Distribución de Riesgo por Burbuja'
+                              : 'Distribución de Riesgo por Nivel',
                           style: GoogleFonts.inter(
                             color: AppColors.gray002855,
                             fontSize: 25,
@@ -199,7 +216,13 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        const TendenciaHistoricaSection(),
+                        if (_vistaOficial)
+                          const SizedBox(
+                            height: 320,
+                            child: DistribucionBurbujasSection(),
+                          )
+                        else
+                          const TendenciaHistoricaSection(),
                       ],
                     ),
                   ),
@@ -261,6 +284,42 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
           // ),
           // const SizedBox(height: 24),
           // const SeguimientoAlumnosSection(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVistaToggle() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.greyF1F5F9,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.greyE2E8F0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Vista Secundaria',
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: _vistaOficial
+                  ? AppColors.gray002855
+                  : AppColors.grey64748B,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Switch(
+            value: _vistaOficial,
+            onChanged: (v) => setState(() => _vistaOficial = v),
+            activeThumbColor: AppColors.gray002855,
+            activeTrackColor: AppColors.blueDBEAFE,
+            inactiveThumbColor: AppColors.grayMedium,
+            inactiveTrackColor: AppColors.greyE2E8F0,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
         ],
       ),
     );

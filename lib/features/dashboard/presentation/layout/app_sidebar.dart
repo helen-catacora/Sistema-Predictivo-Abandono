@@ -130,7 +130,7 @@ const List<_SidebarEntry> _configuracionAcademica = [
   _SidebarEntry(
     path: AppRoutes.homeParalelos,
     label: 'Configuración de Paralelos',
-    icon: Icons.file_upload_outlined,
+    icon: Icons.tune,
     modulo: SidebarModulos.configuracionAcademica,
   ),
 ];

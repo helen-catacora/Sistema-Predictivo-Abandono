@@ -6,6 +6,7 @@ class ParaleloItem {
     required this.areaId,
     this.areaNombre,
     required this.semestreId,
+    required this.encargadoId,
     required this.nombreEncargado,
   });
 
@@ -16,6 +17,7 @@ class ParaleloItem {
       areaId: json['area_id'] as int,
       areaNombre: json['area_nombre'] as String?,
       semestreId: (json['semestre_id'] as num?)?.toInt() ?? 0,
+      encargadoId: json['encargado_id'] as int,
       nombreEncargado: json['nombre_encargado'] as String,
     );
   }
@@ -26,5 +28,6 @@ class ParaleloItem {
   /// Nombre del área (carrera). Viene del backend; si es null se puede derivar por areaId.
   final String? areaNombre;
   final int semestreId;
+  final int encargadoId;
   final String nombreEncargado;
 }

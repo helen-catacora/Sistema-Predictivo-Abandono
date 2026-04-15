@@ -183,6 +183,7 @@ class _UserFormPageState extends State<UserFormPage> {
           'correo': _correoController.text.trim(),
           'contraseña': _passwordController.text,
           'rol_id': _selectedRolId,
+          'estado': _estadoActivo ? 'activo' : 'inactivo',
           'modulos': List<int>.from(_modulosSeleccionados),
         };
         await _repository.createUsuario(body);

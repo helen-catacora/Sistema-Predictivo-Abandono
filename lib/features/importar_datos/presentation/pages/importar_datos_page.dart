@@ -46,7 +46,6 @@ class _ImportarDatosPageState extends State<ImportarDatosPage> {
         const SizedBox(height: 32),
         const ImportMainSection(),
         const SizedBox(height: 32),
-        const SizedBox(height: 16),
         const ImportFileSelector(),
         const SizedBox(height: 32),
         // Row(
