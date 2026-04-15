@@ -37,7 +37,7 @@ class _TendenciaHistoricaSectionState extends State<TendenciaHistoricaSection> {
       builder: (context, dashboard, _) {
         final dist = dashboard.distribucionRiesgo;
         final isLoading = dashboard.isLoading;
-        final hasError = dashboard.hasError;
+        //final hasError = dashboard.hasError;
 
         // Construir barras en orden Bajo, Medio, Alto, Crítico (como en el API).
         final barItems = <_BarItem>[];

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sistemapredictivoabandono/shared/widgets/screen_description_card.dart';
 
-import '../../../../core/constants/app_colors.dart';
+//import '../../../../core/constants/app_colors.dart';
 import '../../../asistencia/presentation/providers/paralelos_provider.dart';
-import '../widgets/paralelos_crear_dialog.dart';
+//Simport '../widgets/paralelos_crear_dialog.dart';
 import '../widgets/paralelos_header.dart';
 import '../widgets/paralelos_list_section.dart';
 import '../widgets/paralelos_stats_cards.dart';
