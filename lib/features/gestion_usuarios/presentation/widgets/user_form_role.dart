@@ -6,11 +6,26 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/responsive_utils.dart';
 import 'user_form_personal_info.dart';
 
-/// Roles disponibles.
-const List<({int rolId, String rolName})> _roles = [
-  (rolId: 1, rolName: 'Super Administrador'),
-  (rolId: 2, rolName: 'Administrador'),
-  (rolId: 3, rolName: 'Encargado de Curso'),
+/// Roles disponibles con su descripción recomendada.
+const List<({int rolId, String rolName, String description, IconData icon})> _roles = [
+  (
+    rolId: 1,
+    rolName: 'Super Administrador',
+    description: 'Recomendado para el Jefe de Carrera',
+    icon: Icons.admin_panel_settings_outlined,
+  ),
+  (
+    rolId: 2,
+    rolName: 'Administrador',
+    description: 'Recomendado para el Coordinador de Ciencias Básicas',
+    icon: Icons.manage_accounts_outlined,
+  ),
+  (
+    rolId: 3,
+    rolName: 'Encargado de Curso',
+    description: 'Recomendado para el Encargado de Curso',
+    icon: Icons.school_outlined,
+  ),
 ];
 
 /// Sección Rol y Permisos.
@@ -59,6 +74,8 @@ class UserFormRole extends StatelessWidget {
                     (r) => _RoleCard(
                       rol: r.rolName,
                       rolId: r.rolId,
+                      description: r.description,
+                      icon: r.icon,
                       isSelected:
                           selectedRol == r.rolName ||
                           selectedRolId == r.rolId,
@@ -178,20 +195,21 @@ class _RoleCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.rolId,
+    required this.description,
+    required this.icon,
   });
 
   final String rol;
   final int rolId;
   final bool isSelected;
   final VoidCallback onTap;
+  final String description;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    final usePurple = rol == 'DOCENTE A DEDICACIÓN EXCLUSIVA';
     return Material(
-      color: isSelected
-          ? (usePurple ? Colors.purple.shade100 : AppColors.blueLight)
-          : Colors.grey.shade100,
+      color: isSelected ? AppColors.blueLight : Colors.grey.shade100,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
@@ -201,36 +219,76 @@ class _RoleCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected
-                  ? (usePurple ? Colors.purple : AppColors.navyMedium)
-                  : Colors.grey.shade300,
+              color: isSelected ? AppColors.navyMedium : Colors.grey.shade300,
               width: isSelected ? 2 : 1,
             ),
           ),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: isSelected
-                    ? (usePurple ? Colors.purple : AppColors.navyMedium)
-                    : Colors.grey.shade400,
-                child: Icon(
-                  Icons.person_outline,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  rol,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: isSelected
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: isSelected
                         ? AppColors.navyMedium
-                        : AppColors.grayDark,
+                        : Colors.grey.shade400,
+                    child: Icon(icon, color: Colors.white, size: 20),
                   ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      rol,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                        color: isSelected
+                            ? AppColors.navyMedium
+                            : AppColors.grayDark,
+                      ),
+                    ),
+                  ),
+                  if (isSelected)
+                    Icon(
+                      Icons.check_circle,
+                      color: AppColors.navyMedium,
+                      size: 18,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.navyMedium.withValues(alpha: 0.08)
+                      : Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_outline,
+                      size: 12,
+                      color: isSelected
+                          ? AppColors.navyMedium
+                          : Colors.grey.shade600,
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isSelected
+                              ? AppColors.navyMedium
+                              : Colors.grey.shade600,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

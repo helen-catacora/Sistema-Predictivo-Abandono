@@ -216,7 +216,8 @@ class ReportsAvailableSection extends StatelessWidget {
     int? paraleloId;
     int? estudianteId;
 
-    if (item.requiereParalelo) {
+    // Reporte por paralelo: solo necesita paralelo_id.
+    if (item.requiereParalelo && !item.requiereEstudiante) {
       final paralelosProvider = context.read<ParalelosProvider>();
       if (paralelosProvider.paralelos.isEmpty) {
         await paralelosProvider.loadParalelos();
@@ -230,6 +231,7 @@ class ReportsAvailableSection extends StatelessWidget {
       paraleloId = selected.id;
     }
 
+    // Reporte individual: diálogo unificado con pestaña "Por Paralelo" y "Búsqueda".
     if (item.requiereEstudiante) {
       final paralelosProvider = context.read<ParalelosProvider>();
       final estudiantesProvider = context.read<EstudiantesProvider>();
@@ -237,27 +239,12 @@ class ReportsAvailableSection extends StatelessWidget {
         await paralelosProvider.loadParalelos();
       }
       if (!context.mounted) return;
-      final paralelo = await _showParaleloPicker(
-        context,
-        paralelosProvider.paralelos,
-        confirmLabel: 'Siguiente',
-      );
-      if (paralelo == null) return;
-      if (!context.mounted) return;
-      final estudiantesDelParalelo = await estudiantesProvider
-          .getEstudiantesPorParalelo(paralelo.id);
-      if (!context.mounted) return;
-      if (estudiantesDelParalelo.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('No hay estudiantes en el paralelo seleccionado'),
-          ),
-        );
-        return;
-      }
-      final selected = await _showEstudiantePicker(
-        context,
-        estudiantesDelParalelo,
+      final selected = await showDialog<EstudianteItem>(
+        context: context,
+        builder: (_) => _EstudiantePickerDialog(
+          paralelos: paralelosProvider.paralelos,
+          estudiantesProvider: estudiantesProvider,
+        ),
       );
       if (selected == null) return;
       estudianteId = selected.id;
@@ -306,20 +293,429 @@ class ReportsAvailableSection extends StatelessWidget {
 
   Future<ParaleloItem?> _showParaleloPicker(
     BuildContext context,
-    List<ParaleloItem> paralelos, {
-    String confirmLabel = 'Generar',
-  }) async {
+    List<ParaleloItem> paralelos,
+  ) async {
     if (paralelos.isEmpty) return null;
-    ParaleloItem? selected = paralelos.first;
     return showDialog<ParaleloItem>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Seleccionar Paralelo'),
-        content: StatefulBuilder(
-          builder: (ctx, setState) => DropdownButton<ParaleloItem>(
-            value: selected,
+      builder: (_) => _ParaleloPickerDialog(paralelos: paralelos),
+    );
+  }
+}
+
+/// Diálogo para seleccionar paralelo en el reporte "Por Paralelo".
+class _ParaleloPickerDialog extends StatefulWidget {
+  const _ParaleloPickerDialog({required this.paralelos});
+
+  final List<ParaleloItem> paralelos;
+
+  @override
+  State<_ParaleloPickerDialog> createState() => _ParaleloPickerDialogState();
+}
+
+class _ParaleloPickerDialogState extends State<_ParaleloPickerDialog> {
+  final TextEditingController _searchCtrl = TextEditingController();
+  ParaleloItem? _seleccionado;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.paralelos.isNotEmpty) _seleccionado = widget.paralelos.first;
+    _searchCtrl.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  List<ParaleloItem> get _filtrados {
+    final q = _searchCtrl.text.trim().toLowerCase();
+    if (q.isEmpty) return widget.paralelos;
+    return widget.paralelos.where((p) {
+      return p.nombre.toLowerCase().contains(q) ||
+          _nombreArea(p.areaId).toLowerCase().contains(q);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      titlePadding: EdgeInsets.zero,
+      title: _buildHeader(),
+      content: SizedBox(
+        width: 440,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _searchCtrl,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Buscar paralelo...',
+                  prefixIcon: const Icon(Icons.search, size: 20),
+                  suffixIcon: _searchCtrl.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, size: 18),
+                          onPressed: () => _searchCtrl.clear(),
+                        )
+                      : null,
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 10),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (_seleccionado != null)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffDBEAFE),
+                    borderRadius: BorderRadius.circular(8),
+                    border:
+                        Border.all(color: AppColors.gray002855, width: 1),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.check_circle,
+                          color: AppColors.gray002855, size: 16),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '${_seleccionado!.nombre} — ${_nombreArea(_seleccionado!.areaId)}',
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.gray002855,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 240),
+                child: _filtrados.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: Text(
+                            'Sin resultados para "${_searchCtrl.text}"',
+                            style: TextStyle(
+                                color: AppColors.grayMedium, fontSize: 13),
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: _filtrados.length,
+                        separatorBuilder: (_, idx) =>
+                            const Divider(height: 1, indent: 12, endIndent: 12),
+                        itemBuilder: (_, i) {
+                          final p = _filtrados[i];
+                          final isSelected = _seleccionado?.id == p.id;
+                          final areaNombre = _nombreArea(p.areaId);
+                          return ListTile(
+                            dense: true,
+                            selected: isSelected,
+                            selectedTileColor: const Color(0xffDBEAFE),
+                            leading: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: isSelected
+                                  ? AppColors.gray002855
+                                  : const Color(0xffE2E8F0),
+                              child: Text(
+                                areaNombre.isNotEmpty
+                                    ? areaNombre[0].toUpperCase()
+                                    : '?',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : AppColors.darkBlue1E293B,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              p.nombre,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              areaNombre,
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: AppColors.grayMedium,
+                              ),
+                            ),
+                            trailing: isSelected
+                                ? const Icon(Icons.check_circle,
+                                    color: AppColors.gray002855, size: 18)
+                                : null,
+                            onTap: () =>
+                                setState(() => _seleccionado = p),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: _seleccionado != null
+              ? () => Navigator.of(context).pop(_seleccionado)
+              : null,
+          child: const Text('Generar'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.gray002855,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        children: [
+          const Icon(Icons.description_outlined,
+              color: Colors.white, size: 20),
+          const SizedBox(width: 8),
+          Text(
+            'Seleccionar Paralelo',
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Diálogo unificado para seleccionar estudiante en el reporte individual.
+/// Ofrece dos modos: filtrar por paralelo o buscar directamente por nombre/código.
+class _EstudiantePickerDialog extends StatefulWidget {
+  const _EstudiantePickerDialog({
+    required this.paralelos,
+    required this.estudiantesProvider,
+  });
+
+  final List<ParaleloItem> paralelos;
+  final EstudiantesProvider estudiantesProvider;
+
+  @override
+  State<_EstudiantePickerDialog> createState() =>
+      _EstudiantePickerDialogState();
+}
+
+class _EstudiantePickerDialogState extends State<_EstudiantePickerDialog> {
+  // 0 = Por Paralelo, 1 = Búsqueda
+  int _modo = 0;
+
+  // --- Pestaña "Por Paralelo" ---
+  ParaleloItem? _paraleloSeleccionado;
+  List<EstudianteItem> _estudiantesDelParalelo = [];
+  EstudianteItem? _estudianteDelParalelo;
+  bool _cargandoParalelo = false;
+  String? _errorParalelo;
+
+  // --- Pestaña "Búsqueda" ---
+  final TextEditingController _searchCtrl = TextEditingController();
+  List<EstudianteItem> _todos = [];
+  bool _cargandoTodos = false;
+  bool _todosLoaded = false;
+  String? _errorBusqueda;
+  EstudianteItem? _estudianteBusqueda;
+
+  EstudianteItem? get _seleccionado =>
+      _modo == 0 ? _estudianteDelParalelo : _estudianteBusqueda;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.paralelos.isNotEmpty) {
+      _paraleloSeleccionado = widget.paralelos.first;
+      _cargarEstudiantesDelParalelo(widget.paralelos.first.id);
+    }
+    _searchCtrl.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _cargarEstudiantesDelParalelo(int paraleloId) async {
+    setState(() {
+      _cargandoParalelo = true;
+      _errorParalelo = null;
+      _estudiantesDelParalelo = [];
+      _estudianteDelParalelo = null;
+    });
+    final lista =
+        await widget.estudiantesProvider.getEstudiantesPorParalelo(paraleloId);
+    if (!mounted) return;
+    setState(() {
+      _estudiantesDelParalelo = lista;
+      _estudianteDelParalelo = lista.isNotEmpty ? lista.first : null;
+      _cargandoParalelo = false;
+      if (lista.isEmpty) {
+        _errorParalelo = 'No hay estudiantes en este paralelo.';
+      }
+    });
+  }
+
+  Future<void> _cargarTodosLosEstudiantes() async {
+    if (_todosLoaded) return;
+    setState(() {
+      _cargandoTodos = true;
+      _errorBusqueda = null;
+    });
+    final lista = await widget.estudiantesProvider.getAllEstudiantes();
+    if (!mounted) return;
+    setState(() {
+      _todos = lista;
+      _todosLoaded = true;
+      _cargandoTodos = false;
+      if (lista.isEmpty) {
+        _errorBusqueda = 'No se encontraron estudiantes.';
+      }
+    });
+  }
+
+  List<EstudianteItem> get _filtrados {
+    final q = _searchCtrl.text.trim().toLowerCase();
+    if (q.isEmpty) return _todos;
+    return _todos.where((e) {
+      return e.nombreCompleto.toLowerCase().contains(q) ||
+          e.codigoEstudiante.toLowerCase().contains(q);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      titlePadding: EdgeInsets.zero,
+      title: _buildHeader(),
+      content: SizedBox(
+        width: 480,
+        child: _modo == 0 ? _buildPorParalelo() : _buildBusqueda(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: _seleccionado != null
+              ? () => Navigator.of(context).pop(_seleccionado)
+              : null,
+          child: const Text('Generar'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.gray002855,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.person_outline, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Seleccionar Estudiante',
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              _ModeTab(
+                label: 'Por Paralelo',
+                icon: Icons.groups_outlined,
+                selected: _modo == 0,
+                onTap: () => setState(() => _modo = 0),
+              ),
+              const SizedBox(width: 8),
+              _ModeTab(
+                label: 'Búsqueda',
+                icon: Icons.search,
+                selected: _modo == 1,
+                onTap: () {
+                  setState(() => _modo = 1);
+                  _cargarTodosLosEstudiantes();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPorParalelo() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Paralelo',
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue1E293B,
+            ),
+          ),
+          const SizedBox(height: 6),
+          DropdownButton<ParaleloItem>(
+            value: _paraleloSeleccionado,
             isExpanded: true,
-            items: paralelos
+            items: widget.paralelos
                 .map(
                   (p) => DropdownMenuItem(
                     value: p,
@@ -327,58 +723,254 @@ class ReportsAvailableSection extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            onChanged: (p) => setState(() => selected = p),
+            onChanged: (p) {
+              if (p == null || p.id == _paraleloSeleccionado?.id) return;
+              setState(() => _paraleloSeleccionado = p);
+              _cargarEstudiantesDelParalelo(p.id);
+            },
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancelar'),
+          const SizedBox(height: 16),
+          Text(
+            'Estudiante',
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue1E293B,
+            ),
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(selected),
-            child: Text(confirmLabel),
-          ),
+          const SizedBox(height: 6),
+          if (_cargandoParalelo)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (_errorParalelo != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                _errorParalelo!,
+                style: TextStyle(color: Colors.red.shade700, fontSize: 13),
+              ),
+            )
+          else
+            DropdownButton<EstudianteItem>(
+              value: _estudianteDelParalelo,
+              isExpanded: true,
+              items: _estudiantesDelParalelo
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(
+                        '${e.nombreCompleto} (${e.codigoEstudiante})',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (e) => setState(() => _estudianteDelParalelo = e),
+            ),
         ],
       ),
     );
   }
 
-  Future<EstudianteItem?> _showEstudiantePicker(
-    BuildContext context,
-    List<EstudianteItem> estudiantes,
-  ) async {
-    if (estudiantes.isEmpty) return null;
-    EstudianteItem? selected = estudiantes.first;
-    return showDialog<EstudianteItem>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Seleccionar Estudiante'),
-        content: StatefulBuilder(
-          builder: (ctx, setState) => DropdownButton<EstudianteItem>(
-            value: selected,
-            isExpanded: true,
-            items: estudiantes
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text('${e.nombreCompleto} (${e.codigoEstudiante})'),
-                  ),
-                )
-                .toList(),
-            onChanged: (e) => setState(() => selected = e),
+  Widget _buildBusqueda() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: _searchCtrl,
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: 'Buscar por nombre o código...',
+              prefixIcon: const Icon(Icons.search, size: 20),
+              suffixIcon: _searchCtrl.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 18),
+                      onPressed: () => _searchCtrl.clear(),
+                    )
+                  : null,
+              isDense: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(selected),
-            child: const Text('Generar'),
-          ),
+          const SizedBox(height: 12),
+          if (_cargandoTodos)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (_errorBusqueda != null && _todos.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                _errorBusqueda!,
+                style: TextStyle(color: Colors.red.shade700, fontSize: 13),
+              ),
+            )
+          else ...[
+            if (_estudianteBusqueda != null)
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xffDBEAFE),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.gray002855, width: 1),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.check_circle,
+                        color: AppColors.gray002855, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '${_estudianteBusqueda!.nombreCompleto} (${_estudianteBusqueda!.codigoEstudiante})',
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.gray002855,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 220),
+              child: _filtrados.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: Text(
+                          _searchCtrl.text.isEmpty
+                              ? 'Escribe para buscar estudiantes'
+                              : 'Sin resultados para "${_searchCtrl.text}"',
+                          style: TextStyle(
+                              color: AppColors.grayMedium, fontSize: 13),
+                        ),
+                      ),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: _filtrados.length,
+                      separatorBuilder: (_, idx) =>
+                          const Divider(height: 1, indent: 12, endIndent: 12),
+                      itemBuilder: (_, i) {
+                        final e = _filtrados[i];
+                        final isSelected =
+                            _estudianteBusqueda?.id == e.id;
+                        return ListTile(
+                          dense: true,
+                          selected: isSelected,
+                          selectedTileColor:
+                              const Color(0xffDBEAFE),
+                          leading: CircleAvatar(
+                            radius: 16,
+                            backgroundColor: isSelected
+                                ? AppColors.gray002855
+                                : const Color(0xffE2E8F0),
+                            child: Text(
+                              e.nombreCompleto.isNotEmpty
+                                  ? e.nombreCompleto[0].toUpperCase()
+                                  : '?',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: isSelected
+                                    ? Colors.white
+                                    : AppColors.darkBlue1E293B,
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            e.nombreCompleto,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            '${e.codigoEstudiante} · ${e.carrera}',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: AppColors.grayMedium,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: isSelected
+                              ? const Icon(Icons.check_circle,
+                                  color: AppColors.gray002855, size: 18)
+                              : null,
+                          onTap: () =>
+                              setState(() => _estudianteBusqueda = e),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+/// Pestaña de modo del diálogo unificado.
+class _ModeTab extends StatelessWidget {
+  const _ModeTab({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: selected ? Colors.white : Colors.white.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 15,
+              color: selected ? AppColors.gray002855 : Colors.white,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: selected ? AppColors.gray002855 : Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -432,23 +1024,6 @@ class _ReportTemplateCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: const Color(0xffDCFCE7),
-                    //     borderRadius: BorderRadius.circular(9999),
-                    //   ),
-                    //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      // child: Text(
-                      //   'ACTIVO',
-                      //   style: GoogleFonts.inter(
-                      //     color: AppColors.green15803D,
-                      //     fontSize: 12,
-                      //     fontWeight: FontWeight.w700,
-                      //     height: 16 / 12,
-                      //     letterSpacing: 0,
-                      //   ),
-                      // ),
-                    // ),
                   ],
                 ),
                 const SizedBox(height: 16),
