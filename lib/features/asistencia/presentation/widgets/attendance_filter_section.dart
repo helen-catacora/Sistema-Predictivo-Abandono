@@ -401,7 +401,7 @@ class _AttendanceFilterSectionState extends State<AttendanceFilterSection> {
         .map(
           (p) => DropdownMenuItem<int>(
             value: p.id,
-            child: Text('${p.nombre} - ${_nombreArea(p.areaId)}'),
+            child: Text('${p.nombre} - ${p.areaNombre ?? _nombreArea(p.areaId)}'),
           ),
         )
         .toList();
