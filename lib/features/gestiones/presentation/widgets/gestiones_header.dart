@@ -5,11 +5,10 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/responsive_utils.dart';
 import '../../../../shared/widgets/refresh_button.dart';
-import '../../../asistencia/presentation/providers/paralelos_provider.dart';
+import '../providers/gestiones_provider.dart';
 
-/// Encabezado de la pantalla Gestión de Paralelos.
-class ParalelosHeader extends StatelessWidget {
-  const ParalelosHeader({super.key});
+class GestionesHeader extends StatelessWidget {
+  const GestionesHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class ParalelosHeader extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: RefreshButton(
-                        onTap: () => context.read<ParalelosProvider>().loadParalelos(),
+                        onTap: () => context.read<GestionesProvider>().loadGestiones(),
                       ),
                     ),
                   ],
@@ -39,7 +38,7 @@ class ParalelosHeader extends StatelessWidget {
                   children: [
                     Expanded(child: _title(fontSize)),
                     RefreshButton(
-                      onTap: () => context.read<ParalelosProvider>().loadParalelos(),
+                      onTap: () => context.read<GestionesProvider>().loadGestiones(),
                     ),
                   ],
                 ),
@@ -49,11 +48,11 @@ class ParalelosHeader extends StatelessWidget {
   }
 
   Widget _title(double fontSize) => Text(
-        'Gestión de Paralelos',
+        'Períodos de Registro de Estudiantes',
         style: GoogleFonts.inter(
-          color: AppColors.gray002855,
           fontSize: fontSize,
           fontWeight: FontWeight.w700,
+          color: AppColors.gray002855,
           height: 36 / 30,
           letterSpacing: 0,
         ),

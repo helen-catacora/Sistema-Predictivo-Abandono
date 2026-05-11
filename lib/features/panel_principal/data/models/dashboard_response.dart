@@ -68,6 +68,8 @@ class DistribucionPorParaleloItem {
     required this.paralelo,
     required this.area,
     required this.total,
+    required this.bajoRiesgo,
+    required this.medioRiesgo,
     required this.altoRiesgo,
     required this.critico,
   });
@@ -77,6 +79,8 @@ class DistribucionPorParaleloItem {
       paralelo: json['paralelo'] as String? ?? '',
       area: json['area'] as String? ?? '',
       total: (json['total'] as num?)?.toInt() ?? 0,
+      bajoRiesgo: (json['bajo_riesgo'] as num?)?.toInt() ?? 0,
+      medioRiesgo: (json['medio_riesgo'] as num?)?.toInt() ?? 0,
       altoRiesgo: (json['alto_riesgo'] as num?)?.toInt() ?? 0,
       critico: (json['critico'] as num?)?.toInt() ?? 0,
     );
@@ -85,6 +89,8 @@ class DistribucionPorParaleloItem {
   final String paralelo;
   final String area;
   final int total;
+  final int bajoRiesgo;
+  final int medioRiesgo;
   final int altoRiesgo;
   final int critico;
 }

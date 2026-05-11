@@ -20,7 +20,9 @@ import 'features/panel_principal/presentation/providers/alertas_provider.dart';
 import 'features/panel_principal/presentation/providers/dashboard_provider.dart';
 import 'features/reportes/presentation/providers/reportes_historial_provider.dart';
 import 'features/entrenamiento_modelo/presentation/providers/entrenamiento_provider.dart';
+import 'features/gestiones/presentation/providers/gestiones_provider.dart';
 import 'features/reportes/presentation/providers/reportes_tipos_provider.dart';
+import 'features/periodos_registro_malla/presentation/providers/periodos_registro_malla_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +70,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => ImportarMallaCurricularProvider()),
         ChangeNotifierProvider(create: (_) => EntrenamientoProvider()),
+        ChangeNotifierProvider(create: (_) => GestionesProvider()),
+        ChangeNotifierProvider(create: (_) => PeriodosRegistroMallaProvider()),
       ],
       child: MaterialApp.router(
         title: 'Sistema Predictivo de Abandono Estudiantil',

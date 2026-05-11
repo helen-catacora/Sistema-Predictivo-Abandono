@@ -13,6 +13,7 @@ import '../widgets/distribucion_burbujas_section.dart';
 import '../widgets/estado_academico_oficial_section.dart';
 import '../widgets/estado_academico_section.dart';
 import '../widgets/resumen_paralelo_section.dart';
+import '../widgets/matriz_calor_section.dart';
 import '../widgets/tendencia_historica_section.dart';
 
 /// Pantalla Panel Principal del Sistema Predictivo de Abandono.
@@ -271,6 +272,22 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
               ],
             ),
           ),
+          // ── MATRIZ DE CALOR ── comentar este bloque para ocultar el widget ──────────
+          const SizedBox(height: 24),
+          Text(
+            'Matriz de Calor de Riesgos',
+            style: GoogleFonts.inter(
+              color: AppColors.gray002855,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+              height: 36 / 30,
+              letterSpacing: 0,
+            ),
+          ),
+          const SizedBox(height: 12),
+          const MatrizCalorSection(),
+          // ─────────────────────────────────────────────────────────────────────────────
+
           // SizedBox(height: 24),
           // Text(
           //   'Seguimiento de Alumnos',

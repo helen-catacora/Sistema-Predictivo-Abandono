@@ -1,0 +1,358 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/responsive_utils.dart';
+import '../../data/models/periodo_registro_malla_item.dart';
+import '../providers/periodos_registro_malla_provider.dart';
+import 'periodo_registro_malla_crear_dialog.dart';
+
+class PeriodosRegistroMallaListSection extends StatelessWidget {
+  const PeriodosRegistroMallaListSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<PeriodosRegistroMallaProvider>();
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final padding = Responsive.contentPadding(constraints.maxWidth);
+
+        return Padding(
+          padding: EdgeInsets.fromLTRB(padding.left, 0, padding.right, padding.bottom),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border(
+                top: BorderSide(color: AppColors.gray002855, width: 4),
+                left: BorderSide(color: AppColors.greyE2E8F0),
+                right: BorderSide(color: AppColors.greyE2E8F0),
+                bottom: BorderSide(color: AppColors.greyE2E8F0),
+              ),
+              boxShadow: const [
+                BoxShadow(color: Color(0x0D000000), blurRadius: 8, offset: Offset(0, 2)),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: AppColors.gray002855,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Períodos de Registro de Malla',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.darkBlue1E293B,
+                          ),
+                        ),
+                      ),
+                      FilledButton.icon(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.gray002855,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        ),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: Text(
+                          'Nuevo Período',
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () => showCrearPeriodoDialog(context),
+                      ),
+                    ],
+                  ),
+                ),
+                if (provider.status == PeriodosRegistroMallaStatus.loading)
+                  const Padding(
+                    padding: EdgeInsets.all(48),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (provider.status == PeriodosRegistroMallaStatus.error)
+                  _ErrorView(message: provider.errorMessage ?? 'Error al cargar períodos')
+                else if (provider.periodos.isEmpty)
+                  const _EmptyView()
+                else
+                  _PeriodosTable(periodos: provider.periodos),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PeriodosTable extends StatelessWidget {
+  const _PeriodosTable({required this.periodos});
+  final List<PeriodoRegistroMallaItem> periodos;
+
+  static const double _acciones = 120;
+  static const double _gap = 16;
+  static const int _flexDesc = 3;
+  static const int _flexPeriodo = 3;
+  static const int _flexEstado = 2;
+  static const int _totalFlex = _flexDesc + _flexPeriodo + _flexEstado;
+
+  static Map<String, double> _widths(double total) {
+    final available = total - _acciones - (_gap * 3) - 32;
+    final unit = available / _totalFlex;
+    return {
+      'desc': unit * _flexDesc,
+      'periodo': unit * _flexPeriodo,
+      'estado': unit * _flexEstado,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = _widths(constraints.maxWidth);
+        return Column(
+          children: [
+            _TableRow(
+              widths: w,
+              rowColor: AppColors.gray002855,
+              desc: _hText('DESCRIPCIÓN'),
+              periodo: _hText('PERÍODO'),
+              estado: _hText('ESTADO'),
+              acciones: _hText('ACCIONES', center: true),
+            ),
+            ...periodos.asMap().entries.map((entry) => Column(
+                  children: [
+                    Divider(height: 1, color: AppColors.greyE2E8F0),
+                    _PeriodoRow(periodo: entry.value, isEven: entry.key.isEven, widths: w),
+                  ],
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _hText(String t, {bool center = false}) => Text(
+        t,
+        textAlign: center ? TextAlign.center : TextAlign.left,
+        style: GoogleFonts.inter(
+            fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: Colors.white),
+      );
+}
+
+class _TableRow extends StatelessWidget {
+  const _TableRow({
+    required this.widths,
+    required this.desc,
+    required this.periodo,
+    required this.estado,
+    required this.acciones,
+    this.rowColor,
+  });
+
+  final Map<String, double> widths;
+  final Widget desc;
+  final Widget periodo;
+  final Widget estado;
+  final Widget acciones;
+  final Color? rowColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: rowColor,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          SizedBox(width: widths['desc']!, child: desc),
+          const SizedBox(width: 16),
+          SizedBox(width: widths['periodo']!, child: periodo),
+          const SizedBox(width: 16),
+          SizedBox(width: widths['estado']!, child: estado),
+          const SizedBox(width: 16),
+          SizedBox(width: 120, child: acciones),
+        ],
+      ),
+    );
+  }
+}
+
+class _PeriodoRow extends StatelessWidget {
+  const _PeriodoRow({required this.periodo, required this.isEven, required this.widths});
+  final PeriodoRegistroMallaItem periodo;
+  final bool isEven;
+  final Map<String, double> widths;
+
+  @override
+  Widget build(BuildContext context) {
+    final fmt = DateFormat('dd/MM/yyyy');
+    final provider = context.watch<PeriodosRegistroMallaProvider>();
+
+    final estadoWidget = periodo.activa
+        ? Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFDCFCE7),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Activo',
+                style: GoogleFonts.inter(
+                    fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.green15803D),
+              ),
+            ),
+          )
+        : Text('Inactivo',
+            style: GoogleFonts.inter(fontSize: 13, color: AppColors.grey64748B));
+
+    final accionesWidget = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (!periodo.activa)
+          SizedBox(
+            height: 32,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.green16A34A,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: provider.isUpdating
+                  ? null
+                  : () async {
+                      final ok = await context.read<PeriodosRegistroMallaProvider>().activar(periodo.id);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(ok
+                            ? 'Período activado'
+                            : (context.read<PeriodosRegistroMallaProvider>().errorMessage ?? 'Error')),
+                      ));
+                    },
+              child: provider.isUpdating
+                  ? const SizedBox(
+                      width: 14, height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  : Text('Activar',
+                      style: GoogleFonts.inter(
+                          fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
+            ),
+          ),
+        if (periodo.activa)
+          SizedBox(
+            height: 32,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.redDC2626),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: provider.isUpdating
+                  ? null
+                  : () async {
+                      final ok = await context.read<PeriodosRegistroMallaProvider>().desactivar(periodo.id);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(ok
+                            ? 'Período cerrado'
+                            : (context.read<PeriodosRegistroMallaProvider>().errorMessage ?? 'Error')),
+                      ));
+                    },
+              child: Text('Cerrar',
+                  style: GoogleFonts.inter(
+                      fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.redDC2626)),
+            ),
+          ),
+      ],
+    );
+
+    return _TableRow(
+      widths: widths,
+      rowColor: isEven ? const Color(0xFFF8FAFC) : Colors.white,
+      desc: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            periodo.descripcion,
+            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue1E293B),
+          ),
+          const SizedBox(height: 2),
+          if (periodo.totalImportados > 0)
+            Text(
+              periodo.mallasImportadas.isNotEmpty
+                  ? periodo.mallasImportadas.join(', ')
+                  : '${periodo.totalImportados} registros importados',
+              style: GoogleFonts.inter(fontSize: 11, color: AppColors.grey64748B),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            )
+          else
+            Text(
+              'Sin importaciones',
+              style: GoogleFonts.inter(fontSize: 11, color: AppColors.gray9CA3AF),
+            ),
+        ],
+      ),
+      periodo: Text(
+          '${fmt.format(periodo.fechaInicio)} – ${fmt.format(periodo.fechaFin)}',
+          style: GoogleFonts.inter(fontSize: 13, color: AppColors.black334155)),
+      estado: estadoWidget,
+      acciones: accionesWidget,
+    );
+  }
+}
+
+class _EmptyView extends StatelessWidget {
+  const _EmptyView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Center(
+        child: Column(
+          children: [
+            const Icon(Icons.calendar_month_outlined, size: 52, color: AppColors.grayMedium),
+            const SizedBox(height: 14),
+            Text('No hay períodos configurados',
+                style: GoogleFonts.inter(
+                    fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.grayMedium)),
+            const SizedBox(height: 6),
+            Text('Crea un período para habilitar la importación de malla.',
+                style: GoogleFonts.inter(fontSize: 13, color: AppColors.grey94A3B8)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(40),
+      child: Center(
+        child: Text(message, style: GoogleFonts.inter(fontSize: 13, color: AppColors.redDC2626)),
+      ),
+    );
+  }
+}

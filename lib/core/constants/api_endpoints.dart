@@ -80,6 +80,16 @@ abstract class ApiEndpoints {
   /// Malla curricular - importar desde Excel (POST multipart/form-data: archivo .xlsx, nombre_malla)
   static const String mallaCurricularImportar = '/malla-curricular/importar';
 
+  /// Gestiones académicas
+  static const String gestiones = '/gestiones';
+  static String gestionActivar(int id) => '/gestiones/$id/activar';
+  static String gestionVentana(int id) => '/gestiones/$id/ventana';
+
+  /// Períodos de registro de malla curricular
+  static const String periodosRegistroMalla = '/periodos-registro-malla';
+  static String periodoRegistroMallaActivar(int id) => '/periodos-registro-malla/$id/activar';
+  static String periodoRegistroMallaDesactivar(int id) => '/periodos-registro-malla/$id/desactivar';
+
   /// Entrenamiento del modelo ML
   static const String entrenamientoIniciar = '/entrenamiento/iniciar';
   static String entrenamientoEstado(int id) => '/entrenamiento/$id/estado';

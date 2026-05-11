@@ -133,6 +133,18 @@ const List<_SidebarEntry> _configuracionAcademica = [
     icon: Icons.tune,
     modulo: SidebarModulos.configuracionAcademica,
   ),
+  _SidebarEntry(
+    path: AppRoutes.homeGestiones,
+    label: 'Períodos de Registro de Estudiantes',
+    icon: Icons.date_range_outlined,
+    modulo: SidebarModulos.configuracionAcademica,
+  ),
+  _SidebarEntry(
+    path: AppRoutes.homePeriodosRegistroMalla,
+    label: 'Períodos de Registro de Malla',
+    icon: Icons.calendar_month_outlined,
+    modulo: SidebarModulos.configuracionAcademica,
+  ),
 ];
 
 const List<_SidebarEntry> _administracion = [
