@@ -20,7 +20,7 @@ class ParalelosHeader extends StatelessWidget {
         final padding = Responsive.contentPadding(constraints.maxWidth);
 
         return Padding(
-          padding: EdgeInsets.fromLTRB(padding.left, padding.top, padding.right, 0),
+          padding: EdgeInsets.fromLTRB(0, 0, padding.right, 0),
           child: isMobile
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -44,7 +44,7 @@ class ImportarDatosCreacionEstudiantesPage extends StatelessWidget {
             letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 12),
         // Text(
         //   'CARGUE ARCHIVOS CON INFORMACIÓN PARA REGISTRAR NUEVOS ESTUDIANTES',
         //   style: GoogleFonts.inter(

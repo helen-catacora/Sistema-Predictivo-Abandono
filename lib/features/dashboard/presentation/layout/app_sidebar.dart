@@ -317,6 +317,12 @@ class _AppSidebarState extends State<AppSidebar> {
               icon: Icons.groups_outlined,
               isSelected: false,
             ),
+            MenuItem(
+              path: '${AppRoutes.homePanel}?seccion=matriz',
+              label: 'Matriz de Calor de Riesgos',
+              icon: Icons.groups_outlined,
+              isSelected: false,
+            ),
           ],
         );
         final visualizacionDePredicciones = [

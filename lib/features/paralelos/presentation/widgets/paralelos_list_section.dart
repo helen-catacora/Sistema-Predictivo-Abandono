@@ -146,25 +146,6 @@ class _ParalelosListSectionState extends State<ParalelosListSection> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        // OutlinedButton.icon(
-                        //   onPressed: () {
-                        //     // TODO: abrir modal de filtros si se requiere
-                        //   },
-                        //   icon: const Icon(Icons.keyboard_arrow_down, size: 20),
-                        //   label: const Text('Filtrar'),
-                        //   style: OutlinedButton.styleFrom(
-                        //     foregroundColor: AppColors.gray002855,
-                        //     side: BorderSide(color: AppColors.greyE2E8F0),
-                        //     padding: const EdgeInsets.symmetric(
-                        //       horizontal: 20,
-                        //       vertical: 12,
-                        //     ),
-                        //     textStyle: GoogleFonts.inter(
-                        //       fontSize: 14,
-                        //       fontWeight: FontWeight.w600,
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

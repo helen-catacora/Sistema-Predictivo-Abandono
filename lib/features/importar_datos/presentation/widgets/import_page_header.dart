@@ -27,7 +27,7 @@ class ImportPageHeader extends StatelessWidget {
                 letterSpacing: 0,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 12),
             const ScreenDescriptionCard(
               description:
                   'Cargue archivos Excel con información estudiantil para el registro de estudiantes en el sistema.',

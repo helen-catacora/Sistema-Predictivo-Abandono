@@ -32,6 +32,7 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
   final GlobalKey _keyTendencia = GlobalKey();
   final GlobalKey _keyAlertas = GlobalKey();
   final GlobalKey _keyResumenParalelo = GlobalKey();
+  final GlobalKey _keyMatriz = GlobalKey();
 
   bool _vistaOficial = false;
 
@@ -79,6 +80,8 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
         _scrollToSection(_keyAlertas);
       case 'resumen_paralelo':
         _scrollToSection(_keyResumenParalelo);
+      case 'matriz':
+        _scrollToSection(_keyMatriz);
     }
   }
 
@@ -273,19 +276,43 @@ class _PanelPrincipalPageState extends State<PanelPrincipalPage> {
             ),
           ),
           // ── MATRIZ DE CALOR ── comentar este bloque para ocultar el widget ──────────
-          const SizedBox(height: 24),
-          Text(
-            'Matriz de Calor de Riesgos',
-            style: GoogleFonts.inter(
-              color: AppColors.gray002855,
-              fontSize: 25,
-              fontWeight: FontWeight.w700,
-              height: 36 / 30,
-              letterSpacing: 0,
+          // Matriz con key
+          
+          const SizedBox(height: 12),
+          _sectionAnchor(
+            key: _keyMatriz,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Matriz de Calor de Riesgos',
+                  style: GoogleFonts.inter(
+                  color: AppColors.gray002855,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  height: 36 / 30,
+                  letterSpacing: 0,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const MatrizCalorSection(),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
-          const MatrizCalorSection(),
+
+          // const SizedBox(height: 24),
+          // Text(
+          //   'Matriz de Calor de Riesgos',
+          //   style: GoogleFonts.inter(
+          //     color: AppColors.gray002855,
+          //     fontSize: 25,
+          //     fontWeight: FontWeight.w700,
+          //     height: 36 / 30,
+          //     letterSpacing: 0,
+          //   ),
+          // ),
+          // const SizedBox(height: 12),
+          // const MatrizCalorSection(),
           // ─────────────────────────────────────────────────────────────────────────────
 
           // SizedBox(height: 24),

@@ -19,7 +19,7 @@ class GestionesHeader extends StatelessWidget {
         final padding = Responsive.contentPadding(constraints.maxWidth);
 
         return Padding(
-          padding: EdgeInsets.fromLTRB(padding.left, padding.top, padding.right, 0),
+          padding: EdgeInsets.fromLTRB(padding.left, 0 , padding.right, 0),
           child: isMobile
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

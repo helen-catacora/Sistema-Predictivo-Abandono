@@ -30,31 +30,43 @@ class _PeriodosRegistroMallaPageState extends State<PeriodosRegistroMallaPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final padding = Responsive.contentPadding(constraints.maxWidth);
+        final fontSize = Responsive.pageTitleFontSize(constraints.maxWidth);
+        final isMobile = Responsive.isMobile(constraints.maxWidth);
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 1. Header con padding solo horizontal (como en el 'antes') y responsivo
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: padding.left),
-                child: Row(
-                  children: [
-                    Text(
-                      'Períodos de Registro de Malla',
-                      style: GoogleFonts.inter(
-                        color: AppColors.gray002855,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        height: 36 / 30,
+                padding: EdgeInsets.symmetric(horizontal: padding.left), 
+                child: isMobile
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildTitle(fontSize),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: RefreshButton(
+                              onTap: () => context.read<PeriodosRegistroMallaProvider>().loadPeriodos(),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(child: _buildTitle(fontSize)),
+                          RefreshButton(
+                            onTap: () => context.read<PeriodosRegistroMallaProvider>().loadPeriodos(),
+                          ),
+                        ],
                       ),
-                    ),
-                    const Spacer(),
-                    RefreshButton(
-                      onTap: () => context.read<PeriodosRegistroMallaProvider>().loadPeriodos(),
-                    ),
-                  ],
-                ),
               ),
+              
               const SizedBox(height: 20),
+              
+              // 2. Tarjeta con su padding horizontal original
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: padding.left),
                 child: const ScreenDescriptionCard(
@@ -65,12 +77,27 @@ class _PeriodosRegistroMallaPageState extends State<PeriodosRegistroMallaPage> {
                   icon: Icons.calendar_month_outlined,
                 ),
               ),
+              
               const SizedBox(height: 24),
+              
+              // 3. Tabla SIN padding extra, respetando sus propios márgenes internos
               const PeriodosRegistroMallaListSection(),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildTitle(double fontSize) {
+    return Text(
+      'Períodos de Registro de Malla',
+      style: GoogleFonts.inter(
+        color: AppColors.gray002855,
+        fontSize: fontSize, // Aquí está la magia responsiva
+        fontWeight: FontWeight.w700,
+        height: 36 / 30,
+      ),
     );
   }
 }
