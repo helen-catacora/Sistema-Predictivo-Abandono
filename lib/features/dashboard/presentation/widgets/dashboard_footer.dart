@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+//import 'package:url_launcher/url_launcher.dart';
+import 'package:web/web.dart' as web;
 
 import '../../../../core/constants/app_colors.dart';
 
 /// Pie de página del panel de control.
 class DashboardFooter extends StatelessWidget {
   const DashboardFooter({super.key});
+
+  Future<void> _abrirEnlace(String url) async {
+    web.window.open(
+      url, 
+      '_blank'
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +39,34 @@ class DashboardFooter extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(width: 16),
-              Text(
-                'REGLAMENTOS',
-                style: TextStyle(
-                  color: AppColors.grayDark,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
+              InkWell(
+                onTap: () {
+                  
+                  _abrirEnlace('https://emi.edu.bo/index.php/nosotros/normativa-interna');
+                },
+                child: Text(
+                  'REGLAMENTOS',
+                  style: TextStyle(
+                    color: AppColors.grayDark,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
-              Text(
-                'MANUAL DE USUARIO',
-                style: TextStyle(
-                  color: AppColors.grayDark,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
+              InkWell(
+                onTap: () {
+                  // Reemplaza esta URL con tu enlace real del manual
+                  _abrirEnlace('https://drive.google.com/file/d/1N60u_v2d58l7UtgDAwnh_SyFDo9XMkei/view?usp=sharing');
+                },
+                child: Text(
+                  'MANUAL DE USUARIO',
+                  style: TextStyle(
+                    color: AppColors.grayDark,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
