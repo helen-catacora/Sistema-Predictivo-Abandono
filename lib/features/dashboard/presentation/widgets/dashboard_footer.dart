@@ -58,7 +58,7 @@ class DashboardFooter extends StatelessWidget {
               InkWell(
                 onTap: () {
                   // Reemplaza esta URL con tu enlace real del manual
-                  _abrirEnlace('https://drive.google.com/file/d/1N60u_v2d58l7UtgDAwnh_SyFDo9XMkei/view?usp=sharing');
+                  _abrirEnlace('https://drive.google.com/file/d/1KY3DWd2t1Cg8xE8RQXOAJcktr2oGx0ey/view?usp=sharing');
                 },
                 child: Text(
                   'MANUAL DE USUARIO',
