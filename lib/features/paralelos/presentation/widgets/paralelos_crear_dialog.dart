@@ -175,16 +175,31 @@ class _CrearParaleloDialogState extends State<_CrearParaleloDialog> {
                           labelText: 'Semestre (opcional)',
                           border: OutlineInputBorder(),
                         ),
-                        items: [
-                          const DropdownMenuItem<int>(
+                        // items: [
+                        //   const DropdownMenuItem<int>(
+                        //     value: null,
+                        //     child: Text('Sin semestre'),
+                        //   ),
+                        //   ...semestreIds.map(
+                        //     (id) => DropdownMenuItem<int>(
+                        //       value: id,
+                        //       child: Text('Semestre $id'),
+                        //     ),
+                        //   ),
+                        // ],
+
+                        items: const [
+                          DropdownMenuItem<int>(
                             value: null,
                             child: Text('Sin semestre'),
                           ),
-                          ...semestreIds.map(
-                            (id) => DropdownMenuItem<int>(
-                              value: id,
-                              child: Text('Semestre $id'),
-                            ),
+                          DropdownMenuItem<int>(
+                            value: 1,
+                            child: Text('Primer Semestre'),
+                          ),
+                          DropdownMenuItem<int>(
+                            value: 2,
+                            child: Text('Segundo Semestre'),
                           ),
                         ],
                         onChanged: (v) => setState(() => _semestreId = v ?? 0),
@@ -200,7 +215,7 @@ class _CrearParaleloDialogState extends State<_CrearParaleloDialog> {
                         items: usuariosActivos
                             .map((u) => DropdownMenuItem<int>(
                                   value: u.id,
-                                  child: Text('${u.nombre} (${u.correo})'),
+                                  child: Text('${u.nombre} ( ${u.correo})'),
                                 ))
                             .toList(),
                         onChanged: usuariosProvider.isLoading && usuariosActivos.isEmpty

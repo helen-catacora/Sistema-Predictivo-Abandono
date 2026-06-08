@@ -95,7 +95,7 @@ class _AlertaTile extends StatelessWidget {
         .contains('CRITIC');
     final isAbandono = (alerta.titulo ?? '').toUpperCase().contains('ABANDONO');
 
-    final isasistencia = alerta.tipo == "temprana" ? "Por Asistencia" : "";
+    final isasistencia = alerta.tipo == "Por Asistencia" ? "temprana" : "";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
